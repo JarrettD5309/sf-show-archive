@@ -14,6 +14,14 @@ if (process.env.NODE_ENV === "production") {
     app.use(express.static("client/build"));
 }
 
+mongoose.connect('mongodb://localhost/show-archive',{
+    useNewUrlParser: true,
+    useUnifiedTopology: true
+});
+
+mongoose.connection.on("connected", () => console.log("Mongoose is connected")
+);
+
 app.get('/api', (req, res) => {
     const data = {
         username: 'nacho',
@@ -24,4 +32,4 @@ app.get('/api', (req, res) => {
 
 app.listen(PORT, () => {
     console.log(`API server now on port ${PORT}!`);
-  });
+});
