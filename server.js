@@ -1,6 +1,7 @@
 const express = require('express');
 const path = require('path');
 const mongoose = require('mongoose');
+var db = require("./models");
 require('dotenv').config();
 
 const PORT = process.env.PORT || 3001;
@@ -23,12 +24,16 @@ mongoose.connection.on("connected", () => console.log("Mongoose is connected")
 );
 
 app.get('/api', (req, res) => {
-    const data = {
-        username: 'nacho',
-        age: 10
-    };
-    res.json(data);
+    db.Show.find({}).sort('showNum')
+    .then(result=>res.json(result))
+    .catch (err=>res.json(err))
 });
+
+// Send every other request to the React app
+// Define any API routes before this runs
+app.get("*", (req, res) => {
+    res.sendFile(path.join(__dirname, "./client/build/index.html"));
+  });
 
 app.listen(PORT, () => {
     console.log(`API server now on port ${PORT}!`);
