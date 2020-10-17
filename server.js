@@ -24,7 +24,11 @@ mongoose.connection.on("connected", () => console.log("Mongoose is connected")
 );
 
 app.get('/api', (req, res) => {
-    db.Show.find({}).sort('showNum')
+    db.Show.find({
+        // date: {$gte:'2010-01-01', $lte:'2010-03-01'}
+    })
+    // .sort('showNum')
+    .sort({date: 1})
     .then(result=>res.json(result))
     .catch (err=>res.json(err))
 });
