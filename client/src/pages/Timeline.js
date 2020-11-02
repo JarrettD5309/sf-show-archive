@@ -1,8 +1,19 @@
 import React, { useEffect } from 'react';
 
-const runButton = document.getElementById('button');
-// runButton.onclick = grow;
+const seconds = 3;
+
 function grow() {
+    const hiddenBranch = document.getElementById('branch10');
+    hiddenBranch.style.visibility = 'visible';
+    const hiddenYearText = document.getElementById('year10');
+    hiddenYearText.style.visibility = 'visible';
+
+    const toHideBranch = document.getElementById('branch9');
+    setTimeout(()=>toHideBranch.style.visibility = 'hidden', (seconds*1000)-10);
+    
+    const toHideYearText = document.getElementById('year9');
+    setTimeout(()=>toHideYearText.style.visibility = 'hidden', (seconds*1000)-10);
+
     const branchElement = document.getElementsByClassName('animate-branch-0');
     for (let i = 0; i < branchElement.length; i++) {
         branchElement[i].beginElement();
@@ -12,9 +23,18 @@ function grow() {
         textElement[i].beginElement();
     }
 };
-const runButton2 = document.getElementById('button2');
-// runButton2.onclick = grow2;
+
 function grow2() {
+    const hiddenBranch = document.getElementById('branch20');
+    hiddenBranch.style.visibility = 'visible';
+    const hiddenYearText = document.getElementById('year20');
+    hiddenYearText.style.visibility = 'visible';
+
+    const toHideBranch = document.getElementById('branch19');
+    setTimeout(()=>toHideBranch.style.visibility = 'hidden', (seconds*1000)-10);
+    
+    const toHideYearText = document.getElementById('year19');
+    setTimeout(()=>toHideYearText.style.visibility = 'hidden', (seconds*1000)-10);
     const branchElement = document.getElementsByClassName('animate-branch-1');
     for (let i = 0; i < branchElement.length; i++) {
         branchElement[i].beginElement();
@@ -31,7 +51,7 @@ const numBranches = 10;
 function createSVG(firstYear, lastYear) {
     const branches = lastYear - firstYear + 1;
 
-    const numScreens = Math.ceil(branches / 10);
+    const numScreens = Math.ceil(branches / numBranches);
     console.log(numScreens);
 
     // define svg
@@ -69,6 +89,11 @@ function createSVG(firstYear, lastYear) {
         branch.setAttribute('d', branchD);
         branch.setAttribute('stroke', 'black');
         branch.setAttribute('stroke-width', '10');
+        branch.setAttribute('id', 'branch' + i);
+
+        if (i%10===0 && i!==0) {
+            branch.style.visibility = 'hidden';
+        }
 
         const loops = numScreens - 1;
         let startBranchD = branchD;
@@ -79,7 +104,7 @@ function createSVG(firstYear, lastYear) {
             animateBranch.setAttribute('attributeName', 'd');
             animateBranch.setAttribute('attributeType', 'XML');
             animateBranch.setAttribute('begin', 'indefinite');
-            animateBranch.setAttribute('dur', '3s');
+            animateBranch.setAttribute('dur', seconds+'s');
             animateBranch.setAttribute('fill', 'freeze');
             animateBranch.setAttribute('from', startBranchD);
 
@@ -103,6 +128,9 @@ function createSVG(firstYear, lastYear) {
         yearText.setAttribute('font-family', 'sans-serif');
         yearText.setAttribute('text-anchor', 'middle');
         yearText.setAttribute('x', xLocation);
+        if (i%10===0 && i!==0) {
+            yearText.style.visibility = 'hidden';
+        }
 
 
         let yLocation;
@@ -114,7 +142,8 @@ function createSVG(firstYear, lastYear) {
         yearText.setAttribute('dy', dyValue);
 
         let currentYear = firstYear + i;
-        yearText.setAttribute('id', 'year' + currentYear)
+        // yearText.setAttribute('id', 'year' + currentYear);
+        yearText.setAttribute('id', 'year' + i);
         yearText.append(currentYear);
 
         const loops = numScreens - 1;
@@ -125,7 +154,7 @@ function createSVG(firstYear, lastYear) {
             animateText.setAttribute('attributeName', 'x');
             animateText.setAttribute('attributeType', 'XML');
             animateText.setAttribute('begin', 'indefinite');
-            animateText.setAttribute('dur', '3s');
+            animateText.setAttribute('dur', seconds+'s');
             animateText.setAttribute('fill', 'freeze');
             animateText.setAttribute('from', startXLocation);
             animateText.setAttribute('to', startXLocation - (10 * mDistance));
