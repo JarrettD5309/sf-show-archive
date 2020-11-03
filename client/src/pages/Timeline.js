@@ -2,6 +2,13 @@ import React, { useEffect } from 'react';
 
 const seconds = 3;
 
+// Allows right arrow to be clickable and run grow function
+document.addEventListener('click',(event)=>{
+    if (event.target.id === 'triangle-end-right') {
+        grow();
+    }
+});
+
 function grow() {
     const hiddenBranch = document.getElementById('branch10');
     hiddenBranch.style.visibility = 'visible';
@@ -13,6 +20,18 @@ function grow() {
     
     const toHideYearText = document.getElementById('year9');
     setTimeout(()=>toHideYearText.style.visibility = 'hidden', (seconds*1000)-10);
+
+    const hiddenLeftEnd = document.getElementById('triangle-end-left');
+    hiddenLeftEnd.style.visibility = 'visible';
+
+    const toHideLeftEnd = document.getElementById('circle-end-left');
+    toHideLeftEnd.style.visibility = 'hidden';
+
+    const hiddenRightEnd = document.getElementById('circle-end-right');
+    setTimeout(()=>hiddenRightEnd.style.visibility = 'visible', (seconds*1000));
+
+    const toHideRightEnd = document.getElementById('triangle-end-right');
+    setTimeout(()=>toHideRightEnd.style.visibility = 'hidden', (seconds*1000));
 
     const branchElement = document.getElementsByClassName('animate-branch-0');
     for (let i = 0; i < branchElement.length; i++) {
@@ -168,18 +187,46 @@ function createSVG(firstYear, lastYear) {
     }
 
     // creates timeline endcaps
-    function makeEnds(cxValue) {
+    function makeEnds(cxValue, side) {
         const circle = document.createElementNS(svgNS, 'circle');
         circle.setAttribute('cx', cxValue);
         circle.setAttribute('cy', 300);
         circle.setAttribute('r', 19);
         circle.setAttribute('stroke', 'black');
+        if (side==='right') {
+            circle.setAttribute('id','circle-end-right');
+            circle.style.visibility = 'hidden';
+        } else {
+            circle.setAttribute('id','circle-end-left');
+        }
         return circle;
     };
     // creates start endcap
-    svg.appendChild(makeEnds(20));
+    svg.appendChild(makeEnds(20,'left'));
     // creates end endcap
-    svg.appendChild(makeEnds(1020));
+    svg.appendChild(makeEnds(1020, 'right'));
+
+    // create triangle endcap
+    function makeTriEnds(refPoint,side) {
+        const triangle = document.createElementNS(svgNS, 'polygon');
+        // triangle.setAttribute('points', '270,30 330,30 300,10');
+        if (side==='left') {
+            triangle.setAttribute('id','triangle-end-left');
+            const pointsString = (refPoint+10)+',280 '+(refPoint+10)+',320 '+ (refPoint-20)+ ',300';
+            triangle.setAttribute('points', pointsString);
+            triangle.style.visibility = 'hidden';
+        } else if (side==='right') {
+            triangle.setAttribute('id','triangle-end-right');
+            const pointsString = (refPoint-10)+',280 '+(refPoint-10)+',320 '+ (refPoint+20)+ ',300';
+            triangle.setAttribute('points', pointsString);
+        }
+        // triangle.setAttribute('points', '30,280 30,320 0,300');
+        triangle.setAttribute('stroke','black');
+        return triangle
+    }
+
+    svg.appendChild(makeTriEnds(20,'left'));
+    svg.appendChild(makeTriEnds(1020,'right'));
 
 
     // appends svg to div
