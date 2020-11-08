@@ -1,13 +1,81 @@
 import React, { useEffect } from 'react';
 
 const seconds = 3;
+const numBranches = 10;
+let numScreens = 0;
+let currentScreen = 0;
 
 // Allows right arrow to be clickable and run grow function
-document.addEventListener('click',(event)=>{
+document.addEventListener('click', (event) => {
     if (event.target.id === 'triangle-end-right') {
-        grow();
+        moveRight();
+    } else if (event.target.id === 'triangle-end-left') {
+        moveLeft();
     }
 });
+
+function moveRight() {
+    let hiddenBranchId = 'branch' + (currentScreen + 1) * numBranches;
+    let hiddenYearTextId = 'year' + (currentScreen + 1) * numBranches;
+    let toHideBranchId = 'branch' + (((currentScreen + 1) * numBranches) - 1);
+    let toHideYearTextId = 'year' + (((currentScreen + 1) * numBranches) - 1);
+    let leftEndTriangleVisibility = 'visible';
+    let leftEndCircleVisibility = 'hidden';
+    let rightEndTriangleVisibility = 'visible';
+    let rightEndCircleVisibility = 'hidden';
+    let animateBranchId = 'animate-branch-' + currentScreen;
+    let animateTextId = 'animate-text-' + currentScreen;
+
+    if (currentScreen === 0) {
+        // leftEndTriangleVisibility = 'visible';
+        // leftEndCircleVisibility = 'hidden';
+        // rightEndTriangleVisibility = 'visible';
+        // rightEndCircleVisibility = 'hidden';
+    }
+
+    if (currentScreen + 2 === numScreens) {
+        rightEndTriangleVisibility = 'hidden';
+        rightEndCircleVisibility = 'visible';
+    }
+
+    const hiddenBranch = document.getElementById(hiddenBranchId);
+    hiddenBranch.style.visibility = 'visible';
+    const hiddenYearText = document.getElementById(hiddenYearTextId);
+    hiddenYearText.style.visibility = 'visible';
+
+    const toHideBranch = document.getElementById(toHideBranchId);
+    setTimeout(() => toHideBranch.style.visibility = 'hidden', (seconds * 1000) - 10);
+
+    const toHideYearText = document.getElementById(toHideYearTextId);
+    setTimeout(() => toHideYearText.style.visibility = 'hidden', (seconds * 1000) - 10);
+
+    const leftEndTriangle = document.getElementById('triangle-end-left');
+    leftEndTriangle.style.visibility = leftEndTriangleVisibility;
+
+    const leftEndCircle = document.getElementById('circle-end-left');
+    leftEndCircle.style.visibility = leftEndCircleVisibility;
+
+    const rightEndCircle = document.getElementById('circle-end-right');
+    setTimeout(() => rightEndCircle.style.visibility = rightEndCircleVisibility, (seconds * 1000));
+
+    const rightEndTriangle = document.getElementById('triangle-end-right');
+    setTimeout(() => rightEndTriangle.style.visibility = rightEndTriangleVisibility, (seconds * 1000));
+
+    const branchElement = document.getElementsByClassName(animateBranchId);
+    for (let i = 0; i < branchElement.length; i++) {
+        branchElement[i].beginElement();
+    }
+    const textElement = document.getElementsByClassName(animateTextId);
+    for (let i = 0; i < textElement.length; i++) {
+        textElement[i].beginElement();
+    }
+
+    currentScreen += 1;
+};
+
+function moveLeft() {
+    console.log('left')
+};
 
 function grow() {
     const hiddenBranch = document.getElementById('branch10');
@@ -16,10 +84,10 @@ function grow() {
     hiddenYearText.style.visibility = 'visible';
 
     const toHideBranch = document.getElementById('branch9');
-    setTimeout(()=>toHideBranch.style.visibility = 'hidden', (seconds*1000)-10);
-    
+    setTimeout(() => toHideBranch.style.visibility = 'hidden', (seconds * 1000) - 10);
+
     const toHideYearText = document.getElementById('year9');
-    setTimeout(()=>toHideYearText.style.visibility = 'hidden', (seconds*1000)-10);
+    setTimeout(() => toHideYearText.style.visibility = 'hidden', (seconds * 1000) - 10);
 
     const hiddenLeftEnd = document.getElementById('triangle-end-left');
     hiddenLeftEnd.style.visibility = 'visible';
@@ -28,10 +96,10 @@ function grow() {
     toHideLeftEnd.style.visibility = 'hidden';
 
     const hiddenRightEnd = document.getElementById('circle-end-right');
-    setTimeout(()=>hiddenRightEnd.style.visibility = 'visible', (seconds*1000));
+    setTimeout(() => hiddenRightEnd.style.visibility = 'visible', (seconds * 1000));
 
     const toHideRightEnd = document.getElementById('triangle-end-right');
-    setTimeout(()=>toHideRightEnd.style.visibility = 'hidden', (seconds*1000));
+    setTimeout(() => toHideRightEnd.style.visibility = 'hidden', (seconds * 1000));
 
     const branchElement = document.getElementsByClassName('animate-branch-0');
     for (let i = 0; i < branchElement.length; i++) {
@@ -50,10 +118,10 @@ function grow2() {
     hiddenYearText.style.visibility = 'visible';
 
     const toHideBranch = document.getElementById('branch19');
-    setTimeout(()=>toHideBranch.style.visibility = 'hidden', (seconds*1000)-10);
-    
+    setTimeout(() => toHideBranch.style.visibility = 'hidden', (seconds * 1000) - 10);
+
     const toHideYearText = document.getElementById('year19');
-    setTimeout(()=>toHideYearText.style.visibility = 'hidden', (seconds*1000)-10);
+    setTimeout(() => toHideYearText.style.visibility = 'hidden', (seconds * 1000) - 10);
     const branchElement = document.getElementsByClassName('animate-branch-1');
     for (let i = 0; i < branchElement.length; i++) {
         branchElement[i].beginElement();
@@ -66,11 +134,11 @@ function grow2() {
 
 
 
-const numBranches = 10;
+
 function createSVG(firstYear, lastYear) {
     const branches = lastYear - firstYear + 1;
 
-    const numScreens = Math.ceil(branches / numBranches);
+    numScreens = Math.ceil(branches / numBranches);
     console.log(numScreens);
 
     // define svg
@@ -110,7 +178,7 @@ function createSVG(firstYear, lastYear) {
         branch.setAttribute('stroke-width', '10');
         branch.setAttribute('id', 'branch' + i);
 
-        if (i%10===0 && i!==0) {
+        if (i % numBranches === 0 && i !== 0) {
             branch.style.visibility = 'hidden';
         }
 
@@ -123,12 +191,12 @@ function createSVG(firstYear, lastYear) {
             animateBranch.setAttribute('attributeName', 'd');
             animateBranch.setAttribute('attributeType', 'XML');
             animateBranch.setAttribute('begin', 'indefinite');
-            animateBranch.setAttribute('dur', seconds+'s');
+            animateBranch.setAttribute('dur', seconds + 's');
             animateBranch.setAttribute('fill', 'freeze');
             animateBranch.setAttribute('from', startBranchD);
 
             let endAnimateBranchD;
-            i % 2 === 0 ? endAnimateBranchD = `M${mLocation - ((j + 1) * 10 * mDistance)} 300 L${mLocation - ((j + 1) * 10 * mDistance)} 200` : endAnimateBranchD = `M${mLocation - ((j + 1) * 10 * mDistance)} 300 L${mLocation - ((j + 1) * 10 * mDistance)} 400`;
+            i % 2 === 0 ? endAnimateBranchD = `M${mLocation - ((j + 1) * numBranches * mDistance)} 300 L${mLocation - ((j + 1) * numBranches * mDistance)} 200` : endAnimateBranchD = `M${mLocation - ((j + 1) * numBranches * mDistance)} 300 L${mLocation - ((j + 1) * numBranches * mDistance)} 400`;
             startBranchD = endAnimateBranchD;
 
             animateBranch.setAttribute('to', endAnimateBranchD);
@@ -147,7 +215,7 @@ function createSVG(firstYear, lastYear) {
         yearText.setAttribute('font-family', 'sans-serif');
         yearText.setAttribute('text-anchor', 'middle');
         yearText.setAttribute('x', xLocation);
-        if (i%10===0 && i!==0) {
+        if (i % numBranches === 0 && i !== 0) {
             yearText.style.visibility = 'hidden';
         }
 
@@ -173,11 +241,11 @@ function createSVG(firstYear, lastYear) {
             animateText.setAttribute('attributeName', 'x');
             animateText.setAttribute('attributeType', 'XML');
             animateText.setAttribute('begin', 'indefinite');
-            animateText.setAttribute('dur', seconds+'s');
+            animateText.setAttribute('dur', seconds + 's');
             animateText.setAttribute('fill', 'freeze');
             animateText.setAttribute('from', startXLocation);
-            animateText.setAttribute('to', startXLocation - (10 * mDistance));
-            startXLocation -= 10 * mDistance;
+            animateText.setAttribute('to', startXLocation - (numBranches * mDistance));
+            startXLocation -= numBranches * mDistance;
             yearText.append(animateText);
         };
 
@@ -193,40 +261,40 @@ function createSVG(firstYear, lastYear) {
         circle.setAttribute('cy', 300);
         circle.setAttribute('r', 19);
         circle.setAttribute('stroke', 'black');
-        if (side==='right') {
-            circle.setAttribute('id','circle-end-right');
+        if (side === 'right') {
+            circle.setAttribute('id', 'circle-end-right');
             circle.style.visibility = 'hidden';
         } else {
-            circle.setAttribute('id','circle-end-left');
+            circle.setAttribute('id', 'circle-end-left');
         }
         return circle;
     };
     // creates start endcap
-    svg.appendChild(makeEnds(20,'left'));
+    svg.appendChild(makeEnds(20, 'left'));
     // creates end endcap
     svg.appendChild(makeEnds(1020, 'right'));
 
     // create triangle endcap
-    function makeTriEnds(refPoint,side) {
+    function makeTriEnds(refPoint, side) {
         const triangle = document.createElementNS(svgNS, 'polygon');
         // triangle.setAttribute('points', '270,30 330,30 300,10');
-        if (side==='left') {
-            triangle.setAttribute('id','triangle-end-left');
-            const pointsString = (refPoint+10)+',280 '+(refPoint+10)+',320 '+ (refPoint-20)+ ',300';
+        if (side === 'left') {
+            triangle.setAttribute('id', 'triangle-end-left');
+            const pointsString = (refPoint + 10) + ',280 ' + (refPoint + 10) + ',320 ' + (refPoint - 20) + ',300';
             triangle.setAttribute('points', pointsString);
             triangle.style.visibility = 'hidden';
-        } else if (side==='right') {
-            triangle.setAttribute('id','triangle-end-right');
-            const pointsString = (refPoint-10)+',280 '+(refPoint-10)+',320 '+ (refPoint+20)+ ',300';
+        } else if (side === 'right') {
+            triangle.setAttribute('id', 'triangle-end-right');
+            const pointsString = (refPoint - 10) + ',280 ' + (refPoint - 10) + ',320 ' + (refPoint + 20) + ',300';
             triangle.setAttribute('points', pointsString);
         }
         // triangle.setAttribute('points', '30,280 30,320 0,300');
-        triangle.setAttribute('stroke','black');
+        triangle.setAttribute('stroke', 'black');
         return triangle
     }
 
-    svg.appendChild(makeTriEnds(20,'left'));
-    svg.appendChild(makeTriEnds(1020,'right'));
+    svg.appendChild(makeTriEnds(20, 'left'));
+    svg.appendChild(makeTriEnds(1020, 'right'));
 
 
     // appends svg to div
@@ -235,9 +303,8 @@ function createSVG(firstYear, lastYear) {
 };
 
 
-
 function Timeline() {
-    useEffect(() => { createSVG(2005, 2034); }, []);
+    useEffect(() => { createSVG(2005, 2020); }, []);
 
     return (
         <div>
