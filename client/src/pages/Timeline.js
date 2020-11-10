@@ -74,7 +74,56 @@ function moveRight() {
 };
 
 function moveLeft() {
-    console.log('left')
+    let hiddenBranchId = 'branch' + (((currentScreen) * numBranches) - 1);
+    let hiddenYearTextId = 'year' + (((currentScreen) * numBranches) - 1);
+    let toHideBranchId = 'branch' + (currentScreen) * numBranches;
+    let toHideYearTextId = 'year' + (currentScreen) * numBranches;
+    let leftEndTriangleVisibility = 'visible';
+    let leftEndCircleVisibility = 'hidden';
+    let rightEndTriangleVisibility = 'visible';
+    let rightEndCircleVisibility = 'hidden';
+    let animateBranchId = 'animate-branch-l-' + (currentScreen-1);
+    let animateTextId = 'animate-text-l-' + (currentScreen-1);
+
+    if (currentScreen === 1) {
+        leftEndTriangleVisibility = 'hidden';
+        leftEndCircleVisibility = 'visible';
+    }
+
+    const hiddenBranch = document.getElementById(hiddenBranchId);
+    hiddenBranch.style.visibility = 'visible';
+
+    const hiddenYearText = document.getElementById(hiddenYearTextId);
+    hiddenYearText.style.visibility = 'visible';
+
+    const toHideBranch = document.getElementById(toHideBranchId);
+    setTimeout(() => toHideBranch.style.visibility = 'hidden', (seconds * 1000) - 10);
+
+    const toHideYearText = document.getElementById(toHideYearTextId);
+    setTimeout(() => toHideYearText.style.visibility = 'hidden', (seconds * 1000) - 10);
+
+    const leftEndTriangle = document.getElementById('triangle-end-left');
+    setTimeout(() => leftEndTriangle.style.visibility = leftEndTriangleVisibility, (seconds * 1000));
+
+    const leftEndCircle = document.getElementById('circle-end-left');
+    setTimeout(() => leftEndCircle.style.visibility = leftEndCircleVisibility, (seconds * 1000));
+    
+    const rightEndCircle = document.getElementById('circle-end-right');
+    rightEndCircle.style.visibility = rightEndCircleVisibility;
+
+    const rightEndTriangle = document.getElementById('triangle-end-right');
+    rightEndTriangle.style.visibility = rightEndTriangleVisibility;
+
+    const branchElement = document.getElementsByClassName(animateBranchId);
+    for (let i = 0; i < branchElement.length; i++) {
+        branchElement[i].beginElement();
+    }
+    const textElement = document.getElementsByClassName(animateTextId);
+    for (let i = 0; i < textElement.length; i++) {
+        textElement[i].beginElement();
+    }
+
+    currentScreen -= 1;
 };
 
 function grow() {
@@ -187,20 +236,32 @@ function createSVG(firstYear, lastYear) {
         for (let j = 0; j < loops; j++) {
 
             const animateBranch = document.createElementNS(svgNS, 'animate');
+            const animateBranchL = document.createElementNS(svgNS, 'animate');
             animateBranch.setAttribute('class', 'animate-branch-' + j);
+            animateBranchL.setAttribute('class', 'animate-branch-l-' + j);
             animateBranch.setAttribute('attributeName', 'd');
+            animateBranchL.setAttribute('attributeName', 'd');
             animateBranch.setAttribute('attributeType', 'XML');
+            animateBranchL.setAttribute('attributeType', 'XML');
             animateBranch.setAttribute('begin', 'indefinite');
+            animateBranchL.setAttribute('begin', 'indefinite');
             animateBranch.setAttribute('dur', seconds + 's');
+            animateBranchL.setAttribute('dur', seconds + 's');
             animateBranch.setAttribute('fill', 'freeze');
+            animateBranchL.setAttribute('fill', 'freeze');
             animateBranch.setAttribute('from', startBranchD);
+            animateBranchL.setAttribute('to', startBranchD);
 
             let endAnimateBranchD;
             i % 2 === 0 ? endAnimateBranchD = `M${mLocation - ((j + 1) * numBranches * mDistance)} 300 L${mLocation - ((j + 1) * numBranches * mDistance)} 200` : endAnimateBranchD = `M${mLocation - ((j + 1) * numBranches * mDistance)} 300 L${mLocation - ((j + 1) * numBranches * mDistance)} 400`;
             startBranchD = endAnimateBranchD;
 
             animateBranch.setAttribute('to', endAnimateBranchD);
+            animateBranchL.setAttribute('from', endAnimateBranchD);
             branch.appendChild(animateBranch);
+            branch.appendChild(animateBranchL);
+
+
         }
 
         svg.appendChild(branch);
@@ -237,16 +298,26 @@ function createSVG(firstYear, lastYear) {
         let startXLocation = xLocation;
         for (let j = 0; j < loops; j++) {
             const animateText = document.createElementNS(svgNS, 'animate');
+            const animateTextL = document.createElementNS(svgNS, 'animate');
             animateText.setAttribute('class', 'animate-text-' + j);
+            animateTextL.setAttribute('class', 'animate-text-l-' + j);
             animateText.setAttribute('attributeName', 'x');
+            animateTextL.setAttribute('attributeName', 'x');
             animateText.setAttribute('attributeType', 'XML');
+            animateTextL.setAttribute('attributeType', 'XML');
             animateText.setAttribute('begin', 'indefinite');
+            animateTextL.setAttribute('begin', 'indefinite');
             animateText.setAttribute('dur', seconds + 's');
+            animateTextL.setAttribute('dur', seconds + 's');
             animateText.setAttribute('fill', 'freeze');
+            animateTextL.setAttribute('fill', 'freeze');
             animateText.setAttribute('from', startXLocation);
+            animateTextL.setAttribute('to', startXLocation);
             animateText.setAttribute('to', startXLocation - (numBranches * mDistance));
+            animateTextL.setAttribute('from', startXLocation - (numBranches * mDistance));
             startXLocation -= numBranches * mDistance;
             yearText.append(animateText);
+            yearText.append(animateTextL);
         };
 
         xLocation += mDistance;
