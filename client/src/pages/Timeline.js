@@ -4,6 +4,7 @@ const seconds = 3;
 const numBranches = 10;
 let numScreens = 0;
 let currentScreen = 0;
+let locked = false;
 
 // Allows right arrow to be clickable and run grow function
 document.addEventListener('click', (event) => {
@@ -15,115 +16,123 @@ document.addEventListener('click', (event) => {
 });
 
 function moveRight() {
-    let hiddenBranchId = 'branch' + (currentScreen + 1) * numBranches;
-    let hiddenYearTextId = 'year' + (currentScreen + 1) * numBranches;
-    let toHideBranchId = 'branch' + (((currentScreen + 1) * numBranches) - 1);
-    let toHideYearTextId = 'year' + (((currentScreen + 1) * numBranches) - 1);
-    let leftEndTriangleVisibility = 'visible';
-    let leftEndCircleVisibility = 'hidden';
-    let rightEndTriangleVisibility = 'visible';
-    let rightEndCircleVisibility = 'hidden';
-    let animateBranchId = 'animate-branch-' + currentScreen;
-    let animateTextId = 'animate-text-' + currentScreen;
-
-    if (currentScreen === 0) {
-        // leftEndTriangleVisibility = 'visible';
-        // leftEndCircleVisibility = 'hidden';
-        // rightEndTriangleVisibility = 'visible';
-        // rightEndCircleVisibility = 'hidden';
+    
+    if (locked!==true) {
+        locked =true;
+        setTimeout(() => locked=false, (seconds * 1000) +10);
+        let hiddenBranchId = 'branch' + (currentScreen + 1) * numBranches;
+        let hiddenYearTextId = 'year' + (currentScreen + 1) * numBranches;
+        let toHideBranchId = 'branch' + (((currentScreen + 1) * numBranches) - 1);
+        let toHideYearTextId = 'year' + (((currentScreen + 1) * numBranches) - 1);
+        let leftEndTriangleVisibility = 'visible';
+        let leftEndCircleVisibility = 'hidden';
+        let rightEndTriangleVisibility = 'visible';
+        let rightEndCircleVisibility = 'hidden';
+        let animateBranchId = 'animate-branch-' + currentScreen;
+        let animateTextId = 'animate-text-' + currentScreen;
+    
+        if (currentScreen === 0) {
+            // leftEndTriangleVisibility = 'visible';
+            // leftEndCircleVisibility = 'hidden';
+            // rightEndTriangleVisibility = 'visible';
+            // rightEndCircleVisibility = 'hidden';
+        }
+    
+        if (currentScreen + 2 === numScreens) {
+            rightEndTriangleVisibility = 'hidden';
+            rightEndCircleVisibility = 'visible';
+        }
+    
+        const hiddenBranch = document.getElementById(hiddenBranchId);
+        hiddenBranch.style.visibility = 'visible';
+        const hiddenYearText = document.getElementById(hiddenYearTextId);
+        hiddenYearText.style.visibility = 'visible';
+    
+        const toHideBranch = document.getElementById(toHideBranchId);
+        setTimeout(() => toHideBranch.style.visibility = 'hidden', (seconds * 1000) - 10);
+    
+        const toHideYearText = document.getElementById(toHideYearTextId);
+        setTimeout(() => toHideYearText.style.visibility = 'hidden', (seconds * 1000) - 10);
+    
+        const leftEndTriangle = document.getElementById('triangle-end-left');
+        leftEndTriangle.style.visibility = leftEndTriangleVisibility;
+    
+        const leftEndCircle = document.getElementById('circle-end-left');
+        leftEndCircle.style.visibility = leftEndCircleVisibility;
+    
+        const rightEndCircle = document.getElementById('circle-end-right');
+        setTimeout(() => rightEndCircle.style.visibility = rightEndCircleVisibility, (seconds * 1000));
+    
+        const rightEndTriangle = document.getElementById('triangle-end-right');
+        setTimeout(() => rightEndTriangle.style.visibility = rightEndTriangleVisibility, (seconds * 1000));
+    
+        const branchElement = document.getElementsByClassName(animateBranchId);
+        for (let i = 0; i < branchElement.length; i++) {
+            branchElement[i].beginElement();
+        }
+        const textElement = document.getElementsByClassName(animateTextId);
+        for (let i = 0; i < textElement.length; i++) {
+            textElement[i].beginElement();
+        }
+    
+        currentScreen += 1;
     }
-
-    if (currentScreen + 2 === numScreens) {
-        rightEndTriangleVisibility = 'hidden';
-        rightEndCircleVisibility = 'visible';
-    }
-
-    const hiddenBranch = document.getElementById(hiddenBranchId);
-    hiddenBranch.style.visibility = 'visible';
-    const hiddenYearText = document.getElementById(hiddenYearTextId);
-    hiddenYearText.style.visibility = 'visible';
-
-    const toHideBranch = document.getElementById(toHideBranchId);
-    setTimeout(() => toHideBranch.style.visibility = 'hidden', (seconds * 1000) - 10);
-
-    const toHideYearText = document.getElementById(toHideYearTextId);
-    setTimeout(() => toHideYearText.style.visibility = 'hidden', (seconds * 1000) - 10);
-
-    const leftEndTriangle = document.getElementById('triangle-end-left');
-    leftEndTriangle.style.visibility = leftEndTriangleVisibility;
-
-    const leftEndCircle = document.getElementById('circle-end-left');
-    leftEndCircle.style.visibility = leftEndCircleVisibility;
-
-    const rightEndCircle = document.getElementById('circle-end-right');
-    setTimeout(() => rightEndCircle.style.visibility = rightEndCircleVisibility, (seconds * 1000));
-
-    const rightEndTriangle = document.getElementById('triangle-end-right');
-    setTimeout(() => rightEndTriangle.style.visibility = rightEndTriangleVisibility, (seconds * 1000));
-
-    const branchElement = document.getElementsByClassName(animateBranchId);
-    for (let i = 0; i < branchElement.length; i++) {
-        branchElement[i].beginElement();
-    }
-    const textElement = document.getElementsByClassName(animateTextId);
-    for (let i = 0; i < textElement.length; i++) {
-        textElement[i].beginElement();
-    }
-
-    currentScreen += 1;
 };
 
 function moveLeft() {
-    let hiddenBranchId = 'branch' + (((currentScreen) * numBranches) - 1);
-    let hiddenYearTextId = 'year' + (((currentScreen) * numBranches) - 1);
-    let toHideBranchId = 'branch' + (currentScreen) * numBranches;
-    let toHideYearTextId = 'year' + (currentScreen) * numBranches;
-    let leftEndTriangleVisibility = 'visible';
-    let leftEndCircleVisibility = 'hidden';
-    let rightEndTriangleVisibility = 'visible';
-    let rightEndCircleVisibility = 'hidden';
-    let animateBranchId = 'animate-branch-l-' + (currentScreen-1);
-    let animateTextId = 'animate-text-l-' + (currentScreen-1);
-
-    if (currentScreen === 1) {
-        leftEndTriangleVisibility = 'hidden';
-        leftEndCircleVisibility = 'visible';
-    }
-
-    const hiddenBranch = document.getElementById(hiddenBranchId);
-    hiddenBranch.style.visibility = 'visible';
-
-    const hiddenYearText = document.getElementById(hiddenYearTextId);
-    hiddenYearText.style.visibility = 'visible';
-
-    const toHideBranch = document.getElementById(toHideBranchId);
-    setTimeout(() => toHideBranch.style.visibility = 'hidden', (seconds * 1000) - 10);
-
-    const toHideYearText = document.getElementById(toHideYearTextId);
-    setTimeout(() => toHideYearText.style.visibility = 'hidden', (seconds * 1000) - 10);
-
-    const leftEndTriangle = document.getElementById('triangle-end-left');
-    setTimeout(() => leftEndTriangle.style.visibility = leftEndTriangleVisibility, (seconds * 1000));
-
-    const leftEndCircle = document.getElementById('circle-end-left');
-    setTimeout(() => leftEndCircle.style.visibility = leftEndCircleVisibility, (seconds * 1000));
+    if (locked!==true) {
+        locked=true;
+        let hiddenBranchId = 'branch' + (((currentScreen) * numBranches) - 1);
+        let hiddenYearTextId = 'year' + (((currentScreen) * numBranches) - 1);
+        let toHideBranchId = 'branch' + (currentScreen) * numBranches;
+        let toHideYearTextId = 'year' + (currentScreen) * numBranches;
+        let leftEndTriangleVisibility = 'visible';
+        let leftEndCircleVisibility = 'hidden';
+        let rightEndTriangleVisibility = 'visible';
+        let rightEndCircleVisibility = 'hidden';
+        let animateBranchId = 'animate-branch-l-' + (currentScreen-1);
+        let animateTextId = 'animate-text-l-' + (currentScreen-1);
     
-    const rightEndCircle = document.getElementById('circle-end-right');
-    rightEndCircle.style.visibility = rightEndCircleVisibility;
-
-    const rightEndTriangle = document.getElementById('triangle-end-right');
-    rightEndTriangle.style.visibility = rightEndTriangleVisibility;
-
-    const branchElement = document.getElementsByClassName(animateBranchId);
-    for (let i = 0; i < branchElement.length; i++) {
-        branchElement[i].beginElement();
+        if (currentScreen === 1) {
+            leftEndTriangleVisibility = 'hidden';
+            leftEndCircleVisibility = 'visible';
+        }
+    
+        const hiddenBranch = document.getElementById(hiddenBranchId);
+        hiddenBranch.style.visibility = 'visible';
+    
+        const hiddenYearText = document.getElementById(hiddenYearTextId);
+        hiddenYearText.style.visibility = 'visible';
+    
+        const toHideBranch = document.getElementById(toHideBranchId);
+        setTimeout(() => toHideBranch.style.visibility = 'hidden', (seconds * 1000) - 10);
+    
+        const toHideYearText = document.getElementById(toHideYearTextId);
+        setTimeout(() => toHideYearText.style.visibility = 'hidden', (seconds * 1000) - 10);
+    
+        const leftEndTriangle = document.getElementById('triangle-end-left');
+        setTimeout(() => leftEndTriangle.style.visibility = leftEndTriangleVisibility, (seconds * 1000));
+    
+        const leftEndCircle = document.getElementById('circle-end-left');
+        setTimeout(() => leftEndCircle.style.visibility = leftEndCircleVisibility, (seconds * 1000));
+        
+        const rightEndCircle = document.getElementById('circle-end-right');
+        rightEndCircle.style.visibility = rightEndCircleVisibility;
+    
+        const rightEndTriangle = document.getElementById('triangle-end-right');
+        rightEndTriangle.style.visibility = rightEndTriangleVisibility;
+    
+        const branchElement = document.getElementsByClassName(animateBranchId);
+        for (let i = 0; i < branchElement.length; i++) {
+            branchElement[i].beginElement();
+        }
+        const textElement = document.getElementsByClassName(animateTextId);
+        for (let i = 0; i < textElement.length; i++) {
+            textElement[i].beginElement();
+        }
+    
+        currentScreen -= 1;
     }
-    const textElement = document.getElementsByClassName(animateTextId);
-    for (let i = 0; i < textElement.length; i++) {
-        textElement[i].beginElement();
-    }
-
-    currentScreen -= 1;
 };
 
 function grow() {
@@ -271,6 +280,12 @@ function createSVG(firstYear, lastYear) {
     // creates text for years
     let xLocation = mDistance + 20;
     for (let i = 0; i < branches; i++) {
+        let currentYear = firstYear + i;
+
+        // creates link for text
+        const anchor = document.createElementNS(svgNS,'a');
+        anchor.setAttributeNS('http://www.w3.org/1999/xlink','xlink:href', 'http://screamingfemales.com/'+currentYear);
+
         const yearText = document.createElementNS(svgNS, 'text');
         yearText.setAttribute('font-size', '36');
         yearText.setAttribute('font-family', 'sans-serif');
@@ -289,7 +304,7 @@ function createSVG(firstYear, lastYear) {
         i % 2 === 0 ? dyValue = -15 : dyValue = 40;
         yearText.setAttribute('dy', dyValue);
 
-        let currentYear = firstYear + i;
+        
         // yearText.setAttribute('id', 'year' + currentYear);
         yearText.setAttribute('id', 'year' + i);
         yearText.append(currentYear);
@@ -321,8 +336,8 @@ function createSVG(firstYear, lastYear) {
         };
 
         xLocation += mDistance;
-
-        svg.appendChild(yearText);
+        anchor.appendChild(yearText)
+        svg.appendChild(anchor);
     }
 
     // creates timeline endcaps
@@ -354,10 +369,12 @@ function createSVG(firstYear, lastYear) {
             const pointsString = (refPoint + 10) + ',280 ' + (refPoint + 10) + ',320 ' + (refPoint - 20) + ',300';
             triangle.setAttribute('points', pointsString);
             triangle.style.visibility = 'hidden';
+            triangle.style.cursor = 'pointer';
         } else if (side === 'right') {
             triangle.setAttribute('id', 'triangle-end-right');
             const pointsString = (refPoint - 10) + ',280 ' + (refPoint - 10) + ',320 ' + (refPoint + 20) + ',300';
             triangle.setAttribute('points', pointsString);
+            triangle.style.cursor = 'pointer';
         }
         // triangle.setAttribute('points', '30,280 30,320 0,300');
         triangle.setAttribute('stroke', 'black');
