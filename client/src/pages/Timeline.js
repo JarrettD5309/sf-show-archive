@@ -12,14 +12,18 @@ document.addEventListener('click', (event) => {
         moveRight();
     } else if (event.target.id === 'triangle-end-left') {
         moveLeft();
+    } else if (/^year/.test(event.target.id)) {
+        fadeTimeline();
+        const currentYear = event.target.textContent;
+        yearTextTitle(currentYear);
     }
 });
 
 function moveRight() {
-    
-    if (locked!==true) {
-        locked =true;
-        setTimeout(() => locked=false, (seconds * 1000) +10);
+
+    if (locked !== true) {
+        locked = true;
+        setTimeout(() => locked = false, (seconds * 1000) + 10);
         let hiddenBranchId = 'branch' + (currentScreen + 1) * numBranches;
         let hiddenYearTextId = 'year' + (currentScreen + 1) * numBranches;
         let toHideBranchId = 'branch' + (((currentScreen + 1) * numBranches) - 1);
@@ -30,42 +34,42 @@ function moveRight() {
         let rightEndCircleVisibility = 'hidden';
         let animateBranchId = 'animate-branch-' + currentScreen;
         let animateTextId = 'animate-text-' + currentScreen;
-    
+
         if (currentScreen === 0) {
             // leftEndTriangleVisibility = 'visible';
             // leftEndCircleVisibility = 'hidden';
             // rightEndTriangleVisibility = 'visible';
             // rightEndCircleVisibility = 'hidden';
         }
-    
+
         if (currentScreen + 2 === numScreens) {
             rightEndTriangleVisibility = 'hidden';
             rightEndCircleVisibility = 'visible';
         }
-    
+
         const hiddenBranch = document.getElementById(hiddenBranchId);
         hiddenBranch.style.visibility = 'visible';
         const hiddenYearText = document.getElementById(hiddenYearTextId);
         hiddenYearText.style.visibility = 'visible';
-    
+
         const toHideBranch = document.getElementById(toHideBranchId);
         setTimeout(() => toHideBranch.style.visibility = 'hidden', (seconds * 1000) - 10);
-    
+
         const toHideYearText = document.getElementById(toHideYearTextId);
         setTimeout(() => toHideYearText.style.visibility = 'hidden', (seconds * 1000) - 10);
-    
+
         const leftEndTriangle = document.getElementById('triangle-end-left');
         leftEndTriangle.style.visibility = leftEndTriangleVisibility;
-    
+
         const leftEndCircle = document.getElementById('circle-end-left');
         leftEndCircle.style.visibility = leftEndCircleVisibility;
-    
+
         const rightEndCircle = document.getElementById('circle-end-right');
         setTimeout(() => rightEndCircle.style.visibility = rightEndCircleVisibility, (seconds * 1000));
-    
+
         const rightEndTriangle = document.getElementById('triangle-end-right');
         setTimeout(() => rightEndTriangle.style.visibility = rightEndTriangleVisibility, (seconds * 1000));
-    
+
         const branchElement = document.getElementsByClassName(animateBranchId);
         for (let i = 0; i < branchElement.length; i++) {
             branchElement[i].beginElement();
@@ -74,14 +78,14 @@ function moveRight() {
         for (let i = 0; i < textElement.length; i++) {
             textElement[i].beginElement();
         }
-    
+
         currentScreen += 1;
     }
 };
 
 function moveLeft() {
-    if (locked!==true) {
-        locked=true;
+    if (locked !== true) {
+        locked = true;
         let hiddenBranchId = 'branch' + (((currentScreen) * numBranches) - 1);
         let hiddenYearTextId = 'year' + (((currentScreen) * numBranches) - 1);
         let toHideBranchId = 'branch' + (currentScreen) * numBranches;
@@ -90,38 +94,38 @@ function moveLeft() {
         let leftEndCircleVisibility = 'hidden';
         let rightEndTriangleVisibility = 'visible';
         let rightEndCircleVisibility = 'hidden';
-        let animateBranchId = 'animate-branch-l-' + (currentScreen-1);
-        let animateTextId = 'animate-text-l-' + (currentScreen-1);
-    
+        let animateBranchId = 'animate-branch-l-' + (currentScreen - 1);
+        let animateTextId = 'animate-text-l-' + (currentScreen - 1);
+
         if (currentScreen === 1) {
             leftEndTriangleVisibility = 'hidden';
             leftEndCircleVisibility = 'visible';
         }
-    
+
         const hiddenBranch = document.getElementById(hiddenBranchId);
         hiddenBranch.style.visibility = 'visible';
-    
+
         const hiddenYearText = document.getElementById(hiddenYearTextId);
         hiddenYearText.style.visibility = 'visible';
-    
+
         const toHideBranch = document.getElementById(toHideBranchId);
         setTimeout(() => toHideBranch.style.visibility = 'hidden', (seconds * 1000) - 10);
-    
+
         const toHideYearText = document.getElementById(toHideYearTextId);
         setTimeout(() => toHideYearText.style.visibility = 'hidden', (seconds * 1000) - 10);
-    
+
         const leftEndTriangle = document.getElementById('triangle-end-left');
         setTimeout(() => leftEndTriangle.style.visibility = leftEndTriangleVisibility, (seconds * 1000));
-    
+
         const leftEndCircle = document.getElementById('circle-end-left');
         setTimeout(() => leftEndCircle.style.visibility = leftEndCircleVisibility, (seconds * 1000));
-        
+
         const rightEndCircle = document.getElementById('circle-end-right');
         rightEndCircle.style.visibility = rightEndCircleVisibility;
-    
+
         const rightEndTriangle = document.getElementById('triangle-end-right');
         rightEndTriangle.style.visibility = rightEndTriangleVisibility;
-    
+
         const branchElement = document.getElementsByClassName(animateBranchId);
         for (let i = 0; i < branchElement.length; i++) {
             branchElement[i].beginElement();
@@ -130,9 +134,34 @@ function moveLeft() {
         for (let i = 0; i < textElement.length; i++) {
             textElement[i].beginElement();
         }
-    
+
         currentScreen -= 1;
     }
+};
+
+function fadeTimeline() {
+    locked = true;
+    console.log('fade timeline');
+    const timelineAnimate = document.getElementById('timeline-animate');
+    timelineAnimate.beginElement();
+    const yearTimeline = document.getElementById('year-timeline');
+    setTimeout(() => yearTimeline.style.visibility = 'hidden', ((seconds * 1000) / 2));
+};
+
+function yearTextTitle(year) {
+    const mainTimeline = document.getElementById('timeline-svg');
+    const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+    const svgNS = svg.namespaceURI;
+
+    const yearText = document.createElementNS(svgNS, 'text');
+    yearText.setAttribute('font-size', '36');
+    yearText.setAttribute('font-family', 'sans-serif');
+    yearText.setAttribute('text-anchor', 'middle');
+    yearText.setAttribute('x', 110);
+    yearText.setAttribute('y', 80);
+    yearText.append(year);
+
+    mainTimeline.appendChild(yearText);
 };
 
 function grow() {
@@ -206,13 +235,30 @@ function createSVG(firstYear, lastYear) {
     // sets size comparision parms
     svg.setAttribute('viewBox', '0 0 1040 600');
 
+    svg.setAttribute('id', 'timeline-svg');
+
+    const yearTimeline = document.createElementNS(svgNS, 'g');
+    yearTimeline.setAttribute('id', 'year-timeline');
+
+    const timelineOpacity = document.createElementNS(svgNS, 'animate');
+    timelineOpacity.setAttribute('id', 'timeline-animate')
+    timelineOpacity.setAttribute('attributeName', 'opacity');
+    timelineOpacity.setAttribute('dur', (seconds / 2) + 's');
+    timelineOpacity.setAttribute('keyTimes', '0;1');
+    timelineOpacity.setAttribute('values', '1;0');
+    timelineOpacity.setAttribute('fill', 'freeze');
+    timelineOpacity.setAttribute('begin', 'indefinite');
+
+    yearTimeline.appendChild(timelineOpacity);
+
+
     // creates main timeline
     const path = document.createElementNS(svgNS, 'path');
     path.setAttribute('stroke-linecap', 'butt');
     path.setAttribute('d', 'M20 300 L1020 300');
     path.setAttribute('stroke', 'black');
     path.setAttribute('stroke-width', '20');
-    svg.appendChild(path);
+    yearTimeline.appendChild(path);
 
     // distance between branches
     const mDistance = 1000 / (numBranches + 1);
@@ -273,7 +319,7 @@ function createSVG(firstYear, lastYear) {
 
         }
 
-        svg.appendChild(branch);
+        yearTimeline.appendChild(branch);
         mLocation += mDistance;
     }
 
@@ -283,8 +329,8 @@ function createSVG(firstYear, lastYear) {
         let currentYear = firstYear + i;
 
         // creates link for text
-        const anchor = document.createElementNS(svgNS,'a');
-        anchor.setAttributeNS('http://www.w3.org/1999/xlink','xlink:href', 'http://screamingfemales.com/'+currentYear);
+        const anchor = document.createElementNS(svgNS, 'a');
+        anchor.setAttributeNS('http://www.w3.org/1999/xlink', 'xlink:href', 'http://screamingfemales.com/' + currentYear);
 
         const yearText = document.createElementNS(svgNS, 'text');
         yearText.setAttribute('font-size', '36');
@@ -304,7 +350,7 @@ function createSVG(firstYear, lastYear) {
         i % 2 === 0 ? dyValue = -15 : dyValue = 40;
         yearText.setAttribute('dy', dyValue);
 
-        
+
         // yearText.setAttribute('id', 'year' + currentYear);
         yearText.setAttribute('id', 'year' + i);
         yearText.append(currentYear);
@@ -336,8 +382,12 @@ function createSVG(firstYear, lastYear) {
         };
 
         xLocation += mDistance;
-        anchor.appendChild(yearText)
-        svg.appendChild(anchor);
+
+        // associated with year text link
+        // anchor.appendChild(yearText)
+        // yearTimeline.appendChild(anchor);
+
+        yearTimeline.appendChild(yearText);
     }
 
     // creates timeline endcaps
@@ -356,9 +406,9 @@ function createSVG(firstYear, lastYear) {
         return circle;
     };
     // creates start endcap
-    svg.appendChild(makeEnds(20, 'left'));
+    yearTimeline.appendChild(makeEnds(20, 'left'));
     // creates end endcap
-    svg.appendChild(makeEnds(1020, 'right'));
+    yearTimeline.appendChild(makeEnds(1020, 'right'));
 
     // create triangle endcap
     function makeTriEnds(refPoint, side) {
@@ -381,10 +431,10 @@ function createSVG(firstYear, lastYear) {
         return triangle
     }
 
-    svg.appendChild(makeTriEnds(20, 'left'));
-    svg.appendChild(makeTriEnds(1020, 'right'));
+    yearTimeline.appendChild(makeTriEnds(20, 'left'));
+    yearTimeline.appendChild(makeTriEnds(1020, 'right'));
 
-
+    svg.appendChild(yearTimeline);
     // appends svg to div
     document.getElementById('timeline').appendChild(svg);
 
