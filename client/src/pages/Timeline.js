@@ -15,7 +15,19 @@ document.addEventListener('click', (event) => {
     } else if (/^year/.test(event.target.id)) {
         fadeTimeline();
         const currentYear = event.target.textContent;
-        yearTextTitle(currentYear);
+        let yearX;
+        const yearY = event.target.getAttribute('y');
+        const yearDY = event.target.getAttribute('dy');
+        
+        if (currentScreen===0) {
+            yearX = event.target.getAttribute('x');
+        } else {
+            yearX=event.target.querySelector('.animate-text-' + (currentScreen-1)).getAttribute('to')
+        }
+        yearTextTitle(currentYear,yearX,yearY,yearDY);
+
+        // hide year element that was part of timeline
+        event.target.style.visibility = 'hidden';
     }
 });
 
@@ -86,6 +98,7 @@ function moveRight() {
 function moveLeft() {
     if (locked !== true) {
         locked = true;
+        setTimeout(() => locked = false, (seconds * 1000) + 10);
         let hiddenBranchId = 'branch' + (((currentScreen) * numBranches) - 1);
         let hiddenYearTextId = 'year' + (((currentScreen) * numBranches) - 1);
         let toHideBranchId = 'branch' + (currentScreen) * numBranches;
@@ -148,7 +161,7 @@ function fadeTimeline() {
     setTimeout(() => yearTimeline.style.visibility = 'hidden', ((seconds * 1000) / 2));
 };
 
-function yearTextTitle(year) {
+function yearTextTitle(year,xPosition,yPosition,dyPosition) {
     const mainTimeline = document.getElementById('timeline-svg');
     const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
     const svgNS = svg.namespaceURI;
@@ -157,70 +170,49 @@ function yearTextTitle(year) {
     yearText.setAttribute('font-size', '36');
     yearText.setAttribute('font-family', 'sans-serif');
     yearText.setAttribute('text-anchor', 'middle');
-    yearText.setAttribute('x', 110);
-    yearText.setAttribute('y', 80);
+    yearText.setAttribute('x', xPosition);
+    yearText.setAttribute('y', yPosition);
+    yearText.setAttribute('dy', dyPosition);
     yearText.append(year);
 
+    const animateTextX = document.createElementNS(svgNS, 'animate');
+    animateTextX.setAttribute('attributeName', 'x');
+    animateTextX.setAttribute('attributeType', 'XML');
+    animateTextX.setAttribute('begin', 'indefinite');
+    animateTextX.setAttribute('dur', (seconds/2) + 's');
+    animateTextX.setAttribute('fill', 'freeze');
+    animateTextX.setAttribute('from', xPosition);
+    animateTextX.setAttribute('to', 110);
+
+    yearText.append(animateTextX);
+
+    const animateTextY = document.createElementNS(svgNS, 'animate');
+    animateTextY.setAttribute('attributeName', 'y');
+    animateTextY.setAttribute('attributeType', 'XML');
+    animateTextY.setAttribute('begin', 'indefinite');
+    animateTextY.setAttribute('dur', (seconds/2) + 's');
+    animateTextY.setAttribute('fill', 'freeze');
+    animateTextY.setAttribute('from', yPosition);
+    animateTextY.setAttribute('to', 80);
+
+    yearText.append(animateTextY);
+
+    const animateTextDY = document.createElementNS(svgNS, 'animate');
+    animateTextDY.setAttribute('attributeName', 'dy');
+    animateTextDY.setAttribute('attributeType', 'XML');
+    animateTextDY.setAttribute('begin', 'indefinite');
+    animateTextDY.setAttribute('dur', (seconds/2) + 's');
+    animateTextDY.setAttribute('fill', 'freeze');
+    animateTextDY.setAttribute('from', dyPosition);
+    animateTextDY.setAttribute('to', 0);
+
+    yearText.append(animateTextDY);
+
     mainTimeline.appendChild(yearText);
+    animateTextX.beginElement();
+    animateTextY.beginElement();
+    animateTextDY.beginElement();
 };
-
-function grow() {
-    const hiddenBranch = document.getElementById('branch10');
-    hiddenBranch.style.visibility = 'visible';
-    const hiddenYearText = document.getElementById('year10');
-    hiddenYearText.style.visibility = 'visible';
-
-    const toHideBranch = document.getElementById('branch9');
-    setTimeout(() => toHideBranch.style.visibility = 'hidden', (seconds * 1000) - 10);
-
-    const toHideYearText = document.getElementById('year9');
-    setTimeout(() => toHideYearText.style.visibility = 'hidden', (seconds * 1000) - 10);
-
-    const hiddenLeftEnd = document.getElementById('triangle-end-left');
-    hiddenLeftEnd.style.visibility = 'visible';
-
-    const toHideLeftEnd = document.getElementById('circle-end-left');
-    toHideLeftEnd.style.visibility = 'hidden';
-
-    const hiddenRightEnd = document.getElementById('circle-end-right');
-    setTimeout(() => hiddenRightEnd.style.visibility = 'visible', (seconds * 1000));
-
-    const toHideRightEnd = document.getElementById('triangle-end-right');
-    setTimeout(() => toHideRightEnd.style.visibility = 'hidden', (seconds * 1000));
-
-    const branchElement = document.getElementsByClassName('animate-branch-0');
-    for (let i = 0; i < branchElement.length; i++) {
-        branchElement[i].beginElement();
-    }
-    const textElement = document.getElementsByClassName('animate-text-0');
-    for (let i = 0; i < textElement.length; i++) {
-        textElement[i].beginElement();
-    }
-};
-
-function grow2() {
-    const hiddenBranch = document.getElementById('branch20');
-    hiddenBranch.style.visibility = 'visible';
-    const hiddenYearText = document.getElementById('year20');
-    hiddenYearText.style.visibility = 'visible';
-
-    const toHideBranch = document.getElementById('branch19');
-    setTimeout(() => toHideBranch.style.visibility = 'hidden', (seconds * 1000) - 10);
-
-    const toHideYearText = document.getElementById('year19');
-    setTimeout(() => toHideYearText.style.visibility = 'hidden', (seconds * 1000) - 10);
-    const branchElement = document.getElementsByClassName('animate-branch-1');
-    for (let i = 0; i < branchElement.length; i++) {
-        branchElement[i].beginElement();
-    }
-    const textElement = document.getElementsByClassName('animate-text-1');
-    for (let i = 0; i < textElement.length; i++) {
-        textElement[i].beginElement();
-    }
-};
-
-
-
 
 function createSVG(firstYear, lastYear) {
     const branches = lastYear - firstYear + 1;
@@ -355,6 +347,8 @@ function createSVG(firstYear, lastYear) {
         yearText.setAttribute('id', 'year' + i);
         yearText.append(currentYear);
 
+        yearText.style.cursor = 'pointer';
+
         const loops = numScreens - 1;
         let startXLocation = xLocation;
         for (let j = 0; j < loops; j++) {
@@ -442,12 +436,10 @@ function createSVG(firstYear, lastYear) {
 
 
 function Timeline() {
-    useEffect(() => { createSVG(2005, 2020); }, []);
+    useEffect(() => { createSVG(2005, 2035); }, []);
 
     return (
         <div>
-            <button id='button' onClick={grow}>RUN</button>
-            <button id='button2' onClick={grow2}>RUN2</button>
             <div id="timeline"></div>
         </div>
     );
