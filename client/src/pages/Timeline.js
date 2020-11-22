@@ -4,6 +4,9 @@ const seconds = 3;
 const numBranches = 10;
 let numScreens = 0;
 let currentScreen = 0;
+
+const numMonthBranches = 6;
+let numMonthScreens = 0;
 let locked = false;
 
 // Allows right arrow to be clickable and run grow function
@@ -14,6 +17,7 @@ document.addEventListener('click', (event) => {
         moveLeft();
     } else if (/^year/.test(event.target.id)) {
         fadeTimeline();
+
         const currentYear = event.target.textContent;
         let yearX;
         const yearY = event.target.getAttribute('y');
@@ -28,6 +32,8 @@ document.addEventListener('click', (event) => {
 
         // hide year element that was part of timeline
         event.target.style.visibility = 'hidden';
+        monthsTimeline();
+        fadeMonthsTimelineIn();
     }
 });
 
@@ -212,6 +218,225 @@ function yearTextTitle(year,xPosition,yPosition,dyPosition) {
     animateTextX.beginElement();
     animateTextY.beginElement();
     animateTextDY.beginElement();
+};
+
+function monthsTimeline() {
+
+    const monthArray = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+    // 12 months
+    const branches = 12;
+    numMonthScreens = Math.ceil(branches / numMonthBranches);
+    const mainTimeline = document.getElementById('timeline-svg');
+    const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+    const svgNS = svg.namespaceURI;
+
+    const monthTimeline = document.createElementNS(svgNS, 'g');
+    monthTimeline.setAttribute('id', 'monthline-svg');
+
+    // fade in parameters
+    const timelineOpacity = document.createElementNS(svgNS, 'animate');
+    timelineOpacity.setAttribute('id', 'month-timeline-fade-in')
+    timelineOpacity.setAttribute('attributeName', 'opacity');
+    timelineOpacity.setAttribute('dur', (seconds / 2) + 's');
+    timelineOpacity.setAttribute('keyTimes', '0;1');
+    timelineOpacity.setAttribute('values', '0;1');
+    timelineOpacity.setAttribute('fill', 'freeze');
+    timelineOpacity.setAttribute('begin', 'indefinite');
+
+    monthTimeline.appendChild(timelineOpacity);
+
+    // creates main timeline
+    const path = document.createElementNS(svgNS, 'path');
+    path.setAttribute('stroke-linecap', 'butt');
+    path.setAttribute('d', 'M20 300 L1020 300');
+    path.setAttribute('stroke', 'black');
+    path.setAttribute('stroke-width', '20');
+    monthTimeline.appendChild(path);
+
+    // distance between branches
+    const mDistance = 1000 / (numMonthBranches + 1);
+
+    // first branch = distance plus offset
+    let mLocation = mDistance + 20;
+
+    // loop to create branches
+    for (let i = 0; i < branches; i++) {
+        const branch = document.createElementNS(svgNS, 'path');
+        branch.setAttribute('stroke-linecap', 'butt');
+
+        // ternary to alternate top and bottom branches
+        let branchD;
+        i % 2 === 0 ? branchD = `M${mLocation} 300 L${mLocation} 200` : branchD = `M${mLocation} 300 L${mLocation} 400`;
+
+        branch.setAttribute('d', branchD);
+        branch.setAttribute('stroke', 'black');
+        branch.setAttribute('stroke-width', '10');
+        branch.setAttribute('id', 'month-branch' + i);
+
+        if (i % numMonthBranches === 0 && i !== 0) {
+            branch.style.visibility = 'hidden';
+        }
+
+        const loops = numMonthScreens - 1;
+        let startBranchD = branchD;
+        for (let j = 0; j < loops; j++) {
+
+            const animateBranch = document.createElementNS(svgNS, 'animate');
+            const animateBranchL = document.createElementNS(svgNS, 'animate');
+            animateBranch.setAttribute('class', 'animate-month-branch-' + j);
+            animateBranchL.setAttribute('class', 'animate-month-branch-l-' + j);
+            animateBranch.setAttribute('attributeName', 'd');
+            animateBranchL.setAttribute('attributeName', 'd');
+            animateBranch.setAttribute('attributeType', 'XML');
+            animateBranchL.setAttribute('attributeType', 'XML');
+            animateBranch.setAttribute('begin', 'indefinite');
+            animateBranchL.setAttribute('begin', 'indefinite');
+            animateBranch.setAttribute('dur', seconds + 's');
+            animateBranchL.setAttribute('dur', seconds + 's');
+            animateBranch.setAttribute('fill', 'freeze');
+            animateBranchL.setAttribute('fill', 'freeze');
+            animateBranch.setAttribute('from', startBranchD);
+            animateBranchL.setAttribute('to', startBranchD);
+
+            let endAnimateBranchD;
+            i % 2 === 0 ? endAnimateBranchD = `M${mLocation - ((j + 1) * numBranches * mDistance)} 300 L${mLocation - ((j + 1) * numBranches * mDistance)} 200` : endAnimateBranchD = `M${mLocation - ((j + 1) * numBranches * mDistance)} 300 L${mLocation - ((j + 1) * numBranches * mDistance)} 400`;
+            startBranchD = endAnimateBranchD;
+
+            animateBranch.setAttribute('to', endAnimateBranchD);
+            animateBranchL.setAttribute('from', endAnimateBranchD);
+            branch.appendChild(animateBranch);
+            branch.appendChild(animateBranchL);
+
+
+        }
+
+        monthTimeline.appendChild(branch);
+        mLocation += mDistance;
+    }
+
+    // creates text for month names
+    let xLocation = mDistance + 20;
+    for (let i = 0; i < branches; i++) {
+        let currentMonthIndex = i;
+
+        // creates link for text
+        const anchor = document.createElementNS(svgNS, 'a');
+        anchor.setAttributeNS('http://www.w3.org/1999/xlink', 'xlink:href', 'http://screamingfemales.com/' + currentMonthIndex);
+
+        const monthText = document.createElementNS(svgNS, 'text');
+        monthText.setAttribute('font-size', '36');
+        monthText.setAttribute('font-family', 'sans-serif');
+        monthText.setAttribute('text-anchor', 'middle');
+        monthText.setAttribute('x', xLocation);
+        if (i % numMonthBranches === 0 && i !== 0) {
+            monthText.style.visibility = 'hidden';
+        }
+
+
+        let yLocation;
+        let dyValue;
+        i % 2 === 0 ? yLocation = 200 : yLocation = 400;
+        monthText.setAttribute('y', yLocation);
+
+        i % 2 === 0 ? dyValue = -15 : dyValue = 40;
+        monthText.setAttribute('dy', dyValue);
+
+
+        // monthText.setAttribute('id', 'month' + currentMonthIndex);
+        monthText.setAttribute('id', 'month' + i);
+        monthText.append(monthArray[currentMonthIndex]);
+
+        monthText.style.cursor = 'pointer';
+
+        const loops = numMonthScreens - 1;
+        let startXLocation = xLocation;
+        for (let j = 0; j < loops; j++) {
+            const animateText = document.createElementNS(svgNS, 'animate');
+            const animateTextL = document.createElementNS(svgNS, 'animate');
+            animateText.setAttribute('class', 'animate-month-text-' + j);
+            animateTextL.setAttribute('class', 'animate-month-text-l-' + j);
+            animateText.setAttribute('attributeName', 'x');
+            animateTextL.setAttribute('attributeName', 'x');
+            animateText.setAttribute('attributeType', 'XML');
+            animateTextL.setAttribute('attributeType', 'XML');
+            animateText.setAttribute('begin', 'indefinite');
+            animateTextL.setAttribute('begin', 'indefinite');
+            animateText.setAttribute('dur', seconds + 's');
+            animateTextL.setAttribute('dur', seconds + 's');
+            animateText.setAttribute('fill', 'freeze');
+            animateTextL.setAttribute('fill', 'freeze');
+            animateText.setAttribute('from', startXLocation);
+            animateTextL.setAttribute('to', startXLocation);
+            animateText.setAttribute('to', startXLocation - (numMonthBranches * mDistance));
+            animateTextL.setAttribute('from', startXLocation - (numMonthBranches * mDistance));
+            startXLocation -= numMonthBranches * mDistance;
+            monthText.append(animateText);
+            monthText.append(animateTextL);
+        };
+
+        xLocation += mDistance;
+
+        // associated with year text link
+        // anchor.appendChild(monthText)
+        // monthTimeline.appendChild(anchor);
+
+        monthTimeline.appendChild(monthText);
+    }
+
+    // creates timeline endcaps
+    function makeEnds(cxValue, side) {
+        const circle = document.createElementNS(svgNS, 'circle');
+        circle.setAttribute('cx', cxValue);
+        circle.setAttribute('cy', 300);
+        circle.setAttribute('r', 19);
+        circle.setAttribute('stroke', 'black');
+        if (side === 'right') {
+            circle.setAttribute('id', 'circle-end-right-month');
+            circle.style.visibility = 'hidden';
+        } else {
+            circle.setAttribute('id', 'circle-end-left-month');
+        }
+        return circle;
+    };
+    // creates start endcap
+    monthTimeline.appendChild(makeEnds(20, 'left'));
+    // creates end endcap
+    monthTimeline.appendChild(makeEnds(1020, 'right'));
+
+    // create triangle endcap
+    function makeTriEnds(refPoint, side) {
+        const triangle = document.createElementNS(svgNS, 'polygon');
+        // triangle.setAttribute('points', '270,30 330,30 300,10');
+        if (side === 'left') {
+            triangle.setAttribute('id', 'triangle-end-left-month');
+            const pointsString = (refPoint + 10) + ',280 ' + (refPoint + 10) + ',320 ' + (refPoint - 20) + ',300';
+            triangle.setAttribute('points', pointsString);
+            triangle.style.visibility = 'hidden';
+            triangle.style.cursor = 'pointer';
+        } else if (side === 'right') {
+            triangle.setAttribute('id', 'triangle-end-right-month');
+            const pointsString = (refPoint - 10) + ',280 ' + (refPoint - 10) + ',320 ' + (refPoint + 20) + ',300';
+            triangle.setAttribute('points', pointsString);
+            triangle.style.cursor = 'pointer';
+        }
+        // triangle.setAttribute('points', '30,280 30,320 0,300');
+        triangle.setAttribute('stroke', 'black');
+        return triangle
+    }
+
+    monthTimeline.appendChild(makeTriEnds(20, 'left'));
+    monthTimeline.appendChild(makeTriEnds(1020, 'right'));
+
+    mainTimeline.appendChild(monthTimeline);
+
+};
+
+function fadeMonthsTimelineIn() {
+    // locked = true;
+    // console.log('fade timeline');
+    const timelineAnimate = document.getElementById('month-timeline-fade-in');
+    timelineAnimate.beginElement();
+    
 };
 
 function createSVG(firstYear, lastYear) {
