@@ -7,6 +7,7 @@ let currentScreen = 0;
 
 const numMonthBranches = 6;
 let numMonthScreens = 0;
+let currentMonthScreen = 0;
 let locked = false;
 
 // Allows right arrow to be clickable and run grow function
@@ -34,6 +35,13 @@ document.addEventListener('click', (event) => {
         event.target.style.visibility = 'hidden';
         monthsTimeline();
         fadeMonthsTimelineIn();
+    } else if (event.target.id === 'triangle-end-right-month') {
+        moveRightMonth();
+    } else if (event.target.id === 'triangle-end-left-month') {
+        moveLeftMonth();
+    } else if (/^month/.test(event.target.id)) {
+        const currentMonth = event.target.textContent;
+        console.log(currentMonth);
     }
 });
 
@@ -158,8 +166,123 @@ function moveLeft() {
     }
 };
 
+function moveRightMonth() {
+    if (locked !== true) {
+        locked = true;
+        setTimeout(() => locked = false, (seconds * 1000) + 10);
+        let hiddenBranchId = 'month-branch' + (currentMonthScreen + 1) * numMonthBranches;
+        let hiddenYearTextId = 'month' + (currentMonthScreen + 1) * numMonthBranches;
+        let toHideBranchId = 'month-branch' + (((currentMonthScreen + 1) * numMonthBranches) - 1);
+        let toHideYearTextId = 'month' + (((currentMonthScreen + 1) * numMonthBranches) - 1);
+        let leftEndTriangleVisibility = 'visible';
+        let leftEndCircleVisibility = 'hidden';
+        let rightEndTriangleVisibility = 'visible';
+        let rightEndCircleVisibility = 'hidden';
+        let animateBranchId = 'animate-month-branch-' + currentMonthScreen;
+        let animateTextId = 'animate-month-text-' + currentMonthScreen;
+
+        if (currentMonthScreen + 2 === numMonthScreens) {
+            rightEndTriangleVisibility = 'hidden';
+            rightEndCircleVisibility = 'visible';
+        }
+
+        const hiddenBranch = document.getElementById(hiddenBranchId);
+        hiddenBranch.style.visibility = 'visible';
+        const hiddenYearText = document.getElementById(hiddenYearTextId);
+        hiddenYearText.style.visibility = 'visible';
+
+        const toHideBranch = document.getElementById(toHideBranchId);
+        setTimeout(() => toHideBranch.style.visibility = 'hidden', (seconds * 1000) - 10);
+
+        const toHideYearText = document.getElementById(toHideYearTextId);
+        setTimeout(() => toHideYearText.style.visibility = 'hidden', (seconds * 1000) - 10);
+
+        const leftEndTriangle = document.getElementById('triangle-end-left-month');
+        leftEndTriangle.style.visibility = leftEndTriangleVisibility;
+
+        const leftEndCircle = document.getElementById('circle-end-left-month');
+        leftEndCircle.style.visibility = leftEndCircleVisibility;
+
+        const rightEndCircle = document.getElementById('circle-end-right-month');
+        setTimeout(() => rightEndCircle.style.visibility = rightEndCircleVisibility, (seconds * 1000));
+
+        const rightEndTriangle = document.getElementById('triangle-end-right-month');
+        setTimeout(() => rightEndTriangle.style.visibility = rightEndTriangleVisibility, (seconds * 1000));
+
+        const branchElement = document.getElementsByClassName(animateBranchId);
+        for (let i = 0; i < branchElement.length; i++) {
+            branchElement[i].beginElement();
+        }
+        const textElement = document.getElementsByClassName(animateTextId);
+        for (let i = 0; i < textElement.length; i++) {
+            textElement[i].beginElement();
+        }
+
+        currentMonthScreen += 1;
+    }
+};
+
+function moveLeftMonth() {
+    if (locked !== true) {
+        locked=true;
+        setTimeout(() => locked = false, (seconds * 1000) + 10);
+
+        let hiddenBranchId = 'month-branch' + (((currentMonthScreen) * numMonthBranches) - 1);
+        let hiddenYearTextId = 'month' + (((currentMonthScreen) * numMonthBranches) - 1);
+        let toHideBranchId = 'month-branch' + (currentMonthScreen) * numMonthBranches;
+        let toHideYearTextId = 'month' + (currentMonthScreen) * numMonthBranches;
+        let leftEndTriangleVisibility = 'visible';
+        let leftEndCircleVisibility = 'hidden';
+        let rightEndTriangleVisibility = 'visible';
+        let rightEndCircleVisibility = 'hidden';
+        let animateBranchId = 'animate-month-branch-l-' + (currentMonthScreen - 1);
+        let animateTextId = 'animate-month-text-l-' + (currentMonthScreen - 1);
+
+        if (currentMonthScreen === 1) {
+            leftEndTriangleVisibility = 'hidden';
+            leftEndCircleVisibility = 'visible';
+        }
+
+        const hiddenBranch = document.getElementById(hiddenBranchId);
+        hiddenBranch.style.visibility = 'visible';
+
+        const hiddenYearText = document.getElementById(hiddenYearTextId);
+        hiddenYearText.style.visibility = 'visible';
+
+        const toHideBranch = document.getElementById(toHideBranchId);
+        setTimeout(() => toHideBranch.style.visibility = 'hidden', (seconds * 1000) - 10);
+
+        const toHideYearText = document.getElementById(toHideYearTextId);
+        setTimeout(() => toHideYearText.style.visibility = 'hidden', (seconds * 1000) - 10);
+
+        const leftEndTriangle = document.getElementById('triangle-end-left-month');
+        setTimeout(() => leftEndTriangle.style.visibility = leftEndTriangleVisibility, (seconds * 1000));
+
+        const leftEndCircle = document.getElementById('circle-end-left-month');
+        setTimeout(() => leftEndCircle.style.visibility = leftEndCircleVisibility, (seconds * 1000));
+
+        const rightEndCircle = document.getElementById('circle-end-right-month');
+        rightEndCircle.style.visibility = rightEndCircleVisibility;
+
+        const rightEndTriangle = document.getElementById('triangle-end-right-month');
+        rightEndTriangle.style.visibility = rightEndTriangleVisibility;
+
+        const branchElement = document.getElementsByClassName(animateBranchId);
+        for (let i = 0; i < branchElement.length; i++) {
+            branchElement[i].beginElement();
+        }
+        const textElement = document.getElementsByClassName(animateTextId);
+        for (let i = 0; i < textElement.length; i++) {
+            textElement[i].beginElement();
+        }
+
+        currentMonthScreen -= 1;
+    }
+};
+
 function fadeTimeline() {
     locked = true;
+    setTimeout(() => locked = false, ((seconds * 1000)/2) + 10);
     console.log('fade timeline');
     const timelineAnimate = document.getElementById('timeline-animate');
     timelineAnimate.beginElement();
@@ -299,7 +422,7 @@ function monthsTimeline() {
             animateBranchL.setAttribute('to', startBranchD);
 
             let endAnimateBranchD;
-            i % 2 === 0 ? endAnimateBranchD = `M${mLocation - ((j + 1) * numBranches * mDistance)} 300 L${mLocation - ((j + 1) * numBranches * mDistance)} 200` : endAnimateBranchD = `M${mLocation - ((j + 1) * numBranches * mDistance)} 300 L${mLocation - ((j + 1) * numBranches * mDistance)} 400`;
+            i % 2 === 0 ? endAnimateBranchD = `M${mLocation - ((j + 1) * numMonthBranches * mDistance)} 300 L${mLocation - ((j + 1) * numMonthBranches * mDistance)} 200` : endAnimateBranchD = `M${mLocation - ((j + 1) * numMonthBranches * mDistance)} 300 L${mLocation - ((j + 1) * numMonthBranches * mDistance)} 400`;
             startBranchD = endAnimateBranchD;
 
             animateBranch.setAttribute('to', endAnimateBranchD);
