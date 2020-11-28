@@ -35,6 +35,7 @@ document.addEventListener('click', (event) => {
         event.target.style.visibility = 'hidden';
         monthsTimeline(currentYear);
         fadeMonthsTimelineIn();
+        createBackButton();
     } else if (event.target.id === 'triangle-end-right-month') {
         moveRightMonth();
     } else if (event.target.id === 'triangle-end-left-month') {
@@ -563,6 +564,36 @@ function fadeMonthsTimelineIn() {
     
 };
 
+function createBackButton() {
+    const mainTimeline = document.getElementById('timeline-svg');
+    const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+    const svgNS = svg.namespaceURI;
+
+    const backText = document.createElementNS(svgNS, 'text');
+    backText.setAttribute('font-size', '36');
+    backText.setAttribute('font-family', 'sans-serif');
+    backText.setAttribute('text-anchor', 'middle');
+    backText.setAttribute('x', 930);
+    backText.setAttribute('y', 80);
+    backText.append('< Back');
+
+    const backFadeInOpacity = document.createElementNS(svgNS, 'animate');
+    backFadeInOpacity.setAttribute('id', 'back-fade-in-animate')
+    backFadeInOpacity.setAttribute('attributeName', 'opacity');
+    backFadeInOpacity.setAttribute('dur', (seconds / 2) + 's');
+    backFadeInOpacity.setAttribute('keyTimes', '0;1');
+    backFadeInOpacity.setAttribute('values', '0;1');
+    backFadeInOpacity.setAttribute('fill', 'freeze');
+    backFadeInOpacity.setAttribute('begin', 'indefinite');
+
+    backText.appendChild(backFadeInOpacity);
+
+    mainTimeline.appendChild(backText);
+
+    const backAnimate = document.getElementById('back-fade-in-animate');
+    backAnimate.beginElement();
+};
+
 function createSVG(firstYear, lastYear) {
     const branches = lastYear - firstYear + 1;
 
@@ -780,6 +811,7 @@ function createSVG(firstYear, lastYear) {
     svg.appendChild(yearTimeline);
     // appends svg to div
     document.getElementById('timeline').appendChild(svg);
+    
 
 };
 
