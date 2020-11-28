@@ -33,7 +33,7 @@ document.addEventListener('click', (event) => {
 
         // hide year element that was part of timeline
         event.target.style.visibility = 'hidden';
-        monthsTimeline();
+        monthsTimeline(currentYear);
         fadeMonthsTimelineIn();
     } else if (event.target.id === 'triangle-end-right-month') {
         moveRightMonth();
@@ -343,7 +343,8 @@ function yearTextTitle(year,xPosition,yPosition,dyPosition) {
     animateTextDY.beginElement();
 };
 
-function monthsTimeline() {
+function monthsTimeline(yearInput) {
+    const currentYear = yearInput;
 
     const monthArray = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
     // 12 months
@@ -444,7 +445,7 @@ function monthsTimeline() {
 
         // creates link for text
         const anchor = document.createElementNS(svgNS, 'a');
-        anchor.setAttributeNS('http://www.w3.org/1999/xlink', 'xlink:href', 'http://screamingfemales.com/' + currentMonthIndex);
+        anchor.setAttributeNS('http://www.w3.org/1999/xlink', 'xlink:href', 'http://screamingfemales.com/' + monthArray[currentMonthIndex] + currentYear);
 
         const monthText = document.createElementNS(svgNS, 'text');
         monthText.setAttribute('font-size', '36');
@@ -500,10 +501,10 @@ function monthsTimeline() {
         xLocation += mDistance;
 
         // associated with year text link
-        // anchor.appendChild(monthText)
-        // monthTimeline.appendChild(anchor);
+        anchor.appendChild(monthText)
+        monthTimeline.appendChild(anchor);
 
-        monthTimeline.appendChild(monthText);
+        // monthTimeline.appendChild(monthText);
     }
 
     // creates timeline endcaps
