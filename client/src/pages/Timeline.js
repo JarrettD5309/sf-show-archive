@@ -33,7 +33,7 @@ document.addEventListener('click', (event) => {
 
         // hide year element that was part of timeline
         event.target.style.visibility = 'hidden';
-        monthsTimeline(currentYear);
+        monthsTimeline();
         fadeMonthsTimelineIn();
         createBackButton();
     } else if (event.target.id === 'triangle-end-right-month') {
@@ -43,6 +43,9 @@ document.addEventListener('click', (event) => {
     } else if (/^month/.test(event.target.id)) {
         const currentMonth = event.target.textContent;
         console.log(currentMonth);
+    } else if (event.target.id === 'back-button') {
+        console.log('back button');
+        fadeInTimeline();
     }
 });
 
@@ -284,11 +287,19 @@ function moveLeftMonth() {
 function fadeTimeline() {
     locked = true;
     setTimeout(() => locked = false, ((seconds * 1000)/2) + 10);
-    console.log('fade timeline');
     const timelineAnimate = document.getElementById('timeline-animate');
     timelineAnimate.beginElement();
     const yearTimeline = document.getElementById('year-timeline');
     setTimeout(() => yearTimeline.style.visibility = 'hidden', ((seconds * 1000) / 2));
+};
+
+function fadeInTimeline() {
+    locked = true;
+    setTimeout(() => locked = false, ((seconds * 1000)/2) + 10);
+    const yearTimeline = document.getElementById('year-timeline');
+    yearTimeline.style.visibility = 'visible';
+    const timelineAnimateFadeIn = document.getElementById('timeline-animate-fade-in');
+    timelineAnimateFadeIn.beginElement();
 };
 
 function yearTextTitle(year,xPosition,yPosition,dyPosition) {
@@ -297,6 +308,7 @@ function yearTextTitle(year,xPosition,yPosition,dyPosition) {
     const svgNS = svg.namespaceURI;
 
     const yearText = document.createElementNS(svgNS, 'text');
+    yearText.setAttribute('id','year-header-text');
     yearText.setAttribute('font-size', '36');
     yearText.setAttribute('font-family', 'sans-serif');
     yearText.setAttribute('text-anchor', 'middle');
@@ -344,8 +356,8 @@ function yearTextTitle(year,xPosition,yPosition,dyPosition) {
     animateTextDY.beginElement();
 };
 
-function monthsTimeline(yearInput) {
-    const currentYear = yearInput;
+function monthsTimeline() {
+    const currentYear = document.getElementById('year-header-text').textContent;
 
     const monthArray = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
     // 12 months
@@ -570,6 +582,7 @@ function createBackButton() {
     const svgNS = svg.namespaceURI;
 
     const backText = document.createElementNS(svgNS, 'text');
+    backText.setAttribute('id','back-button');
     backText.setAttribute('font-size', '36');
     backText.setAttribute('font-family', 'sans-serif');
     backText.setAttribute('text-anchor', 'middle');
@@ -587,6 +600,8 @@ function createBackButton() {
     backFadeInOpacity.setAttribute('begin', 'indefinite');
 
     backText.appendChild(backFadeInOpacity);
+
+    backText.style.cursor = 'pointer';
 
     mainTimeline.appendChild(backText);
 
@@ -622,6 +637,17 @@ function createSVG(firstYear, lastYear) {
     timelineOpacity.setAttribute('begin', 'indefinite');
 
     yearTimeline.appendChild(timelineOpacity);
+
+    const timelineOpacityFadeIn = document.createElementNS(svgNS, 'animate');
+    timelineOpacityFadeIn.setAttribute('id', 'timeline-animate-fade-in')
+    timelineOpacityFadeIn.setAttribute('attributeName', 'opacity');
+    timelineOpacityFadeIn.setAttribute('dur', (seconds / 2) + 's');
+    timelineOpacityFadeIn.setAttribute('keyTimes', '0;1');
+    timelineOpacityFadeIn.setAttribute('values', '0;1');
+    timelineOpacityFadeIn.setAttribute('fill', 'freeze');
+    timelineOpacityFadeIn.setAttribute('begin', 'indefinite');
+
+    yearTimeline.appendChild(timelineOpacityFadeIn);
 
 
     // creates main timeline
