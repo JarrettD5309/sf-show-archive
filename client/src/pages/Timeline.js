@@ -8,50 +8,63 @@ let currentScreen = 0;
 const numMonthBranches = 6;
 let numMonthScreens = 0;
 let currentMonthScreen = 0;
+
+let currentYearTextElement;
+
 let locked = false;
 
-// Allows right arrow to be clickable and run grow function
-document.addEventListener('click', (event) => {
-    if (event.target.id === 'triangle-end-right') {
-        moveRight();
-    } else if (event.target.id === 'triangle-end-left') {
-        moveLeft();
-    } else if (/^year/.test(event.target.id)) {
-        fadeTimeline();
+// all clickable triggers
 
-        const currentYear = event.target.textContent;
-        let yearX;
-        const yearY = event.target.getAttribute('y');
-        const yearDY = event.target.getAttribute('dy');
+    document.addEventListener('click', (event) => {
+        if (locked !== true) {
+
+            if (event.target.id === 'triangle-end-right') {
+                moveRight();
+            } else if (event.target.id === 'triangle-end-left') {
+                moveLeft();
+            } else if (/^year/.test(event.target.id)) {
+                fadeTimeline();
         
-        if (currentScreen===0) {
-            yearX = event.target.getAttribute('x');
-        } else {
-            yearX=event.target.querySelector('.animate-text-' + (currentScreen-1)).getAttribute('to')
+                const currentYear = event.target.textContent;
+                let yearX;
+                const yearY = event.target.getAttribute('y');
+                const yearDY = event.target.getAttribute('dy');
+                
+                if (currentScreen===0) {
+                    yearX = event.target.getAttribute('x');
+                } else {
+                    yearX=event.target.querySelector('.animate-text-' + (currentScreen-1)).getAttribute('to')
+                }
+                yearTextTitle(currentYear,yearX,yearY,yearDY);
+        
+                // hide year element that was part of timeline
+                currentYearTextElement = event.target;
+                event.target.style.visibility = 'hidden';
+                monthsTimeline();
+                fadeMonthsTimelineIn();
+                createBackButton();
+            } else if (event.target.id === 'triangle-end-right-month') {
+                moveRightMonth();
+            } else if (event.target.id === 'triangle-end-left-month') {
+                moveLeftMonth();
+            } else if (/^month/.test(event.target.id)) {
+                const currentMonth = event.target.textContent.toLowerCase();
+                console.log(currentMonth);
+                const currentYear = document.getElementById('year-header-text').textContent;
+                // window.location.assign('http://screamingfemales.com/' + currentMonth + currentYear);
+            } else if (event.target.id === 'back-button') {
+                console.log('back button');
+                fadeInTimeline();
+                fadeOutMonthsTimeline();
+                fadeOutBackButton();
+                yearTextReturn();
+                timelineYearVisible();
+            }
         }
-        yearTextTitle(currentYear,yearX,yearY,yearDY);
+    });
 
-        // hide year element that was part of timeline
-        event.target.style.visibility = 'hidden';
-        monthsTimeline();
-        fadeMonthsTimelineIn();
-        createBackButton();
-    } else if (event.target.id === 'triangle-end-right-month') {
-        moveRightMonth();
-    } else if (event.target.id === 'triangle-end-left-month') {
-        moveLeftMonth();
-    } else if (/^month/.test(event.target.id)) {
-        const currentMonth = event.target.textContent;
-        console.log(currentMonth);
-    } else if (event.target.id === 'back-button') {
-        console.log('back button');
-        fadeInTimeline();
-    }
-});
 
 function moveRight() {
-
-    if (locked !== true) {
         locked = true;
         setTimeout(() => locked = false, (seconds * 1000) + 10);
         let hiddenBranchId = 'branch' + (currentScreen + 1) * numBranches;
@@ -78,9 +91,12 @@ function moveRight() {
         }
 
         const hiddenBranch = document.getElementById(hiddenBranchId);
-        hiddenBranch.style.visibility = 'visible';
+        // hiddenBranch.style.visibility = 'visible';
+        hiddenBranch.style.removeProperty('visibility');
         const hiddenYearText = document.getElementById(hiddenYearTextId);
-        hiddenYearText.style.visibility = 'visible';
+        // hiddenYearText.style.visibility = 'visible';
+        hiddenYearText.style.removeProperty('visibility');
+        
 
         const toHideBranch = document.getElementById(toHideBranchId);
         setTimeout(() => toHideBranch.style.visibility = 'hidden', (seconds * 1000) - 10);
@@ -89,16 +105,16 @@ function moveRight() {
         setTimeout(() => toHideYearText.style.visibility = 'hidden', (seconds * 1000) - 10);
 
         const leftEndTriangle = document.getElementById('triangle-end-left');
-        leftEndTriangle.style.visibility = leftEndTriangleVisibility;
+        leftEndTriangleVisibility==='hidden' ? leftEndTriangle.style.visibility = leftEndTriangleVisibility : leftEndTriangle.style.removeProperty('visibility');
 
         const leftEndCircle = document.getElementById('circle-end-left');
-        leftEndCircle.style.visibility = leftEndCircleVisibility;
+        leftEndCircleVisibility==='hidden' ? leftEndCircle.style.visibility = leftEndCircleVisibility : leftEndCircle.style.removeProperty('visibility');
 
         const rightEndCircle = document.getElementById('circle-end-right');
-        setTimeout(() => rightEndCircle.style.visibility = rightEndCircleVisibility, (seconds * 1000));
+        setTimeout(() => rightEndCircleVisibility==='hidden' ? rightEndCircle.style.visibility = rightEndCircleVisibility : rightEndCircle.style.removeProperty('visibility'), (seconds * 1000));
 
         const rightEndTriangle = document.getElementById('triangle-end-right');
-        setTimeout(() => rightEndTriangle.style.visibility = rightEndTriangleVisibility, (seconds * 1000));
+        setTimeout(() => rightEndTriangleVisibility==='hidden' ? rightEndTriangle.style.visibility = rightEndTriangleVisibility : rightEndTriangle.style.removeProperty('visibility'), (seconds * 1000));
 
         const branchElement = document.getElementsByClassName(animateBranchId);
         for (let i = 0; i < branchElement.length; i++) {
@@ -110,11 +126,9 @@ function moveRight() {
         }
 
         currentScreen += 1;
-    }
 };
 
 function moveLeft() {
-    if (locked !== true) {
         locked = true;
         setTimeout(() => locked = false, (seconds * 1000) + 10);
         let hiddenBranchId = 'branch' + (((currentScreen) * numBranches) - 1);
@@ -134,10 +148,12 @@ function moveLeft() {
         }
 
         const hiddenBranch = document.getElementById(hiddenBranchId);
-        hiddenBranch.style.visibility = 'visible';
+        // hiddenBranch.style.visibility = 'visible';
+        hiddenBranch.style.removeProperty('visibility');
 
         const hiddenYearText = document.getElementById(hiddenYearTextId);
-        hiddenYearText.style.visibility = 'visible';
+        // hiddenYearText.style.visibility = 'visible';
+        hiddenYearText.style.removeProperty('visibility');
 
         const toHideBranch = document.getElementById(toHideBranchId);
         setTimeout(() => toHideBranch.style.visibility = 'hidden', (seconds * 1000) - 10);
@@ -146,16 +162,16 @@ function moveLeft() {
         setTimeout(() => toHideYearText.style.visibility = 'hidden', (seconds * 1000) - 10);
 
         const leftEndTriangle = document.getElementById('triangle-end-left');
-        setTimeout(() => leftEndTriangle.style.visibility = leftEndTriangleVisibility, (seconds * 1000));
+        setTimeout(() => leftEndTriangleVisibility==='hidden' ? leftEndTriangle.style.visibility = leftEndTriangleVisibility : leftEndTriangle.style.removeProperty('visibility'), (seconds * 1000));
 
         const leftEndCircle = document.getElementById('circle-end-left');
-        setTimeout(() => leftEndCircle.style.visibility = leftEndCircleVisibility, (seconds * 1000));
+        setTimeout(() => leftEndCircleVisibility==='hidden' ? leftEndCircle.style.visibility = leftEndCircleVisibility : leftEndCircle.style.removeProperty('visibility'), (seconds * 1000));
 
         const rightEndCircle = document.getElementById('circle-end-right');
-        rightEndCircle.style.visibility = rightEndCircleVisibility;
+        rightEndCircleVisibility==='hidden' ? rightEndCircle.style.visibility = rightEndCircleVisibility : rightEndCircle.style.removeProperty('visibility');
 
         const rightEndTriangle = document.getElementById('triangle-end-right');
-        rightEndTriangle.style.visibility = rightEndTriangleVisibility;
+        rightEndTriangleVisibility==='hidden' ? rightEndTriangle.style.visibility = rightEndTriangleVisibility : rightEndTriangle.style.removeProperty('visibility');
 
         const branchElement = document.getElementsByClassName(animateBranchId);
         for (let i = 0; i < branchElement.length; i++) {
@@ -167,13 +183,11 @@ function moveLeft() {
         }
 
         currentScreen -= 1;
-    }
 };
 
 function moveRightMonth() {
-    if (locked !== true) {
         locked = true;
-        setTimeout(() => locked = false, (seconds * 1000) + 10);
+        setTimeout(() => {locked = false; console.log(locked)}, (seconds * 1000) + 10);
         let hiddenBranchId = 'month-branch' + (currentMonthScreen + 1) * numMonthBranches;
         let hiddenYearTextId = 'month' + (currentMonthScreen + 1) * numMonthBranches;
         let toHideBranchId = 'month-branch' + (((currentMonthScreen + 1) * numMonthBranches) - 1);
@@ -223,11 +237,9 @@ function moveRightMonth() {
         }
 
         currentMonthScreen += 1;
-    }
 };
 
 function moveLeftMonth() {
-    if (locked !== true) {
         locked=true;
         setTimeout(() => locked = false, (seconds * 1000) + 10);
 
@@ -281,7 +293,6 @@ function moveLeftMonth() {
         }
 
         currentMonthScreen -= 1;
-    }
 };
 
 function fadeTimeline() {
@@ -328,6 +339,18 @@ function yearTextTitle(year,xPosition,yPosition,dyPosition) {
 
     yearText.append(animateTextX);
 
+    const animateTextXReturn = document.createElementNS(svgNS, 'animate');
+    animateTextXReturn.setAttribute('id', 'x-return');
+    animateTextXReturn.setAttribute('attributeName', 'x');
+    animateTextXReturn.setAttribute('attributeType', 'XML');
+    animateTextXReturn.setAttribute('begin', 'indefinite');
+    animateTextXReturn.setAttribute('dur', (seconds/2) + 's');
+    animateTextXReturn.setAttribute('fill', 'freeze');
+    animateTextXReturn.setAttribute('to', xPosition);
+    animateTextXReturn.setAttribute('from', 110);
+
+    yearText.append(animateTextXReturn);
+
     const animateTextY = document.createElementNS(svgNS, 'animate');
     animateTextY.setAttribute('attributeName', 'y');
     animateTextY.setAttribute('attributeType', 'XML');
@@ -338,6 +361,18 @@ function yearTextTitle(year,xPosition,yPosition,dyPosition) {
     animateTextY.setAttribute('to', 80);
 
     yearText.append(animateTextY);
+
+    const animateTextYReturn = document.createElementNS(svgNS, 'animate');
+    animateTextYReturn.setAttribute('id', 'y-return');
+    animateTextYReturn.setAttribute('attributeName', 'y');
+    animateTextYReturn.setAttribute('attributeType', 'XML');
+    animateTextYReturn.setAttribute('begin', 'indefinite');
+    animateTextYReturn.setAttribute('dur', (seconds/2) + 's');
+    animateTextYReturn.setAttribute('fill', 'freeze');
+    animateTextYReturn.setAttribute('to', yPosition);
+    animateTextYReturn.setAttribute('from', 80);
+
+    yearText.append(animateTextYReturn);
 
     const animateTextDY = document.createElementNS(svgNS, 'animate');
     animateTextDY.setAttribute('attributeName', 'dy');
@@ -350,15 +385,45 @@ function yearTextTitle(year,xPosition,yPosition,dyPosition) {
 
     yearText.append(animateTextDY);
 
+    const animateTextDYReturn = document.createElementNS(svgNS, 'animate');
+    animateTextDYReturn.setAttribute('id', 'dy-return');
+    animateTextDYReturn.setAttribute('attributeName', 'dy');
+    animateTextDYReturn.setAttribute('attributeType', 'XML');
+    animateTextDYReturn.setAttribute('begin', 'indefinite');
+    animateTextDYReturn.setAttribute('dur', (seconds/2) + 's');
+    animateTextDYReturn.setAttribute('fill', 'freeze');
+    animateTextDYReturn.setAttribute('to', dyPosition);
+    animateTextDYReturn.setAttribute('from', 0);
+
+    yearText.append(animateTextDYReturn);
+
     mainTimeline.appendChild(yearText);
     animateTextX.beginElement();
     animateTextY.beginElement();
     animateTextDY.beginElement();
 };
 
-function monthsTimeline() {
-    const currentYear = document.getElementById('year-header-text').textContent;
+function yearTextReturn() {
+    const yearX = document.getElementById('x-return');
+    const yearY = document.getElementById('y-return');
+    const yearDY = document.getElementById('dy-return');
+    yearX.beginElement();
+    yearY.beginElement();
+    yearDY.beginElement();
+    const yearHeader = document.getElementById('year-header-text');
+    setTimeout(() => yearHeader.remove(), ((seconds * 1000) / 2));
+};
 
+function timelineYearVisible() {
+    setTimeout(() => {
+        currentYearTextElement.style.visibility = 'visible';
+        currentYearTextElement = undefined;
+    }, ((seconds * 1000) / 2));
+};
+
+function monthsTimeline() {
+    // const currentYear = document.getElementById('year-header-text').textContent;
+    currentMonthScreen = 0;
     const monthArray = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
     // 12 months
     const branches = 12;
@@ -381,6 +446,18 @@ function monthsTimeline() {
     timelineOpacity.setAttribute('begin', 'indefinite');
 
     monthTimeline.appendChild(timelineOpacity);
+
+    // fade out parameters
+    const timelineOpacityFadeOut = document.createElementNS(svgNS, 'animate');
+    timelineOpacityFadeOut.setAttribute('id', 'month-timeline-fade-out')
+    timelineOpacityFadeOut.setAttribute('attributeName', 'opacity');
+    timelineOpacityFadeOut.setAttribute('dur', (seconds / 2) + 's');
+    timelineOpacityFadeOut.setAttribute('keyTimes', '0;1');
+    timelineOpacityFadeOut.setAttribute('values', '1;0');
+    timelineOpacityFadeOut.setAttribute('fill', 'freeze');
+    timelineOpacityFadeOut.setAttribute('begin', 'indefinite');
+
+    monthTimeline.appendChild(timelineOpacityFadeOut);
 
     // creates main timeline
     const path = document.createElementNS(svgNS, 'path');
@@ -457,8 +534,8 @@ function monthsTimeline() {
         let currentMonthIndex = i;
 
         // creates link for text
-        const anchor = document.createElementNS(svgNS, 'a');
-        anchor.setAttributeNS('http://www.w3.org/1999/xlink', 'xlink:href', 'http://screamingfemales.com/' + monthArray[currentMonthIndex] + currentYear);
+        // const anchor = document.createElementNS(svgNS, 'a');
+        // anchor.setAttributeNS('http://www.w3.org/1999/xlink', 'xlink:href', 'http://screamingfemales.com/' + monthArray[currentMonthIndex] + currentYear);
 
         const monthText = document.createElementNS(svgNS, 'text');
         monthText.setAttribute('font-size', '36');
@@ -514,10 +591,10 @@ function monthsTimeline() {
         xLocation += mDistance;
 
         // associated with year text link
-        anchor.appendChild(monthText)
-        monthTimeline.appendChild(anchor);
+        // anchor.appendChild(monthText)
+        // monthTimeline.appendChild(anchor);
 
-        // monthTimeline.appendChild(monthText);
+        monthTimeline.appendChild(monthText);
     }
 
     // creates timeline endcaps
@@ -576,6 +653,13 @@ function fadeMonthsTimelineIn() {
     
 };
 
+function fadeOutMonthsTimeline() {
+    const timelineAnimate = document.getElementById('month-timeline-fade-out');
+    timelineAnimate.beginElement();
+    const monthTimeline = document.getElementById('monthline-svg');
+    setTimeout(() => monthTimeline.remove(), ((seconds * 1000) / 2));
+};
+
 function createBackButton() {
     const mainTimeline = document.getElementById('timeline-svg');
     const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
@@ -601,12 +685,30 @@ function createBackButton() {
 
     backText.appendChild(backFadeInOpacity);
 
+    const backFadeOutOpacity = document.createElementNS(svgNS, 'animate');
+    backFadeOutOpacity.setAttribute('id', 'back-fade-out-animate')
+    backFadeOutOpacity.setAttribute('attributeName', 'opacity');
+    backFadeOutOpacity.setAttribute('dur', (seconds / 2) + 's');
+    backFadeOutOpacity.setAttribute('keyTimes', '0;1');
+    backFadeOutOpacity.setAttribute('values', '1;0');
+    backFadeOutOpacity.setAttribute('fill', 'freeze');
+    backFadeOutOpacity.setAttribute('begin', 'indefinite');
+
+    backText.appendChild(backFadeOutOpacity);
+
     backText.style.cursor = 'pointer';
 
     mainTimeline.appendChild(backText);
 
     const backAnimate = document.getElementById('back-fade-in-animate');
     backAnimate.beginElement();
+};
+
+function fadeOutBackButton() {
+    const backAnimate = document.getElementById('back-fade-out-animate');
+    backAnimate.beginElement();
+    const backButton = document.getElementById('back-button');
+    setTimeout(() => backButton.remove(), ((seconds * 1000) / 2));
 };
 
 function createSVG(firstYear, lastYear) {
