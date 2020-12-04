@@ -416,7 +416,8 @@ function yearTextReturn() {
 
 function timelineYearVisible() {
     setTimeout(() => {
-        currentYearTextElement.style.visibility = 'visible';
+        // currentYearTextElement.style.visibility = 'visible';
+        currentYearTextElement.style.removeProperty('visibility');
         currentYearTextElement = undefined;
     }, ((seconds * 1000) / 2));
 };
