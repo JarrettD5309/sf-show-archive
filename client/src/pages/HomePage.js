@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import ShowInfo from '../components/ShowInfo'
+import ShowInfo from '../components/ShowInfo';
 import axios from 'axios';
 
 
@@ -9,7 +9,7 @@ function HomePage() {
 
     useEffect(() => {
         function loadShows() {
-            axios.get('/api')
+            axios.get('/api/shows')
                 .then(res => setShows(res.data))
                 .catch(err => console.log(err));
         };
