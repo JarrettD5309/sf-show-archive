@@ -2,6 +2,7 @@ import React from 'react';
 import { BrowserRouter as Router, Route } from 'react-router-dom';
 import Backdrop from './components/SlideDrawer/Backdrop';
 import HomePage from './pages/HomePage';
+import NavBar from './components/NavBar';
 import SlideDrawer from './components/SlideDrawer/SlideDrawer';
 import TimelinePage from './pages/TimelinePage';
 
@@ -18,9 +19,11 @@ function App() {
 
     return (
         <Router>
+            <NavBar handleDrawerToggle={handleDrawerToggle} />
             <SlideDrawer show={drawerOpen} />
-            {drawerOpen && <Backdrop handleBackdrop={handleBackdrop} />}
-            <Route exact path='/' component={()=> <TimelinePage handleDrawerToggle={handleDrawerToggle} />} />
+            <Backdrop handleBackdrop={handleBackdrop} show={drawerOpen}/>
+            {/* {drawerOpen && <Backdrop handleBackdrop={handleBackdrop} show={drawerOpen}/>} */}
+            <Route exact path='/' component={TimelinePage} />
             <Route exact path='/all-shows' component={HomePage} />
         </Router>
     );

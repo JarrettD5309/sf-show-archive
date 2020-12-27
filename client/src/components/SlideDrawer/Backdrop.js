@@ -5,7 +5,7 @@ const Backdrop = (props) => {
 
     return (
         <div 
-            className='backdrop'
+            className={props.show ? 'backdrop open' : 'backdrop'}
             onClick={props.handleBackdrop} 
         />
     );

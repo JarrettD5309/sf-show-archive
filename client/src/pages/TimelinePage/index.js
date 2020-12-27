@@ -28,7 +28,6 @@ const TimelinePage = (props) => {
 
     return (
         <div className='root'>
-            <button onClick={props.handleDrawerToggle}>Click Me!</button>
             <Timeline 
                 setCurrentYear={setCurrentYear}
                 setCurrentMonth={setCurrentMonth}

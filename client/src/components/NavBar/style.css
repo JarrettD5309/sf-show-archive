@@ -1,0 +1,11 @@
+.hamburger {
+    padding: 20px;
+    height: 100%;
+    box-sizing: border-box;
+}
+
+.hamburger-root {
+    height: 70px;
+    display: flex;
+    justify-content: flex-end;
+}
