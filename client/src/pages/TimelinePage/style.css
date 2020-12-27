@@ -1,0 +1,8 @@
+.border {
+    border: 1px black solid;
+}
+
+.root {
+    width: 80%;
+    margin: 0 auto;
+}

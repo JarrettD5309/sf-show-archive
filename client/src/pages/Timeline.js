@@ -51,7 +51,7 @@ let locked = false;
                 const currentMonth = event.target.textContent.toLowerCase();
                 console.log(currentMonth);
                 const currentYear = document.getElementById('year-header-text').textContent;
-                // window.location.assign('http://screamingfemales.com/' + currentMonth + currentYear);
+                window.location.assign('http://screamingfemales.com/' + currentMonth + currentYear);
             } else if (event.target.id === 'back-button') {
                 console.log('back button');
                 fadeInTimeline();
@@ -830,8 +830,8 @@ function createSVG(firstYear, lastYear) {
         let currentYear = firstYear + i;
 
         // creates link for text
-        const anchor = document.createElementNS(svgNS, 'a');
-        anchor.setAttributeNS('http://www.w3.org/1999/xlink', 'xlink:href', 'http://screamingfemales.com/' + currentYear);
+        // const anchor = document.createElementNS(svgNS, 'a');
+        // anchor.setAttributeNS('http://www.w3.org/1999/xlink', 'xlink:href', 'http://screamingfemales.com/' + currentYear);
 
         const yearText = document.createElementNS(svgNS, 'text');
         yearText.setAttribute('font-size', '36');
