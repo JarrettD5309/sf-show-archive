@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 
 const Timeline = (props) => {
-    const {setCurrentYear, setCurrentMonth, setFadeShows} = props;
+    const {setCurrentYear, setCurrentMonth, pageBackButton} = props;
     const seconds = 2;
     const numBranches = 10;
     let numScreens = 0;
@@ -15,8 +15,11 @@ const Timeline = (props) => {
 
     let locked = false;
 
+    const currentDate = new Date();
+    const currentYear = currentDate.getFullYear();
+
     useEffect(() => {
-        createSVG(2005, 2035);
+        createSVG(2005, currentYear);
 
         // all clickable triggers
         document.addEventListener('click', handler);
@@ -65,9 +68,6 @@ const Timeline = (props) => {
                 const currentMonth = event.target.textContent.toLowerCase();
                 console.log(currentMonth);
                 setCurrentMonth(currentMonth);
-                // setFadeShows(true);
-                // const currentYear = document.getElementById('year-header-text').textContent;
-                // window.location.assign('http://screamingfemales.com/' + currentMonth + currentYear);
             } else if (event.target.id === 'back-button') {
                 console.log('back button');
                 fadeInTimeline();
@@ -75,9 +75,9 @@ const Timeline = (props) => {
                 fadeOutBackButton();
                 yearTextReturn();
                 timelineYearVisible();
-                setCurrentYear(undefined);
-                setCurrentMonth(undefined);
-                setFadeShows(false);
+                
+                // manages TimelinePage logic
+                pageBackButton();
             }
         }
 

@@ -1,10 +1,11 @@
-.border {
-    border: 1px black solid;
+.child-header-div {
+    display: inline-block;
 }
 
-.root {
-    width: 80%;
-    margin: 0 auto;
+.fadeIn {
+    opacity:1;
+    transition: opacity 0.5s;
+
 }
 
 .fadeOut {
@@ -12,8 +13,27 @@
     transition: opacity 1.75s;
 
 }
-.fadeIn {
-    opacity:1;
-    transition: opacity 0.5s;
 
+.main-header-div {
+    display: flex;
+    justify-content: center;
 }
+
+.root {
+    width: 900px;
+    margin: 0 auto;
+}
+
+.timeline {
+    /* margin-top: -15px; */
+    width: 800px;
+    margin: -15px auto 0 auto;
+    /* display: none; */
+}
+
+@supports (-webkit-text-stroke: 1px black) {
+	.outline {
+	  -webkit-text-stroke: 1px black;
+	  -webkit-text-fill-color: rgba(255, 255, 255,0);
+	}
+  }

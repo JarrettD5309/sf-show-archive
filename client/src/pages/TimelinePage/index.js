@@ -8,9 +8,9 @@ const TimelinePage = (props) => {
     const [currentYear, setCurrentYear] = React.useState();
     const [currentMonth, setCurrentMonth] = React.useState();
     const [shows, setShows] = React.useState([]);
-    const [fadeShows,setFadeShows] = React.useState(false);
+    const [fadeShows, setFadeShows] = React.useState(false);
 
-    useEffect(()=>{
+    useEffect(() => {
         if (currentMonth) {
             axios.get('/api/shows/month', {
                 params: {
@@ -24,15 +24,33 @@ const TimelinePage = (props) => {
                 })
                 .catch(err => console.log(err));
         }
-    },[currentMonth]);
+    }, [currentMonth]);
+
+    const pageBackButton = () => {
+        setCurrentYear(undefined);
+        setCurrentMonth(undefined);
+        setFadeShows(false);
+        setTimeout(()=>{setShows([])},1100);
+    };
 
     return (
         <div className='root'>
-            <Timeline 
-                setCurrentYear={setCurrentYear}
-                setCurrentMonth={setCurrentMonth}
-                setFadeShows={setFadeShows}
-            />
+            <div className='main-header-div'>
+                <div className='child-header-div'>
+                    <h1>Screaming</h1>
+                        <h1>&nbsp;&nbsp;&nbsp;Females</h1>
+                    <h1 className='outline'>Tour</h1>
+                    <h1 className='outline'>&nbsp;Archive</h1>
+                </div>
+            </div>
+            <div className='timeline'>
+                <Timeline
+                    setCurrentYear={setCurrentYear}
+                    setCurrentMonth={setCurrentMonth}
+                    setFadeShows={setFadeShows}
+                    pageBackButton={pageBackButton}
+                />
+            </div>
             <div className={fadeShows ? 'fadeIn' : 'fadeOut'} >
                 {shows.map(show => (
                     <ShowInfo
@@ -45,7 +63,7 @@ const TimelinePage = (props) => {
                         key={show.showNum}
                     />
                 ))}
-            </div> 
+            </div>
         </div>
     );
 

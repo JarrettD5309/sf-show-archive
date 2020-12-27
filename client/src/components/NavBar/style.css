@@ -1,11 +1,15 @@
-.hamburger {
+.hamburger-div {
     padding: 20px;
     height: 100%;
     box-sizing: border-box;
 }
 
 .hamburger-root {
-    height: 70px;
+    height: 55px;
     display: flex;
     justify-content: flex-end;
+}
+
+#hamburger {
+    cursor: pointer;
 }
