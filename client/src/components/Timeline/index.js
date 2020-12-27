@@ -1,8 +1,8 @@
 import React, { useEffect } from 'react';
 
 const Timeline = (props) => {
-    const {setCurrentYear, setCurrentMonth} = props;
-    const seconds = 3;
+    const {setCurrentYear, setCurrentMonth, setFadeShows} = props;
+    const seconds = 2;
     const numBranches = 10;
     let numScreens = 0;
     let currentScreen = 0;
@@ -65,6 +65,7 @@ const Timeline = (props) => {
                 const currentMonth = event.target.textContent.toLowerCase();
                 console.log(currentMonth);
                 setCurrentMonth(currentMonth);
+                // setFadeShows(true);
                 // const currentYear = document.getElementById('year-header-text').textContent;
                 // window.location.assign('http://screamingfemales.com/' + currentMonth + currentYear);
             } else if (event.target.id === 'back-button') {
@@ -76,6 +77,7 @@ const Timeline = (props) => {
                 timelineYearVisible();
                 setCurrentYear(undefined);
                 setCurrentMonth(undefined);
+                setFadeShows(false);
             }
         }
 
