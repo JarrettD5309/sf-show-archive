@@ -44,7 +44,7 @@ const TimelinePage = (props) => {
     };
 
     return (
-        <div className='root'>
+        <div className='sub-root'>
             <div className='main-header-div'>
                 <div className='child-header-div'>
                     <h1>Screaming</h1>
