@@ -68,8 +68,8 @@ app.get('/api/shows/month', (req,res)=>{
     db.Show.find({
         date: {$gte:`${dateString}-01`, $lte:`${dateString}-31`}
     })
-    // .sort('showNum')
-    .sort({date: 1})
+    .sort('showNum')
+    // .sort({date: 1})
     .then(result=>res.json(result))
     .catch (err=>res.json(err))
 
