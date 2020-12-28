@@ -5,6 +5,10 @@ h1 {
 	letter-spacing: .2em;
 }
 
+#root {
+	padding-left: calc(100vw - 100%);
+}
+
 @font-face {
 	font-family: "RobotoMono";
 	src: local("RobotoMono"), url("./fonts/RobotoMono-VariableFont_wght.ttf") format("truetype");

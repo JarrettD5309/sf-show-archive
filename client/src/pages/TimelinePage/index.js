@@ -9,6 +9,7 @@ const TimelinePage = (props) => {
     const [currentMonth, setCurrentMonth] = React.useState();
     const [shows, setShows] = React.useState([]);
     const [fadeShows, setFadeShows] = React.useState(false);
+    const [timelineMini, setTimelineMini] = React.useState(false);
 
     useEffect(() => {
         if (currentMonth) {
@@ -29,8 +30,17 @@ const TimelinePage = (props) => {
     const pageBackButton = () => {
         setCurrentYear(undefined);
         setCurrentMonth(undefined);
+        // setFadeShows(false);
+        // setTimeout(()=>{setShows([])},1100);
+    };
+
+    const handleUnMini = () => {
+        setTimelineMini(false);
         setFadeShows(false);
-        setTimeout(()=>{setShows([])},1100);
+        setTimeout(()=>{
+            setShows([]);
+            setCurrentMonth(undefined);
+        },900);
     };
 
     return (
@@ -43,12 +53,16 @@ const TimelinePage = (props) => {
                     <h1 className='outline'>&nbsp;Archive</h1>
                 </div>
             </div>
-            <div className='timeline'>
+            <div 
+                {...(timelineMini && {onClick: ()=>{handleUnMini()}})}
+                className={timelineMini ? 'timeline-div mini' : 'timeline-div'}
+            >
                 <Timeline
                     setCurrentYear={setCurrentYear}
                     setCurrentMonth={setCurrentMonth}
                     setFadeShows={setFadeShows}
                     pageBackButton={pageBackButton}
+                    setTimelineMini={setTimelineMini}
                 />
             </div>
             <div className={fadeShows ? 'fadeIn' : 'fadeOut'} >

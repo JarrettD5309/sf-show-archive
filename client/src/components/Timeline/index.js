@@ -1,8 +1,13 @@
 import React, { useEffect } from 'react';
 
 const Timeline = (props) => {
-    const {setCurrentYear, setCurrentMonth, pageBackButton} = props;
-    const seconds = 2;
+    const {
+        setCurrentYear, 
+        setCurrentMonth, 
+        pageBackButton,
+        setTimelineMini
+    } = props;
+    const seconds = 1.5;
     const numBranches = 10;
     let numScreens = 0;
     let currentScreen = 0;
@@ -68,6 +73,7 @@ const Timeline = (props) => {
                 const currentMonth = event.target.textContent.toLowerCase();
                 console.log(currentMonth);
                 setCurrentMonth(currentMonth);
+                setTimelineMini(true);
             } else if (event.target.id === 'back-button') {
                 console.log('back button');
                 fadeInTimeline();

@@ -1,11 +1,13 @@
 .hamburger-div {
-    padding: 20px;
+    padding-top: 20px;
+    padding-right: 20px;
+    padding-bottom: 15px;
     height: 100%;
     box-sizing: border-box;
 }
 
 .hamburger-root {
-    height: 55px;
+    height: 50px;
     display: flex;
     justify-content: flex-end;
 }
