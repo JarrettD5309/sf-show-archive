@@ -13,3 +13,9 @@ h1 {
 	font-family: "RobotoMono";
 	src: local("RobotoMono"), url("./fonts/RobotoMono-VariableFont_wght.ttf") format("truetype");
 }
+
+@media (max-width: 575px) {
+	#root {
+		padding-left: 0;
+	}
+}
