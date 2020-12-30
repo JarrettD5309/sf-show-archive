@@ -1,8 +1,12 @@
+html {
+	font-size: 16px;
+	font-family: Verdana, Geneva, Tahoma, sans-serif
+}
 h1 {
-	font-size: 2.2em;
+	font-size: 2.2rem;
 	font-family: 'RobotoMono';
 	text-transform: uppercase;
-	letter-spacing: .2em;
+	letter-spacing: .44rem;
 }
 
 #root {
