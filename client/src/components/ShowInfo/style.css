@@ -7,7 +7,7 @@
 
 .city {
     grid-column-start: 2;
-    grid-column-end: 3;
+    grid-column-end: 4;
     grid-row-start: 4;
     grid-row-end: 5;
 }
@@ -19,13 +19,39 @@
 
 .grid-container {
     display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
-    grid-template-rows: 1fr 1fr 1fr 1fr;
+    grid-template-columns: 250px 260px 60px;
+    justify-content: center;
+    grid-template-rows: 30px auto auto 33px;
+}
+
+.show-date-heading {
+    padding-bottom: 8px;
+}
+
+.show-info-border {
+    width: 574px;
+    border-bottom: lightgray 1px solid;
+    margin: 0 auto;
+}
+
+.show-info-container {
+    padding-top: 10px;
+    line-height: 1.4;
+    width: 574px;
+    margin: 0 auto;
+}
+
+.show-info-container:hover {
+    background-color: rgb(248, 248, 248);
 }
 
 .show-num {
     grid-column-start: 3;
     grid-column-end: 4;
+}
+
+.slight-bold {
+    font-weight: 600;
 }
 
 .street {
