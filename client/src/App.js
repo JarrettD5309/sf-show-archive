@@ -20,7 +20,7 @@ function App() {
     return (
         <Router>
             <NavBar handleDrawerToggle={handleDrawerToggle} />
-            <SlideDrawer show={drawerOpen} />
+            <SlideDrawer handleBackdrop={handleBackdrop} show={drawerOpen} />
             <Backdrop handleBackdrop={handleBackdrop} show={drawerOpen}/>
             {/* {drawerOpen && <Backdrop handleBackdrop={handleBackdrop} show={drawerOpen}/>} */}
             <Route exact path='/' component={TimelinePage} />
