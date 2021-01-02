@@ -1,0 +1,22 @@
+input {
+    width: 200px;
+    padding: 12px 20px;
+    margin: 8px 0;
+    box-sizing: border-box;
+    border: 1px solid black;
+    outline:none;
+}
+
+label {
+    margin: 10px 0;
+    display: inline-block;
+}
+
+.form-row {
+    display: flex;
+    justify-content: space-between;
+}
+
+.search-form {
+    margin-top: 20px;
+}

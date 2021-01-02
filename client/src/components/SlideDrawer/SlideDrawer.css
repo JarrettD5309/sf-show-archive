@@ -66,3 +66,21 @@ body {
    transform: translateX(0);
    box-shadow: 1px 0px 7px rgba(0,0,0,0.5); 
 }
+
+@media (max-width:399px) {
+   .side-drawer {
+      width: 100%;
+   }
+}
+
+@media (min-width:400px) and (max-width:575px) {
+   .side-drawer {
+      width: 100%;
+   }
+}
+
+@media (min-width:576px) and (max-width:767px) {
+   .side-drawer {
+      width: 55%;
+   }
+}

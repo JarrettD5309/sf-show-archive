@@ -15,10 +15,10 @@ const SlideDrawer = (props) => {
             </div>
             <ul className='nav-list'>
                 <li className='nav-item'>
-                    <a href="#" className='nav-text'>Timeline</a>
+                    <a href="/" className='nav-text'>Timeline</a>
                 </li>
                 <li className='nav-item'>
-                    <a href="#" className='nav-text'>Search</a>
+                    <a href="/search" className='nav-text'>Search</a>
                 </li>
                 <li className='nav-item'>
                     <a href="#" className='nav-text'>Login</a>
