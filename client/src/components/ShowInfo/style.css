@@ -74,3 +74,142 @@
     grid-row-start: 2;
     grid-row-end: 3;
 }
+
+@media (max-width:399px) {
+    .address-title {
+        grid-column-start: 1;
+        grid-column-end: 2;
+        grid-row-start: 4;
+        grid-row-end: 5;
+    }
+    
+    .city {
+        grid-column-start: 1;
+        grid-column-end: 3;
+        grid-row-start: 6;
+        grid-row-end: 7;
+    }
+    
+    .date {
+        grid-column-start: 1;
+        grid-column-end: 2;
+    }
+    
+    .grid-container {
+        grid-template-columns: 227px 55px;
+        grid-template-rows: 30px auto auto auto auto 33px;
+    }
+    
+    .show-info-border {
+        width: 286px;
+    }
+    
+    .show-info-container {
+        width: 286px;
+    }
+    
+    .show-num {
+        grid-column-start: 2;
+        grid-column-end: 3;
+    }
+    
+    .street {
+        grid-column-start: 1;
+        grid-column-end: 2;
+        grid-row-start: 5;
+        grid-row-end: 6;
+    }
+    
+    .venue {
+        grid-column-start: 1;
+        grid-column-end: 2;
+        grid-row-start: 3;
+        grid-row-end: 4;
+    }
+    
+    .venue-title {
+        grid-column-start: 1;
+        grid-column-end: 2;
+        grid-row-start: 2;
+        grid-row-end: 3;
+    }
+}
+
+@media (min-width: 400px) and (max-width: 575px) {
+    .address-title {
+        grid-column-start: 1;
+        grid-column-end: 2;
+        grid-row-start: 4;
+        grid-row-end: 5;
+    }
+    
+    .city {
+        grid-column-start: 1;
+        grid-column-end: 3;
+        grid-row-start: 6;
+        grid-row-end: 7;
+        margin-left: 20px;
+    }
+    
+    .date {
+        grid-column-start: 1;
+        grid-column-end: 2;
+    }
+    
+    .grid-container {
+        grid-template-columns: 311px 55px;
+        grid-template-rows: 30px auto auto auto auto 33px;
+    }
+    
+    .show-info-border {
+        width: 370px;
+    }
+    
+    .show-info-container {
+        width: 370px;
+    }
+    
+    .show-num {
+        grid-column-start: 2;
+        grid-column-end: 3;
+    }
+    
+    .street {
+        grid-column-start: 1;
+        grid-column-end: 2;
+        grid-row-start: 5;
+        grid-row-end: 6;
+        margin-left: 20px;
+    }
+    
+    .venue {
+        grid-column-start: 1;
+        grid-column-end: 2;
+        grid-row-start: 3;
+        grid-row-end: 4;
+        margin-left: 20px;
+    }
+    
+    .venue-title {
+        grid-column-start: 1;
+        grid-column-end: 2;
+        grid-row-start: 2;
+        grid-row-end: 3;
+    }
+
+}
+
+@media (min-width: 576px) and (max-width: 767px) {
+    .grid-container {
+        grid-template-columns: 216px 226px 55px;
+    }
+
+    .show-info-border {
+        width: 500px;
+    }
+    
+    .show-info-container {
+        width: 500px;
+    }
+
+}
