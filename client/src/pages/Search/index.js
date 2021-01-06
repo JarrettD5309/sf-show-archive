@@ -7,6 +7,15 @@ const Search = () => {
     const [shows, setShows] = React.useState([]);
     const [fadeShows, setFadeShows] = React.useState(false);
 
+    let resizeTimer;
+    window.addEventListener("resize", () => {
+        document.body.classList.add("resize-animation-stopper");
+        clearTimeout(resizeTimer);
+        resizeTimer = setTimeout(() => {
+            document.body.classList.remove("resize-animation-stopper");
+        }, 400);
+    });
+
     return (
         <div className='sub-root'>
             <div className='main-header-div'>
@@ -29,8 +38,6 @@ const Search = () => {
                         <label for='venue'>Venue</label><br />
                         <input type='text' id='venue' name='venue' />
                     </div>
-                </div>
-                <div className='form-row'>
                     <div>
                         <label for='city'>City</label><br />
                         <input type='text' id='city' name='city' />
@@ -38,6 +45,9 @@ const Search = () => {
                     <div>
                         <label for='stateCountry'>State/Country</label><br />
                         <input type='text' id='stateCountry' name='stateCountry' />
+                    </div>
+                    <div>
+                        <button className='all-shows-button' type='button'>All Shows</button>
                     </div>
                 </div>
             </form>
