@@ -1,4 +1,5 @@
 import React, { useEffect } from "react";
+import SearchForm from '../../components/SearchForm';
 import ShowInfo from '../../components/ShowInfo';
 import axios from 'axios';
 import './style.css';
@@ -24,33 +25,7 @@ const Search = () => {
                     <h1 className='outline'>&nbsp;Archive</h1>
                 </div>
             </div>
-            <form className='search-form'>
-                <div className='form-row'>
-                    <div>
-                        <label for='startDate'>Start Date</label><br />
-                        <input type='date' id='startDate' name='startDate' />
-                    </div>
-                    <div>
-                        <label for='endDate'>End Date (optional)</label><br />
-                        <input type='date' id='endDate' name='endDate' />
-                    </div>
-                    <div>
-                        <label for='venue'>Venue</label><br />
-                        <input type='text' id='venue' name='venue' />
-                    </div>
-                    <div>
-                        <label for='city'>City</label><br />
-                        <input type='text' id='city' name='city' />
-                    </div>
-                    <div>
-                        <label for='stateCountry'>State/Country</label><br />
-                        <input type='text' id='stateCountry' name='stateCountry' />
-                    </div>
-                    <div>
-                        <button className='all-shows-button' type='button'>All Shows</button>
-                    </div>
-                </div>
-            </form>
+            <SearchForm />
             <div className={fadeShows ? 'fadeIn' : 'fadeOut'} >
                 {shows.map(show => (
                     <ShowInfo
