@@ -7,6 +7,9 @@ import './style.css';
 const Search = () => {
     const [shows, setShows] = React.useState([]);
     const [fadeShows, setFadeShows] = React.useState(false);
+    const [startDate, setStartDate] = React.useState('');
+    const [endDate, setEndDate] = React.useState('');
+    const [venue, setVenue] = React.useState('');
 
     let resizeTimer;
     window.addEventListener("resize", () => {
@@ -17,6 +20,23 @@ const Search = () => {
         }, 400);
     });
 
+    const handleSubmit = () => {
+        axios.get('/api/shows', {
+            params: {
+                startDate: startDate,
+                endDate: endDate,
+                venue: venue
+            }
+        })
+            .then(res => {
+                console.log(res);
+                setShows(res.data);
+                setFadeShows(true);
+            })
+            .catch(err => console.log(err));
+
+    };
+
     return (
         <div className='sub-root'>
             <div className='main-header-div'>
@@ -25,7 +45,15 @@ const Search = () => {
                     <h1 className='outline'>&nbsp;Archive</h1>
                 </div>
             </div>
-            <SearchForm />
+            <SearchForm 
+                startDate={startDate}
+                setStartDate={setStartDate}
+                endDate={endDate}
+                setEndDate={setEndDate}
+                venue={venue}
+                setVenue={setVenue}
+                handleSubmit={handleSubmit}
+            />
             <div className={fadeShows ? 'fadeIn' : 'fadeOut'} >
                 {shows.map(show => (
                     <ShowInfo

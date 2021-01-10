@@ -2,6 +2,7 @@ const express = require('express');
 const path = require('path');
 const mongoose = require('mongoose');
 var db = require("./models");
+const { start } = require('repl');
 require('dotenv').config();
 
 const PORT = process.env.PORT || 3001;
@@ -24,9 +25,35 @@ mongoose.connection.on("connected", () => console.log("Mongoose is connected")
 );
 
 app.get('/api/shows', (req, res) => {
-    db.Show.find({
-        // date: {$gte:'2010-01-01', $lte:'2010-03-01'}
-    })
+    // console.log(req.query);
+
+    const startDate = req.query.startDate;
+    const endDate = req.query.endDate;
+    const venue = req.query.venue;
+    let dateQuery;
+
+    if (endDate==='') {
+        dateQuery=startDate;
+    } else {
+        dateQuery= {
+            $gte: startDate,
+            $lte: endDate
+        }
+    }
+
+    let queryObj = {};
+
+    if (dateQuery!=='') {
+        queryObj.date = dateQuery;
+    }
+
+    if (venue!=='') {
+        queryObj.venue = new RegExp(`^.*${venue}.*$`, `i`);
+    }
+
+    console.log(queryObj);
+
+    db.Show.find(queryObj)
     // .sort('showNum')
     .sort({date: 1})
     .then(result=>res.json(result))

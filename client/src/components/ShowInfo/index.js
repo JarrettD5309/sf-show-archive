@@ -10,7 +10,7 @@ function ShowInfo(props) {
     return (
         <div className='show-info-container'>
             <div className='grid-container'>
-                <div className='date'><h4 class='show-date-heading'>{dateString}</h4></div>
+                <div className='date'><h4 className='show-date-heading'>{dateString}</h4></div>
                 <div className='show-num'># {showNum}</div>
                 <div className='venue-title'><p className='slight-bold'>Venue:</p></div>
                 <div className='venue'>{venue}</div>
