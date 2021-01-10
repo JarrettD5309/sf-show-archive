@@ -10,6 +10,9 @@ const Search = () => {
     const [startDate, setStartDate] = React.useState('');
     const [endDate, setEndDate] = React.useState('');
     const [venue, setVenue] = React.useState('');
+    const [city, setCity] = React.useState('');
+    const [stateCountry, setStateCountry] = React.useState('');
+    const [stateArr, setStateArr] = React.useState([]);
 
     let resizeTimer;
     window.addEventListener("resize", () => {
@@ -20,12 +23,40 @@ const Search = () => {
         }, 400);
     });
 
+    useEffect(()=>{
+        axios.get('/api/allstates')
+            .then(res=> {
+                console.log(res);
+                setStateArr(res.data);
+            })
+            .catch(err=>console.log(err));
+    },[]);
+
     const handleSubmit = () => {
+        if (startDate!=='' || endDate!=='' || venue!=='' || city!=='' || stateCountry!=='') {
+            axios.get('/api/shows', {
+                params: {
+                    startDate: startDate,
+                    endDate: endDate,
+                    venue: venue,
+                    city: city,
+                    stateCountry: stateCountry
+                }
+            })
+                .then(res => {
+                    console.log(res);
+                    setShows(res.data);
+                    setFadeShows(true);
+                })
+                .catch(err => console.log(err));
+        }
+
+    };
+
+    const handleAllShowsSubmit = () => {
         axios.get('/api/shows', {
             params: {
-                startDate: startDate,
-                endDate: endDate,
-                venue: venue
+                allShows: true
             }
         })
             .then(res => {
@@ -52,7 +83,13 @@ const Search = () => {
                 setEndDate={setEndDate}
                 venue={venue}
                 setVenue={setVenue}
+                city={city}
+                setCity={setCity}
+                stateArr={stateArr}
+                stateCountry={stateCountry}
+                setStateCountry={setStateCountry}
                 handleSubmit={handleSubmit}
+                handleAllShowsSubmit={handleAllShowsSubmit}
             />
             <div className={fadeShows ? 'fadeIn' : 'fadeOut'} >
                 {shows.map(show => (

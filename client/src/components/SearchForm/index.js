@@ -9,7 +9,13 @@ const SearchForm = (props) => {
         setEndDate,
         venue,
         setVenue,
-        handleSubmit
+        city,
+        setCity,
+        stateArr,
+        stateCountry,
+        setStateCountry,
+        handleSubmit,
+        handleAllShowsSubmit
     } = props;
     return (
         <form className='search-form'>
@@ -28,14 +34,20 @@ const SearchForm = (props) => {
                 </div>
                 <div>
                     <label htmlFor='city'>City</label><br />
-                    <input type='text' id='city' name='city' />
+                    <input type='text' id='city' name='city' value={city} onChange={event=>setCity(event.target.value)} />
                 </div>
                 <div>
                     <label htmlFor='stateCountry'>State/Country</label><br />
-                    <input type='text' id='stateCountry' name='stateCountry' />
+                    {/* <input type='text' id='stateCountry' name='stateCountry' /> */}
+                    <select type='text' id='stateCountry' name='stateCountry' value={stateCountry} onChange={event=>setStateCountry(event.target.value)}>
+                        <option value=''></option>
+                    {stateArr.map((state,i) => (
+                    <option value={state} key={i}>{state}</option>
+                ))}
+                    </select>
                 </div>
                 <div>
-                    <button className='all-shows-button' type='button'>All Shows</button>
+                    <button className='all-shows-button' type='button' onClick={handleAllShowsSubmit}>All Shows</button>
                 </div>
                 <div className='search-button-div'>
                     <button className='search-button' type='button' onClick={handleSubmit}>Search</button>

@@ -24,12 +24,21 @@ mongoose.connect('mongodb://localhost/show-archive',{
 mongoose.connection.on("connected", () => console.log("Mongoose is connected")
 );
 
+app.get('/api/allstates', (req, res)=>{
+    db.Show.distinct('stateCountry')
+    .then(result=>res.json(result))
+    .catch (err=>res.json(err));
+});
+
 app.get('/api/shows', (req, res) => {
     // console.log(req.query);
 
     const startDate = req.query.startDate;
     const endDate = req.query.endDate;
     const venue = req.query.venue;
+    const city = req.query.city;
+    const allShows = req.query.allShows;
+    const stateCountry = req.query.stateCountry;
     let dateQuery;
 
     if (endDate==='') {
@@ -49,6 +58,18 @@ app.get('/api/shows', (req, res) => {
 
     if (venue!=='') {
         queryObj.venue = new RegExp(`^.*${venue}.*$`, `i`);
+    }
+
+    if (city!=='') {
+        queryObj.city = new RegExp(`^.*${city}.*$`, `i`);
+    }
+
+    if (stateCountry!=='') {
+        queryObj.stateCountry = stateCountry;
+    }
+
+    if (allShows) {
+        queryObj = {};
     }
 
     console.log(queryObj);

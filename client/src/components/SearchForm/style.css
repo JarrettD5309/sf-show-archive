@@ -59,6 +59,16 @@
     height: 50px;
 }
 
+.form-row select {
+    width: 200px;
+    padding: 12px 20px;
+    margin: 8px 0;
+    box-sizing: border-box;
+    border: 1px solid black;
+    outline:none;
+    height: 50px;
+}
+
 .resize-animation-stopper * {
     transition: none !important;
     animation: none !important;
@@ -135,6 +145,10 @@
         width: 180px;
     }
 
+    .form-row select {
+        width: 180px;
+    }
+
     .search-button {
         width: 180px;
     }
@@ -147,6 +161,10 @@
     }
 
     .form-row input {
+        width: 250px;
+    }
+
+    .form-row select {
         width: 250px;
     }
 
