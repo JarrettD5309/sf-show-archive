@@ -1,0 +1,76 @@
+.fadeOutSearchBack {
+    opacity:0;
+    transition: opacity 0.8s;
+
+}
+
+.search-back-button {
+    outline: none;
+    transition-duration: 0.3s;
+    box-sizing: border-box;
+    height: 50px;
+    width: 200px;
+    border-radius: 0;
+    /* margin-top: 44px; */
+    cursor: pointer;
+    border: 1px black solid;
+    background-color: black;
+    overflow: hidden;
+    position: relative;
+    color: white;
+    margin-top: 20px;
+    margin-bottom: 30px;
+}
+
+.search-back-button:hover {
+    background-color: white;
+    color: black;
+}
+
+.search-back-button:after {
+    content: "";
+    background: rgb(197, 197, 197);
+    display: block;
+    position: absolute;
+    padding-top: 300%;
+    padding-left: 350%;
+    margin-left: -20px!important;
+    margin-top: -120%;
+    opacity: 0;
+    transition: all 0.8s
+}
+  
+.search-back-button:active:after {
+    padding: 0;
+    margin: 0;
+    opacity: 1;
+    transition: 0s
+}
+
+.search-back-button-div {
+    display: flex;
+    justify-content: center;
+}
+
+.search-form-div {
+    transition: transform 0.5s, height 1s;
+}
+
+.search-form-div.off {
+    transform: translateX(100vw);
+    height: 0;
+}
+
+@media (min-width: 400px) and (max-width: 575px) {
+
+    .search-back-button {
+        width: 180px;
+    }
+}
+
+@media (min-width: 950px) {
+
+    .search-back-button {
+        width: 250px;
+    }
+}

@@ -68,6 +68,18 @@ const Search = () => {
 
     };
 
+    const handleBack = () => {
+        setFadeShows(false);
+        setStartDate('');
+        setEndDate('');
+        setVenue('');
+        setCity('');
+        setStateCountry('');
+        setTimeout(()=>{
+            setShows([]);
+        },900);
+    };
+
     return (
         <div className='sub-root'>
             <div className='main-header-div'>
@@ -76,7 +88,8 @@ const Search = () => {
                     <h1 className='outline'>&nbsp;Archive</h1>
                 </div>
             </div>
-            <SearchForm 
+                <div className={shows.length===0 ? 'search-form-div' : 'search-form-div off'}>
+                <SearchForm 
                 startDate={startDate}
                 setStartDate={setStartDate}
                 endDate={endDate}
@@ -91,6 +104,12 @@ const Search = () => {
                 handleSubmit={handleSubmit}
                 handleAllShowsSubmit={handleAllShowsSubmit}
             />
+            </div>
+            
+                <div className={fadeShows ? 'fadeIn search-back-button-div' : 'fadeOutSearchBack search-back-button-div'}>
+                    <button className='search-back-button' type='button' onClick={handleBack}>Back</button>
+                </div>
+           
             <div className={fadeShows ? 'fadeIn' : 'fadeOut'} >
                 {shows.map(show => (
                     <ShowInfo
