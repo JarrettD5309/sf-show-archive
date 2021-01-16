@@ -57,7 +57,7 @@
 }
 
 .search-form-div.off {
-    transform: translateX(100vw);
+    transform: translateX(-100vw);
     height: 0;
 }
 
