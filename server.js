@@ -16,7 +16,8 @@ if (process.env.NODE_ENV === "production") {
     app.use(express.static("client/build"));
 }
 
-mongoose.connect('mongodb://localhost/show-archive',{
+const MONGODB_URI = process.env.mongodburi;
+mongoose.connect(MONGODB_URI || 'mongodb://localhost/show-archive',{
     useNewUrlParser: true,
     useUnifiedTopology: true
 });
