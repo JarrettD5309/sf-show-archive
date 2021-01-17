@@ -22,11 +22,11 @@ const SearchForm = (props) => {
             <div className='form-row'>
                 <div>
                     <label htmlFor='startDate'>Start Date</label><br />
-                    <input type='date' id='startDate' name='startDate' value={startDate} onChange={event=>setStartDate(event.target.value)}/>
+                    <input type='date' id='startDate' name='startDate' placeholder='yyyy-mm-dd' value={startDate} onChange={event=>setStartDate(event.target.value)}/>
                 </div>
                 <div>
                     <label htmlFor='endDate'>End Date (optional)</label><br />
-                    <input type='date' id='endDate' name='endDate' value={endDate} onChange={event=>setEndDate(event.target.value)} />
+                    <input type='date' id='endDate' name='endDate' value={endDate} placeholder='yyyy-mm-dd' onChange={event=>setEndDate(event.target.value)} />
                 </div>
                 <div>
                     <label htmlFor='venue'>Venue</label><br />

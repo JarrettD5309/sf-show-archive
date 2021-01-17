@@ -34,6 +34,7 @@ const Search = () => {
 
     const handleSubmit = () => {
         if (startDate!=='' || endDate!=='' || venue!=='' || city!=='' || stateCountry!=='') {
+            console.log(startDate);
             axios.get('/api/shows', {
                 params: {
                     startDate: startDate,
