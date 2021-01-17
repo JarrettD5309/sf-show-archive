@@ -46,8 +46,10 @@ const Search = () => {
             })
                 .then(res => {
                     console.log(res);
-                    setShows(res.data);
-                    setFadeShows(true);
+                    if(res.data.length!==0) {
+                        setShows(res.data);
+                        setFadeShows(true);
+                    }
                 })
                 .catch(err => console.log(err));
         }
