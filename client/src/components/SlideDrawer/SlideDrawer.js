@@ -21,7 +21,7 @@ const SlideDrawer = (props) => {
                     <a href="/search" className='nav-text'>Search</a>
                 </li>
                 <li className='nav-item'>
-                    <a href="#" className='nav-text'>Login</a>
+                    <a href="/login" className='nav-text'>Login</a>
                 </li>
             </ul>
         </div>

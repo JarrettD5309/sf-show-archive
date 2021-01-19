@@ -2,6 +2,7 @@ import React from 'react';
 import { BrowserRouter as Router, Route } from 'react-router-dom';
 import Backdrop from './components/SlideDrawer/Backdrop';
 import HomePage from './pages/HomePage';
+import Login from './pages/Login';
 import NavBar from './components/NavBar';
 import Search from './pages/Search';
 import SlideDrawer from './components/SlideDrawer/SlideDrawer';
@@ -27,6 +28,7 @@ function App() {
             {/* {drawerOpen && <Backdrop handleBackdrop={handleBackdrop} show={drawerOpen}/>} */}
             <Route exact path='/' component={TimelinePage} />
             <Route exact path='/search' component={Search} />
+            <Route exact path='/login' component={Login} />
             <Route exact path='/all-shows' component={HomePage} />
         </Router>
     );
