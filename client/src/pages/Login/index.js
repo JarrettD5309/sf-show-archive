@@ -1,23 +1,17 @@
 import React from 'react';
-import './style.css';
+import LoginForm from '../../components/LoginForm';
 
 const Login = () => {
+    const [loginUsername, setLoginUsername] = React.useState('');
+    const [loginPassword, setLoginPassword] = React.useState('');
 
     return (
-        <div className='login-root'>
-            <div className='login-box'>
-                <h1>Login</h1>
-                <div>
-                    <label htmlFor='login-username'>Username</label><br />
-                    <input type='text' id='login-username' name='login-username' className='login-input' /><br />
-                    <label htmlFor='login-password'>Password</label><br />
-                    <input type='password' id='login-password' name='login-password' className='login-input' />
-                </div>
-                <div>
-                    <button className='login-button' type='button'>Login</button>
-                </div>
-            </div>
-        </div>
+        <LoginForm 
+            loginUsername={loginUsername}
+            setLoginUsername={setLoginUsername}
+            loginPassword={loginPassword}
+            setLoginPassword={setLoginPassword}
+        />
     );
 
 };
