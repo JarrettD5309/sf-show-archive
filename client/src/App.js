@@ -1,6 +1,7 @@
 import React from 'react';
 import { BrowserRouter as Router, Route } from 'react-router-dom';
 import Backdrop from './components/SlideDrawer/Backdrop';
+import CreateAccount from './pages/CreateAccount';
 import HomePage from './pages/HomePage';
 import Login from './pages/Login';
 import NavBar from './components/NavBar';
@@ -29,6 +30,7 @@ function App() {
             <Route exact path='/' component={TimelinePage} />
             <Route exact path='/search' component={Search} />
             <Route exact path='/login' component={Login} />
+            <Route exact path='/create-account' component={CreateAccount} />
             <Route exact path='/all-shows' component={HomePage} />
         </Router>
     );

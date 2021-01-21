@@ -13,6 +13,7 @@ const LoginForm = (props) => {
         <div className='login-root'>
             <div className='login-box'>
                 <h1>Login</h1>
+                <p>Please enter details</p>
                 <div>
                     <label htmlFor='login-username'>Username</label><br />
                     <input 
@@ -37,7 +38,7 @@ const LoginForm = (props) => {
                     <button className='login-button' type='button'>Login</button>
                 </div>
                 <p>Forgot your password?</p>
-                <p>First time here? Create an account</p>
+                <p>First time here? <a href='/create-account' className='login-link'>Create account</a></p>
             </div>
         </div>
     );
