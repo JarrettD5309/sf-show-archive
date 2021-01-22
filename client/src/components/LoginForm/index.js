@@ -6,14 +6,18 @@ const LoginForm = (props) => {
         loginUsername,
         setLoginUsername,
         loginPassword,
-        setLoginPassword
+        setLoginPassword,
+        loginInstructions,
+        handleSubmit
     } = props;
 
     return (
         <div className='login-root'>
             <div className='login-box'>
                 <h1>Login</h1>
-                <p>Please enter details</p>
+                <div className='login-instructions-div'>
+                    <p>{loginInstructions}</p>
+                </div>
                 <div>
                     <label htmlFor='login-username'>Username</label><br />
                     <input 
@@ -35,7 +39,7 @@ const LoginForm = (props) => {
                     />
                 </div>
                 <div>
-                    <button className='login-button' type='button'>Login</button>
+                    <button className='login-button' type='button' onClick={handleSubmit}>Login</button>
                 </div>
                 <p>Forgot your password?</p>
                 <p>First time here? <a href='/create-account' className='login-link'>Create account</a></p>

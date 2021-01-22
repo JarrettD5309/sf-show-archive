@@ -10,14 +10,18 @@ const CreateAccountForm = (props) => {
         createEmail,
         setCreateEmail,
         createPasswordConfirm,
-        setCreatePasswordConfirm
+        setCreatePasswordConfirm,
+        createInstructions,
+        handleSubmit
     } = props;
 
     return (
         <div className='create-root'>
             <div className='create-box'>
                 <h1>Sign Up</h1>
-                <p>Please enter details</p>
+                <div className='create-instructions-div'>
+                    <p>{createInstructions}</p>
+                </div>
                 <div>
                     <label htmlFor='create-username'>Username</label><br />
                     <input 
@@ -57,7 +61,7 @@ const CreateAccountForm = (props) => {
                     />
                 </div>
                 <div>
-                    <button className='create-button' type='button'>Sign Up</button>
+                    <button className='create-button' type='button' onClick={handleSubmit}>Sign Up</button>
                 </div>
                 <p>Already have an account? <a href='/login' className='create-link'>Login</a></p>
             </div>

@@ -62,6 +62,10 @@
     height: 50px;
 }
 
+.login-instructions-div {
+    text-align: center;
+}
+
 .login-link:link {
     color: black;
     text-decoration: none;
