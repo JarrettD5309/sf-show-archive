@@ -6,6 +6,7 @@ import HomePage from './pages/HomePage';
 import Login from './pages/Login';
 import NavBar from './components/NavBar';
 import Search from './pages/Search';
+import Show from './pages/Show';
 import SlideDrawer from './components/SlideDrawer/SlideDrawer';
 import TimelinePage from './pages/TimelinePage';
 import axios from 'axios';
@@ -53,6 +54,7 @@ const App = () => {
             <Route exact path='/search' component={Search} />
             <Route exact path='/login' component={() => <Login setLoggedIn={setLoggedIn} />} />
             <Route exact path='/create-account' component={CreateAccount} />
+            <Route path='/show/:id' component={Show} />
             <Route exact path='/all-shows' component={HomePage} />
         </Router>
     );

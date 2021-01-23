@@ -15,6 +15,13 @@ h1 {
 	letter-spacing: .44rem;
 }
 
+h2 {
+	font-size: 1.8rem;
+	font-family: 'RobotoMono', sans-serif;
+	text-transform: uppercase;
+	letter-spacing: .35rem;
+}
+
 h4 {
 	font-size: 1.4rem;
 }

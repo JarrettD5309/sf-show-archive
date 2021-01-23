@@ -46,6 +46,10 @@ module.exports = app => {
             queryObj.stateCountry = stateCountry;
         }
 
+        if (req.query.showNum)  {
+            queryObj.showNum = req.query.showNum;
+        }
+
         if (allShows) {
             queryObj = {};
         }
