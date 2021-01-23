@@ -1,7 +1,20 @@
 import React from 'react';
 import './SlideDrawer.css';
+import axios from 'axios';
 
 const SlideDrawer = (props) => {
+
+    const handleLogout = () => {
+        axios.get('/api/logout')
+            .then(res=>{
+                console.log(res);
+                if (res.status === 200) {
+                    props.setLoggedIn(false);
+                    props.setDrawerOpen(false);
+                }
+            })
+            .catch(err=>console.log(err));
+    };
 
     return (
         <div className={props.show ? 'side-drawer open' : 'side-drawer'}>
@@ -20,9 +33,21 @@ const SlideDrawer = (props) => {
                 <li className='nav-item'>
                     <a href="/search" className='nav-text'>Search</a>
                 </li>
-                <li className='nav-item'>
-                    <a href="/login" className='nav-text'>Login</a>
-                </li>
+                {props.loggedIn ?
+                    (
+                        <li className='nav-item'>
+                            <p className='nav-text' onClick={handleLogout} >Logout</p>
+                        </li>
+                    )
+                    :
+                    (
+                        <li className='nav-item'>
+                            <a href="/login" className='nav-text'>Login</a>
+                        </li>
+                    )
+
+                }
+
             </ul>
         </div>
     );

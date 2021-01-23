@@ -1,4 +1,5 @@
 const express = require('express');
+const session = require('express-session');
 const path = require('path');
 const mongoose = require('mongoose');
 var db = require("./models");
@@ -15,6 +16,12 @@ app.use(express.json());
 if (process.env.NODE_ENV === "production") {
     app.use(express.static("client/build"));
 }
+
+app.use(session({
+    secret: "tennis123",
+    resave: true,
+    saveUninitialized: true,
+}));
 
 
 // const MONGODB_URI = process.env.mongodburi;

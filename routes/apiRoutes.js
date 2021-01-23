@@ -175,7 +175,8 @@ module.exports = app => {
                     const hash = results[0].password;
                     bcrypt.compare(password, hash, (err, result) => {
                         if (result) {
-                            // response for login success
+                            req.session.loggedin = true;
+                            res.status(200).send('loggedIn');
                         } else {
                             res.status(400).send('wrongPassUser');
                         }
@@ -183,5 +184,18 @@ module.exports = app => {
                 }
             });
         }
+    });
+
+    app.get('/api/checklogin', (req,res)=>{
+        if (req.session.loggedin) {
+            res.sendStatus(200);
+        } else {
+            res.sendStatus(404);
+        }
+    });
+
+    app.get('/api/logout', (req,res) => {
+        req.session.destroy();
+        res.sendStatus(200);
     });
 };
