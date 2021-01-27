@@ -1,5 +1,7 @@
 const db = require('../models');
 const bcrypt = require('bcrypt');
+const multer = require('multer');
+const path = require('path');
 
 module.exports = app => {
     app.get('/api/allstates', (req, res) => {
@@ -46,7 +48,7 @@ module.exports = app => {
             queryObj.stateCountry = stateCountry;
         }
 
-        if (req.query.showNum)  {
+        if (req.query.showNum) {
             queryObj.showNum = req.query.showNum;
         }
 
@@ -104,6 +106,7 @@ module.exports = app => {
             .catch(err => res.json(err))
     });
 
+    // CREATE ACCOUNT
     app.post('/api/user', (req, res) => {
         // console.log(req.body);
 
@@ -165,32 +168,148 @@ module.exports = app => {
 
     });
 
+    // LOGIN
     app.post('/api/login', (req, res) => {
         const username = req.body.username;
         const password = req.body.password;
 
         if (username && password) {
             db.User.find({ username: username })
-            .then(results=>{
-                if (results.length===0) {
-                    res.status(400).send('wrongPassUser');
-                } else {
-                    console.log(results[0].password);
-                    const hash = results[0].password;
-                    bcrypt.compare(password, hash, (err, result) => {
-                        if (result) {
-                            req.session.loggedin = true;
-                            res.status(200).send('loggedIn');
-                        } else {
-                            res.status(400).send('wrongPassUser');
-                        }
-                    });
-                }
-            });
+                .then(results => {
+                    if (results.length === 0) {
+                        res.status(400).send('wrongPassUser');
+                    } else {
+                        // console.log(results[0].password);
+                        const hash = results[0].password;
+                        bcrypt.compare(password, hash, (err, result) => {
+                            if (result) {
+                                req.session.loggedin = true;
+                                console.log(results[0]._id);
+                                req.session.userID = results[0]._id;
+                                res.status(200).send('loggedIn');
+                            } else {
+                                res.status(400).send('wrongPassUser');
+                            }
+                        });
+                    }
+                });
         }
     });
 
-    app.get('/api/checklogin', (req,res)=>{
+    // GET USER INFO
+    app.get('/api/getuser', (req, res) => {
+        if (req.session.loggedin) {
+            db.User.findById(req.session.userID, { _id: 1, username: 1, email: 1 })
+                .then(results => {
+                    res.json(results);
+                })
+                .catch(err => console.log(err));
+        } else {
+            res.sendStatus(404);
+        }
+    });
+
+    // TEST USER DETAILS
+    // app.post('/api/userdetails',(req,res)=>{
+
+    //     const name = req.body.name;
+    //     const userId = req.body.userId;
+    //     const userObj = {
+    //         name:name,
+    //         userId:userId
+    //     }
+    //     db.UserDetails.create(userObj)
+    //         .then(result => res.json(result))
+    //         .catch(err => res.json(err));
+    // });
+
+    // var upload = multer({dest: './test-images/'});
+
+    // Image Upload 
+    // Set Storage Engine
+    const storage = multer.diskStorage({
+        destination: './client/public/uploads/',
+        filename: (req, file, cb) => {
+            cb(null, req.body.date + '-' + Date.now() + path.extname(file.originalname));
+        }
+    });
+
+    // Init Upload Variable
+    var upload = multer({
+        storage: storage,
+        limits: { fileSize: 2000000 },
+        fileFilter: (req, file, cb) => {
+            checkFileType(file, cb);
+        }
+    }).single('flyerImg');
+
+    // Check File Type Function
+    const checkFileType = (file, cb) => {
+        // Allowed ext
+        const filetypes = /jpeg|jpg|png/;
+        // Check ext
+        const extname = filetypes.test(path.extname(file.originalname).toLowerCase());
+        // Check mime type
+        const mimetype = filetypes.test(file.mimetype);
+
+        if (mimetype && extname) {
+            return cb(null, true);
+        } else {
+            cb({message: 'Error: Images Only'});
+        }
+    };
+
+    app.post('/api/showflyer', (req, res) => {
+        upload(req, res, (err) => {
+            console.log(req.body);
+            if (err) {
+                // send this to react for instructions
+                console.log(err);
+                // res.json(err);
+                res.status(400).json(err);
+            } else {
+                if (req.file == undefined) {
+                    res.status(400).json({
+                        "message": "Error: No File Selected"
+                    });
+                } else {
+                    db.ShowDetails.findOneAndUpdate(
+                        {showId:req.body.showId},
+                        {
+                            showId:req.body.showId,
+                            flyer: {
+                                flyerImg: req.file.path,
+                                contributed: req.body.contributed
+                            }
+                        },
+                        {
+                            new: true,
+                            upsert: true,
+                            setDefaultsOnInsert: true
+                        }
+                        )
+                        .then(result => res.json(result))
+                        .catch(err=>res.json(err));
+                }
+
+            }
+        });
+        // console.log(req.file.buffer);
+        // console.log(req.body);
+        // const detailsObj = {
+        //     showId:req.body.showId,
+        //     flyer: {
+        //         flyerImg: req.file.buffer,
+        //         contributed: req.body.contributed
+        //     }
+        // }
+        // db.ShowDetails.create(detailsObj)
+        //     .then(result => res.json(result))
+        //     .catch(err => res.json(err));
+    });
+
+
+    app.get('/api/checklogin', (req, res) => {
         if (req.session.loggedin) {
             res.sendStatus(200);
         } else {
@@ -198,7 +317,7 @@ module.exports = app => {
         }
     });
 
-    app.get('/api/logout', (req,res) => {
+    app.get('/api/logout', (req, res) => {
         req.session.destroy();
         res.sendStatus(200);
     });

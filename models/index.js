@@ -1,4 +1,6 @@
 module.exports = {
     Show: require("./Show"),
-    User: require("./User")
+    User: require("./User"),
+    ShowDetails: require("./ShowDetails"),
+    UserDetails: require("./UserDetails")
   };

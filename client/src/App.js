@@ -10,15 +10,22 @@ import Show from './pages/Show';
 import SlideDrawer from './components/SlideDrawer/SlideDrawer';
 import TimelinePage from './pages/TimelinePage';
 import axios from 'axios';
+import TestUserInfo from './pages/TestUserInfo';
 
 
 const App = () => {
     const [drawerOpen, setDrawerOpen] = React.useState(false);
     const [loggedIn, setLoggedIn] = React.useState(false);
+    const [userInfo, setUserInfo] = React.useState();
 
     useEffect(() => {
         checkLoggedIn();
     }, []);
+
+    useEffect(()=>{
+        getUserInfo();
+        console.log('getting user info');
+    },[]);
 
     const checkLoggedIn = () => {
         axios.get('/api/checklogin')
@@ -34,6 +41,16 @@ const App = () => {
                 console.log(err);
 
             });
+    };
+
+    const getUserInfo = () => {
+        axios.get('/api/getuser')
+            .then(res=> {
+                console.log('get info');
+                console.log(res.data);
+                setUserInfo(res.data);
+            })  
+            .catch(err=>console.log(err));
     };
 
     const handleDrawerToggle = () => {
@@ -52,8 +69,9 @@ const App = () => {
             {/* {drawerOpen && <Backdrop handleBackdrop={handleBackdrop} show={drawerOpen}/>} */}
             <Route exact path='/' component={TimelinePage} />
             <Route exact path='/search' component={Search} />
-            <Route exact path='/login' component={() => <Login setLoggedIn={setLoggedIn} />} />
+            <Route exact path='/login' component={() => <Login setLoggedIn={setLoggedIn} getUserInfo={getUserInfo} />} />
             <Route exact path='/create-account' component={CreateAccount} />
+            <Route exact path='/test-user' component={()=> <TestUserInfo userInfo={userInfo} />} />
             <Route path='/show/:id' component={Show} />
             <Route exact path='/all-shows' component={HomePage} />
         </Router>

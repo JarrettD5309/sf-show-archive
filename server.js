@@ -31,7 +31,8 @@ app.use(session({
 // });
 mongoose.connect('mongodb://localhost/show-archive', {
     useNewUrlParser: true,
-    useUnifiedTopology: true
+    useUnifiedTopology: true,
+    useFindAndModify: false
 });
 
 mongoose.connection.on("connected", () => console.log("Mongoose is connected")
