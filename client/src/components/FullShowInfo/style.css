@@ -1,12 +1,51 @@
+.full-show-add-button {
+    outline: none;
+    transition-duration: 0.3s;
+    box-sizing: border-box;
+    height: 24px;
+    width: 48px;
+    border-radius: 0;
+    cursor: pointer;
+    border: 1px black solid;
+    background-color: black;
+    overflow: hidden;
+    position: relative;
+    color: white;
+    align-self: center;
+    margin-left: 14px;
+    /* margin-bottom: 20px; */
+}
+
+.full-show-add-button:hover {
+    background-color: white;
+    color: black;
+}
+
+.full-show-add-button:after {
+    content: "";
+    background: rgb(197, 197, 197);
+    display: block;
+    position: absolute;
+    padding-top: 300%;
+    padding-left: 350%;
+    margin-left: -20px!important;
+    margin-top: -120%;
+    opacity: 0;
+    transition: all 0.8s
+}
+  
+.full-show-add-button:active:after {
+    padding: 0;
+    margin: 0;
+    opacity: 1;
+    transition: 0s
+}
+
 .full-show-address-title {
     grid-column-start: 1;
     grid-column-end: 2;
     grid-row-start: 3;
     grid-row-end: 4;
-}
-
-.full-show-audio-div {
-    display: flex;
 }
 
 .full-show-city {
@@ -32,6 +71,7 @@
 .full-show-flyer-set-div {
     display: flex;
     justify-content: space-between;
+    flex-wrap: wrap;
 }
 
 .full-show-grid-container {
@@ -40,6 +80,11 @@
     justify-content: center;
     grid-template-rows: 30px auto auto 33px;
     /* cursor: pointer; */
+}
+
+.full-show-header-margin {
+    margin: 14px 0 8px 0;
+    display: flex;
 }
 
 .full-show-image {
@@ -62,6 +107,22 @@
 /* .full-show-info-container:hover {
     background-color: rgb(248, 248, 248);
 } */
+
+.full-show-links-details {
+    flex: 1;
+    min-width: 0;
+    
+}
+
+.full-show-links-details > p {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.full-show-link-div {
+    display: flex;
+}
 
 .full-show-link-title-col {
     width: 100px;
@@ -133,6 +194,10 @@
     .full-show-info-container {
         width: 286px;
     }
+
+    .full-show-link-div {
+        flex-direction: column;
+    }
     
     .full-show-num {
         grid-column-start: 2;
@@ -181,6 +246,10 @@
         grid-column-start: 1;
         grid-column-end: 2;
     }
+
+    .full-show-flyer-div {
+        width: 100%;
+    }
     
     .full-show-grid-container {
         grid-template-columns: 311px 55px;
@@ -198,6 +267,10 @@
     .full-show-num {
         grid-column-start: 2;
         grid-column-end: 3;
+    }
+
+    .full-show-set-list-div {
+        width: 100%;
     }
     
     .full-show-street {
@@ -226,6 +299,10 @@
 }
 
 @media (min-width: 576px) and (max-width: 767px) {
+    .full-show-flyer-div {
+        width: 235px;
+    }
+    
     .full-show-grid-container {
         grid-template-columns: 216px 226px 55px;
     }
@@ -236,6 +313,10 @@
     
     .full-show-info-container {
         width: 500px;
+    }
+
+    .full-show-set-list-div {
+        width: 235px;
     }
 
 }

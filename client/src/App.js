@@ -72,7 +72,7 @@ const App = () => {
             <Route exact path='/login' component={() => <Login setLoggedIn={setLoggedIn} getUserInfo={getUserInfo} />} />
             <Route exact path='/create-account' component={CreateAccount} />
             <Route exact path='/test-user' component={()=> <TestUserInfo userInfo={userInfo} />} />
-            <Route path='/show/:id' component={Show} />
+            <Route path='/show/:id' component={()=> <Show loggedIn={loggedIn} />} />
             <Route exact path='/all-shows' component={HomePage} />
         </Router>
     );

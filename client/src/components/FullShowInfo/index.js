@@ -4,7 +4,7 @@ import dateFunction from '../../other/dateFunction';
 import ShowFlyer from '../../images/flyers/2009-08-29-1.jpg';
 
 function FullShowInfo(props) {
-    const {showNum, date, venue, address, city, stateCountry} = props;
+    const { showNum, date, venue, address, city, stateCountry, loggedIn, setDisplayModal } = props;
 
     const dateString = dateFunction(date);
 
@@ -22,11 +22,18 @@ function FullShowInfo(props) {
             {/* <div className='full-show-info-border'></div> */}
             <div className='full-show-flyer-set-div'>
                 <div className='full-show-flyer-div'>
-                    <h2>Flyer/Poster</h2>
+                    <div className='full-show-header-margin'>
+                        <h2>Flyer</h2>
+                        {/* <button className='full-show-add-button' type='button' onClick={()=>setDisplayModal(true)}>ADD</button> */}
+                        {loggedIn && <button className='full-show-add-button' type='button' onClick={()=>setDisplayModal(true)}>ADD</button>}
+                    </div>
                     <img src={ShowFlyer} className='full-show-image' />
                 </div>
                 <div className='full-show-set-list-div'>
-                    <h2>Setlist</h2>
+                    <div className='full-show-header-margin'>
+                        <h2>Setlist</h2>
+                        {loggedIn && <button className='full-show-add-button' type='button'>ADD</button>}
+                    </div>
                     <p>1. Foulmouth</p>
                     <p>2. Arm Over Arm</p>
                     <p>3. Black Moon</p>
@@ -35,30 +42,47 @@ function FullShowInfo(props) {
                 </div>
             </div>
             <div>
-                <h2>Links</h2>
-                <div className='full-show-audio-div'>
+                <div className='full-show-header-margin'>
+                    <h2>Links</h2>
+                    {loggedIn && <button className='full-show-add-button' type='button'>ADD</button>}
+                </div>
+                <div className='full-show-link-div'>
                     <div className='full-show-link-title-col'>
-                    <p className='full-show-slight-bold'>Audio:</p>
+                        <p className='full-show-slight-bold'>Audio:</p>
                     </div>
-                    <div>
+                    <div className='full-show-links-details'>
                         <p>http://www.livelink.com</p>
                         <p>Contributed By: JD</p>
                     </div>
                 </div>
-                <div className='full-show-audio-div'>
+                <div className='full-show-link-div'>
                     <div className='full-show-link-title-col'>
-                    <p className='full-show-slight-bold'>Video:</p>
+                        <p className='full-show-slight-bold'>Video:</p>
                     </div>
-                    <div>
-                        <p>http://www.youtube.com/10001</p>
+                    <div className='full-show-links-details'>
+                        <p>http://www.youtube.com/10001/alotmorestuffoverheretoseewhathappens</p>
                         <p>Contributed By: JD</p>
                         <p>http://www.youtube.com/20001</p>
                         <p>Contributed By: DJ</p>
                     </div>
                 </div>
+                <div className='full-show-link-div'>
+                    <div className='full-show-link-title-col'>
+                        <p className='full-show-slight-bold'>Review:</p>
+                    </div>
+                    <div className='full-show-links-details'>
+                        <p>http://www.myblog.com</p>
+                        <p>Contributed By: JD</p>
+                        <p>http://www.villagevoice.com</p>
+                        <p>Contributed By: DJ</p>
+                    </div>
+                </div>
             </div>
             <div>
-                <h2>Attendance</h2>
+                <div className='full-show-header-margin'>
+                        <h2>Attendance</h2>
+                        {loggedIn && <button className='full-show-add-button' type='button'>ADD</button>}
+                    </div>
             </div>
         </div>
     );

@@ -255,57 +255,51 @@ module.exports = app => {
         if (mimetype && extname) {
             return cb(null, true);
         } else {
-            cb({message: 'Error: Images Only'});
+            cb({ message: 'Error: Images Only' });
         }
     };
 
     app.post('/api/showflyer', (req, res) => {
-        upload(req, res, (err) => {
-            console.log(req.body);
-            if (err) {
-                // send this to react for instructions
-                console.log(err);
-                // res.json(err);
-                res.status(400).json(err);
-            } else {
-                if (req.file == undefined) {
-                    res.status(400).json({
-                        "message": "Error: No File Selected"
-                    });
+        if (req.session.loggedin) {
+            upload(req, res, (err) => {
+                console.log(req.body);
+                if (err) {
+                    // send this to react for instructions
+                    console.log(err);
+                    // res.json(err);
+                    res.status(400).json(err);
                 } else {
-                    db.ShowDetails.findOneAndUpdate(
-                        {showId:req.body.showId},
-                        {
-                            showId:req.body.showId,
-                            flyer: {
-                                flyerImg: req.file.path,
-                                contributed: req.body.contributed
+                    if (req.file == undefined) {
+                        res.status(400).json({
+                            "message": "Error: No File Selected"
+                        });
+                    } else {
+                        db.ShowDetails.findOneAndUpdate(
+                            { showId: req.body.showId },
+                            {
+                                showId: req.body.showId,
+                                flyer: {
+                                    flyerImg: req.file.path,
+                                    contributed: req.session.userID
+                                }
+                            },
+                            {
+                                new: true,
+                                upsert: true,
+                                setDefaultsOnInsert: true
                             }
-                        },
-                        {
-                            new: true,
-                            upsert: true,
-                            setDefaultsOnInsert: true
-                        }
                         )
-                        .then(result => res.json(result))
-                        .catch(err=>res.json(err));
-                }
+                            .then(result => res.json(result))
+                            .catch(err => res.json(err));
+                    }
 
-            }
-        });
-        // console.log(req.file.buffer);
-        // console.log(req.body);
-        // const detailsObj = {
-        //     showId:req.body.showId,
-        //     flyer: {
-        //         flyerImg: req.file.buffer,
-        //         contributed: req.body.contributed
-        //     }
-        // }
-        // db.ShowDetails.create(detailsObj)
-        //     .then(result => res.json(result))
-        //     .catch(err => res.json(err));
+                }
+            });
+        } else {
+            res.status(401).json({
+                "message": "Error: Must be logged in"
+            });
+        }
     });
 
 
