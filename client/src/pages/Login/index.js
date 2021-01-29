@@ -22,7 +22,7 @@ const Login = (props) => {
                 if (res.data==='loggedIn') {
                     props.setLoggedIn(true);
                     props.getUserInfo();
-                    history.push('/')
+                    history.push('/');
                 }
             })
             .catch(err=>{

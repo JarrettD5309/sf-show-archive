@@ -1,37 +1,178 @@
 /* The Modal (background) */
 .modal {
-    /* display: none; Hidden by default */
-    position: fixed; /* Stay in place */
-    z-index: 1; /* Sit on top */
-    left: 0;
-    top: 0;
-    width: 100%; /* Full width */
-    height: 100%; /* Full height */
-    overflow: auto; /* Enable scroll if needed */
-    background-color: rgb(0,0,0); /* Fallback color */
-    background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
-  }
+  /* display: none; Hidden by default */
+  position: fixed; /* Stay in place */
+  z-index: 1; /* Sit on top */
+  left: 0;
+  top: 0;
+  width: 100%; /* Full width */
+  height: 100%; /* Full height */
+  overflow: auto; /* Enable scroll if needed */
+  background-color: rgb(0,0,0); /* Fallback color */
+  background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+}
   
-  /* Modal Content/Box */
+/* Modal Content/Box */
+.modal-content {
+  background-color: #fefefe;
+  margin: 15% auto; /* 15% from the top and centered */
+  padding: 20px;
+  border: 1px solid #888;
+  width: 70%; /* Could be more or less, depending on screen size */
+}
+  
+/* The Close Button */
+/* .close {
+  color: #aaa;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+  color: black;
+  text-decoration: none;
+  cursor: pointer;
+} */
+
+.modal-button-div {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.modal-close-button {
+  margin: 20px 0 0 15px;
+  outline: none;
+  transition-duration: 0.3s;
+  box-sizing: border-box;
+  border-radius: 0;
+  background-color: white;
+  height: 40px;
+  width: 100px;
+  cursor: pointer;
+  border: 1px black solid;
+}
+
+.modal-close-button:hover {
+  background-color: black;
+  color: white;
+}
+
+.modal-file-div {
+  border: 1px solid black;
+  width: 100%;
+  display: flex;
+  box-sizing: border-box;
+}
+
+.modal-file-label {
+  outline: none;
+  transition-duration: 0.3s;
+  box-sizing: border-box;
+  border-radius: 0;
+  background-color: white;
+  overflow: hidden;
+  position: relative;
+  border-left: 1px solid black;
+  display: inline-block;
+  padding: 10px 12px;
+  cursor: pointer;
+  line-height: normal;
+}
+
+.modal-file-label:hover {
+  background-color: black;
+  color: white;
+}
+
+/* .modal-file-label:after {
+  content: "";
+  background: rgb(105, 105, 105);
+  display: block;
+  position: absolute;
+  padding-top: 300%;
+  padding-left: 350%;
+  margin-left: -20px!important;
+  margin-top: -120%;
+  opacity: 0;
+  transition: all 0.8s
+}
+
+.modal-file-label:active:after {
+  padding: 0;
+  margin: 0;
+  opacity: 1;
+  transition: 0s
+} */
+
+.modal-file-text-area {
+  flex:1;
+  padding: 6px 12px;
+  line-height: normal;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.modal-input-file {
+  display: none;
+}
+
+.modal-instructions {
+  margin: 12px 0;
+}
+
+.modal-submit-button {
+  margin: 20px 0 0 15px;
+  outline: none;
+  transition-duration: 0.3s;
+  box-sizing: border-box;
+  height: 40px;
+  width: 100px;
+  border-radius: 0;
+  cursor: pointer;
+  border: 1px black solid;
+  background-color: black;
+  overflow: hidden;
+  position: relative;
+  color: white;
+}
+
+.modal-submit-button:hover {
+  background-color: white;
+  color: black;
+}
+
+.modal-submit-button:after {
+  content: "";
+  background: rgb(197, 197, 197);
+  display: block;
+  position: absolute;
+  padding-top: 300%;
+  padding-left: 350%;
+  margin-left: -20px!important;
+  margin-top: -120%;
+  opacity: 0;
+  transition: all 0.8s
+}
+
+.modal-submit-button:active:after {
+  padding: 0;
+  margin: 0;
+  opacity: 1;
+  transition: 0s
+}
+
+@media (max-width: 399px) {
   .modal-content {
-    background-color: #fefefe;
-    margin: 15% auto; /* 15% from the top and centered */
-    padding: 20px;
-    border: 1px solid #888;
-    width: 80%; /* Could be more or less, depending on screen size */
+    width: 80%;
   }
   
-  /* The Close Button */
-  .close {
-    color: #aaa;
-    float: right;
-    font-size: 28px;
-    font-weight: bold;
+}
+
+@media (min-width: 400px) and (max-width: 575px) {
+  .modal-content {
+    width: 80%;
   }
-  
-  .close:hover,
-  .close:focus {
-    color: black;
-    text-decoration: none;
-    cursor: pointer;
-  }
+}

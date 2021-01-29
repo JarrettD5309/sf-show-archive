@@ -1,9 +1,10 @@
 import React from 'react';
 import './SlideDrawer.css';
+import { useHistory } from "react-router-dom";
 import axios from 'axios';
 
 const SlideDrawer = (props) => {
-
+    let history = useHistory();
     const handleLogout = () => {
         axios.get('/api/logout')
             .then(res=>{
@@ -11,6 +12,7 @@ const SlideDrawer = (props) => {
                 if (res.status === 200) {
                     props.setLoggedIn(false);
                     props.setDrawerOpen(false);
+                    history.push('/');
                 }
             })
             .catch(err=>console.log(err));
