@@ -10,6 +10,7 @@ const Show = (props) => {
     const [displayModal, setDisplayModal] = React.useState(false);
     const [imageFile, setImageFile] = React.useState();
     const [imageFileName, setImageFileName] = React.useState('');
+    const [flyerInstructions, setFlyerInstructions] = React.useState('Please choose a image');
 
     const { loggedIn } = props;
 
@@ -54,13 +55,18 @@ const Show = (props) => {
         axios.post('/api/showflyer', formData, config)
             .then(res => {
                 console.log(res);
-                setDisplayModal(false);
-                setImageFile(null);
-                setImageFileName('')
+                setFlyerInstructions('Success!');
+                setTimeout(()=>{
+                    setDisplayModal(false);
+                    setImageFile(null);
+                    setImageFileName('');
+                    setFlyerInstructions('Please choose a image');
+                }, 1000);
             })
             .catch(err => {
                 console.log(err);
                 console.log(err.response.data.message);
+                setFlyerInstructions(err.response.data.message);
                 setImageFile(null);
                 setImageFileName('')
             });
@@ -72,6 +78,7 @@ const Show = (props) => {
         if (type === 'flyer') {
             setImageFileName('');
             setImageFile(null);
+            setFlyerInstructions('Please choose a image');
         }
     };
 
@@ -96,6 +103,7 @@ const Show = (props) => {
                         imageFileName={imageFileName}
                         setImageFileName={setImageFileName}
                         handleCloseModal={handleCloseModal}
+                        flyerInstructions={flyerInstructions}
                     />}
 
                 </div>

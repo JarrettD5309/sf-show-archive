@@ -8,7 +8,8 @@ const Modal = (props) => {
         handleFlyerSubmit,
         setImageFile,
         imageFileName,
-        setImageFileName 
+        setImageFileName,
+        flyerInstructions 
     } = props;
     return (
         <div id="myModal" className="modal">
@@ -17,7 +18,7 @@ const Modal = (props) => {
                 {type === 'flyer' &&
                 <div>
                     <h2>Add Flyer</h2>
-                    <p className='modal-instructions'>Please choose a image</p>
+                    <p className='modal-instructions'>{flyerInstructions}</p>
                     <div className='modal-file-div'>
                         <div className='modal-file-text-area'>
                             {imageFileName.replace(/.*[\/\\]/, '')}

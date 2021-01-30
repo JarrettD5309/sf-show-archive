@@ -8,7 +8,7 @@ var ShowDetailsSchema = new Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Show'
     },
-    flyer: {
+    flyer: [{
         flyerImg: {
             type: String
         }, 
@@ -16,7 +16,7 @@ var ShowDetailsSchema = new Schema({
             type: mongoose.Schema.Types.ObjectId,
             ref: 'User'
         }
-    },
+    }],
     setList: {
         songs: [String],
         encore: [String],

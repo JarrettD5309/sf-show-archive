@@ -239,12 +239,13 @@ module.exports = app => {
         storage: storage,
         limits: { fileSize: 2000000 },
         fileFilter: (req, file, cb) => {
-            checkFileType(file, cb);
+            // console.log('body' + JSON.stringify(req.body));
+            checkFileType(req, file, cb);
         }
     }).single('flyerImg');
 
     // Check File Type Function
-    const checkFileType = (file, cb) => {
+    const checkFileType = (req, file, cb) => {
         // Allowed ext
         const filetypes = /jpeg|jpg|png/;
         // Check ext
@@ -253,7 +254,17 @@ module.exports = app => {
         const mimetype = filetypes.test(file.mimetype);
 
         if (mimetype && extname) {
-            return cb(null, true);
+            db.ShowDetails.find({ showId: req.body.showId })
+                .then(results => {
+                    // only allow 2 flyers
+                    if (results.length === 0 || results[0].flyer.length < 2) {
+                        return cb(null, true);
+                    } else {
+                        return cb({ message: 'Error: Only 2 Flyers' })
+                    }
+                })
+                .catch(err => console.log(err));
+
         } else {
             cb({ message: 'Error: Images Only' });
         }
@@ -261,12 +272,11 @@ module.exports = app => {
 
     app.post('/api/showflyer', (req, res) => {
         if (req.session.loggedin) {
+
             upload(req, res, (err) => {
                 console.log(req.body);
                 if (err) {
-                    // send this to react for instructions
                     console.log(err);
-                    // res.json(err);
                     res.status(400).json(err);
                 } else {
                     if (req.file == undefined) {
@@ -274,13 +284,16 @@ module.exports = app => {
                             "message": "Error: No File Selected"
                         });
                     } else {
+
                         db.ShowDetails.findOneAndUpdate(
                             { showId: req.body.showId },
                             {
                                 showId: req.body.showId,
-                                flyer: {
-                                    flyerImg: req.file.path,
-                                    contributed: req.session.userID
+                                $push: {
+                                    flyer: {
+                                        flyerImg: req.file.path,
+                                        contributed: req.session.userID
+                                    }
                                 }
                             },
                             {
@@ -292,7 +305,6 @@ module.exports = app => {
                             .then(result => res.json(result))
                             .catch(err => res.json(err));
                     }
-
                 }
             });
         } else {
