@@ -48,9 +48,9 @@ module.exports = app => {
             queryObj.stateCountry = stateCountry;
         }
 
-        if (req.query.showNum) {
-            queryObj.showNum = req.query.showNum;
-        }
+        // if (req.query.showNum) {
+        //     queryObj.showNum = req.query.showNum;
+        // }
 
         if (allShows) {
             queryObj = {};
@@ -62,6 +62,21 @@ module.exports = app => {
             // .sort('showNum')
             .sort({ date: 1 })
             .then(result => res.json(result))
+            .catch(err => res.json(err))
+    });
+
+    app.get('/api/showdetails', (req, res) => {
+        db.Show.find({ showNum: req.query.showNum })
+            .then(result => {
+                db.ShowDetails.findOne({ showId: result[0]._id })
+                    .populate('showId')
+                    .then(newResult => {
+                        console.log(newResult);
+                        res.json([newResult, result[0]]);
+                    })
+                    .catch(err => res.json(err));
+                // res.json(result);
+            })
             .catch(err => res.json(err))
     });
 
@@ -209,22 +224,6 @@ module.exports = app => {
         }
     });
 
-    // TEST USER DETAILS
-    // app.post('/api/userdetails',(req,res)=>{
-
-    //     const name = req.body.name;
-    //     const userId = req.body.userId;
-    //     const userObj = {
-    //         name:name,
-    //         userId:userId
-    //     }
-    //     db.UserDetails.create(userObj)
-    //         .then(result => res.json(result))
-    //         .catch(err => res.json(err));
-    // });
-
-    // var upload = multer({dest: './test-images/'});
-
     // Image Upload 
     // Set Storage Engine
     const storage = multer.diskStorage({
@@ -274,7 +273,7 @@ module.exports = app => {
         if (req.session.loggedin) {
 
             upload(req, res, (err) => {
-                console.log(req.body);
+                console.log(req.file);
                 if (err) {
                     console.log(err);
                     res.status(400).json(err);
@@ -291,7 +290,7 @@ module.exports = app => {
                                 showId: req.body.showId,
                                 $push: {
                                     flyer: {
-                                        flyerImg: req.file.path,
+                                        flyerImg: req.file.filename,
                                         contributed: req.session.userID
                                     }
                                 }
@@ -307,6 +306,32 @@ module.exports = app => {
                     }
                 }
             });
+        } else {
+            res.status(401).json({
+                "message": "Error: Must be logged in"
+            });
+        }
+    });
+
+    app.post('/api/setlist', (req, res) => {
+        if (req.session.loggedin) {
+            const setlistObj = {
+                setList: {
+                    songs: req.body.setlist,
+                    contributed: req.session.userID
+                }
+            }
+            db.ShowDetails.findOneAndUpdate(
+                { showId: req.body.showId },
+                setlistObj,
+                {
+                    new: true,
+                    upsert: true,
+                    setDefaultsOnInsert: true
+                }
+            )
+                .then(result => res.json(result))
+                .catch(err => res.json(err));
         } else {
             res.status(401).json({
                 "message": "Error: Must be logged in"

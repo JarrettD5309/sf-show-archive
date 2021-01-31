@@ -19,7 +19,6 @@ var ShowDetailsSchema = new Schema({
     }],
     setList: {
         songs: [String],
-        encore: [String],
         contributed: {
             type: mongoose.Schema.Types.ObjectId,
             ref: 'User'

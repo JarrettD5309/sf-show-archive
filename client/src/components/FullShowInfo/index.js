@@ -1,10 +1,45 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import './style.css';
 import dateFunction from '../../other/dateFunction';
 import ShowFlyer from '../../images/flyers/2009-08-29-1.jpg';
 
 function FullShowInfo(props) {
-    const { showNum, date, venue, address, city, stateCountry, loggedIn, setDisplayModal } = props;
+
+    useEffect(() => {
+        console.log(props.showInfo);
+        console.log(props.showInfoDetails);
+    });
+
+    const {
+
+        loggedIn,
+        handleOpenModal
+    } = props;
+
+    const {
+        showNum,
+        date,
+        venue,
+        address,
+        city,
+        stateCountry
+    } = props.showInfo;
+
+    let attendance = [];
+    let audio = [];
+    let flyer = [];
+    let review = [];
+    let setList = {};
+    let video = [];
+
+    if (props.showInfoDetails) {
+        attendance = props.showInfoDetails.attendance;
+        audio = props.showInfoDetails.audio;
+        flyer = props.showInfoDetails.flyer;
+        review = props.showInfoDetails.review;
+        setList = props.showInfoDetails.setList;
+        video = props.showInfoDetails.video;
+    }
 
     const dateString = dateFunction(date);
 
@@ -24,21 +59,28 @@ function FullShowInfo(props) {
                 <div className='full-show-flyer-div'>
                     <div className='full-show-header-margin'>
                         <h2>Flyer</h2>
-                        {/* <button className='full-show-add-button' type='button' onClick={()=>setDisplayModal(true)}>ADD</button> */}
-                        {loggedIn && <button className='full-show-add-button' type='button' onClick={()=>setDisplayModal(true)}>ADD</button>}
+                        {loggedIn && <button className='full-show-add-button' type='button' onClick={() => handleOpenModal('flyer')}>ADD</button>}
                     </div>
-                    <img src={ShowFlyer} className='full-show-image' />
+                    {flyer.length!==0 ? flyer.map(eachFlyer => {
+                        const imgName = eachFlyer.flyerImg;
+                        return (<img src={`/uploads/${imgName}`} className='full-show-image' alt={`Flyer from ${date}`} key={eachFlyer._id} />)
+                    }
+                    ) :
+                        (<p>N/A</p>)
+                    }
+                    {/* <img src={ShowFlyer} className='full-show-image' /> */}
                 </div>
                 <div className='full-show-set-list-div'>
                     <div className='full-show-header-margin'>
                         <h2>Setlist</h2>
-                        {loggedIn && <button className='full-show-add-button' type='button'>ADD</button>}
+                        {loggedIn && <button className='full-show-add-button' type='button' onClick={() => handleOpenModal('setlist')}>ADD</button>}
                     </div>
-                    <p>1. Foulmouth</p>
-                    <p>2. Arm Over Arm</p>
-                    <p>3. Black Moon</p>
-                    <p>4. I'll Make You Sorry</p>
-                    <p>5. Starve the Beat</p>
+                    {props.setListArr.length!==0 ? props.setListArr.map((song,i) => (
+                        <p key={i}>{i+1}. {song}</p>
+                    )
+                    ) :
+                        (<p>N/A</p>)
+                    }
                 </div>
             </div>
             <div>
@@ -80,9 +122,9 @@ function FullShowInfo(props) {
             </div>
             <div>
                 <div className='full-show-header-margin'>
-                        <h2>Attendance</h2>
-                        {loggedIn && <button className='full-show-add-button' type='button'>ADD</button>}
-                    </div>
+                    <h2>Attendance</h2>
+                    {loggedIn && <button className='full-show-add-button' type='button'>ADD</button>}
+                </div>
             </div>
         </div>
     );

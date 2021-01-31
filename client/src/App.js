@@ -10,7 +10,6 @@ import Show from './pages/Show';
 import SlideDrawer from './components/SlideDrawer/SlideDrawer';
 import TimelinePage from './pages/TimelinePage';
 import axios from 'axios';
-import TestUserInfo from './pages/TestUserInfo';
 
 
 const App = () => {
@@ -71,7 +70,6 @@ const App = () => {
             <Route exact path='/search' component={Search} />
             <Route exact path='/login' component={() => <Login setLoggedIn={setLoggedIn} getUserInfo={getUserInfo} />} />
             <Route exact path='/create-account' component={CreateAccount} />
-            <Route exact path='/test-user' component={()=> <TestUserInfo userInfo={userInfo} />} />
             <Route path='/show/:id' component={()=> <Show loggedIn={loggedIn} />} />
             <Route exact path='/all-shows' component={HomePage} />
         </Router>
