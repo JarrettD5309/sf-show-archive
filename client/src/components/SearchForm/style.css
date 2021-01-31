@@ -1,15 +1,16 @@
-/* Change the white to any color ;) */
+/* Change the white to any color ;)
 input:-webkit-autofill,
 input:-webkit-autofill:hover, 
 input:-webkit-autofill:focus, 
 input:-webkit-autofill:active  {
     -webkit-box-shadow: 0 0 0 30px white inset !important;
-}
+} */
 
 select {
     -webkit-appearance: none;
     -moz-appearance: none;
     -webkit-border-radius: 0px;
+    border-radius: 0px;
     appearance: none;
     background: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='100' height='100' fill='black'><polygon points='0,0 100,0 50,50'/></svg>") no-repeat;
     background-size: 12px;

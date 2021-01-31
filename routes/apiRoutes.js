@@ -70,6 +70,8 @@ module.exports = app => {
             .then(result => {
                 db.ShowDetails.findOne({ showId: result[0]._id })
                     .populate('showId')
+                    .populate('flyer.contributed',['username','email'])
+                    .populate('setList.contributed',['username'])
                     .then(newResult => {
                         console.log(newResult);
                         res.json([newResult, result[0]]);

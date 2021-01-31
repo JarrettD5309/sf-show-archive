@@ -15,6 +15,7 @@ const Show = (props) => {
     const [flyerInstructions, setFlyerInstructions] = React.useState('Please choose a image');
     const [setListArr, setSetListArr] = React.useState([]);
     const [setlistInstructions, setSetListInstructions] = React.useState('Please add songs');
+    const [linksInstructions,setLinkInstructions] = React.useState('Please add a link');
 
     const { loggedIn } = props;
 
@@ -43,6 +44,23 @@ const Show = (props) => {
         return () => mounted = false;
     }, []);
 
+    const getDetails = () => {
+        axios.get('/api/showdetails', {
+            params: {
+                showNum: id
+            }
+        })
+            .then(res => {
+                // console.log(res);
+                setShowInfoDetails(res.data[0]);
+                setShowInfo(res.data[1]);
+                if (res.data[0]) {
+                    setSetListArr(res.data[0].setList.songs);
+                }
+            })
+            .catch(err => console.log(err));
+    };
+
     const handleFlyerSubmit = () => {
         const formData = new FormData();
 
@@ -61,11 +79,12 @@ const Show = (props) => {
                 console.log(res);
                 setFlyerInstructions('Success!');
                 setTimeout(() => {
-                    setDisplayModal(false);
-                    setImageFile(null);
-                    setImageFileName('');
-                    setFlyerInstructions('Please choose a image');
-                }, 1000);
+                    handleCloseModal('flyer');
+                    // setImageFile(null);
+                    // setImageFileName('');
+                    // setFlyerInstructions('Please choose a image');
+                    getDetails();
+                }, 900);
             })
             .catch(err => {
                 console.log(err);
@@ -93,25 +112,38 @@ const Show = (props) => {
             setlist: newSetlist
         }
         axios.post('/api/setlist', setlistData)
-            .then(res=>{
+            .then(res => {
                 console.log(res);
+                setSetListInstructions('Success!')
+                setTimeout(() => {
+                    // setDisplayModal(false);
+                    handleCloseModal('setlist');
+                    // setImageFile(null);
+                    // setImageFileName('');
+                    // setSetListInstructions('Please add songs');
+                    getDetails();
+                }, 900);
             })
-            .catch(err=>console.log(err));
+            .catch(err => console.log(err));
     };
 
     const handleCloseModal = (type) => {
         setDisplayModal(false);
+        document.body.style.overflowY = 'visible';
 
         if (type === 'flyer') {
             setImageFileName('');
             setImageFile(null);
             setFlyerInstructions('Please choose a image');
+        } else if (type='setlist') {
+            setSetListInstructions('Please add songs');
         }
     };
 
     const handleOpenModal = (type) => {
         setModalType(type);
         setDisplayModal(true);
+        document.body.style.overflowY = 'hidden';
     };
 
     return (
@@ -123,7 +155,6 @@ const Show = (props) => {
                         showInfoDetails={showInfoDetails}
                         loggedIn={loggedIn}
                         handleOpenModal={handleOpenModal}
-                        setListArr={setListArr}
                     />
                     {displayModal && <Modal
                         type={modalType}
@@ -136,6 +167,7 @@ const Show = (props) => {
                         handleSetlistSubmit={handleSetlistSubmit}
                         setlistInstructions={setlistInstructions}
                         setListArr={setListArr}
+                        linksInstructions={linksInstructions}
                     />}
 
                 </div>

@@ -29,7 +29,7 @@ function FullShowInfo(props) {
     let audio = [];
     let flyer = [];
     let review = [];
-    let setList = {};
+    let setList = {songs: []};
     let video = [];
 
     if (props.showInfoDetails) {
@@ -61,9 +61,15 @@ function FullShowInfo(props) {
                         <h2>Flyer</h2>
                         {loggedIn && <button className='full-show-add-button' type='button' onClick={() => handleOpenModal('flyer')}>ADD</button>}
                     </div>
-                    {flyer.length!==0 ? flyer.map(eachFlyer => {
+                    {flyer.length !== 0 ? flyer.map(eachFlyer => {
                         const imgName = eachFlyer.flyerImg;
-                        return (<img src={`/uploads/${imgName}`} className='full-show-image' alt={`Flyer from ${date}`} key={eachFlyer._id} />)
+                        const username = eachFlyer.contributed.username;
+                        return (
+                            <div key={eachFlyer._id}>
+                                <img src={`/uploads/${imgName}`} className='full-show-image' alt={`Flyer from ${date}`} key={eachFlyer._id} />
+                                <p>Contributed by: {username}</p>
+                            </div>
+                        )
                     }
                     ) :
                         (<p>N/A</p>)
@@ -75,9 +81,14 @@ function FullShowInfo(props) {
                         <h2>Setlist</h2>
                         {loggedIn && <button className='full-show-add-button' type='button' onClick={() => handleOpenModal('setlist')}>ADD</button>}
                     </div>
-                    {props.setListArr.length!==0 ? props.setListArr.map((song,i) => (
-                        <p key={i}>{i+1}. {song}</p>
-                    )
+                    {setList.songs.length !== 0 ? (
+                        <div>
+                            {setList.songs.map((song, i) =>
+                                <p key={i}>{i + 1}. {song}</p>
+                            )}
+                            <p>Contributed by: {setList.contributed.username} </p>
+                        </div>
+
                     ) :
                         (<p>N/A</p>)
                     }
@@ -86,7 +97,7 @@ function FullShowInfo(props) {
             <div>
                 <div className='full-show-header-margin'>
                     <h2>Links</h2>
-                    {loggedIn && <button className='full-show-add-button' type='button'>ADD</button>}
+                    {loggedIn && <button className='full-show-add-button' type='button' onClick={() => handleOpenModal('links')}>ADD</button>}
                 </div>
                 <div className='full-show-link-div'>
                     <div className='full-show-link-title-col'>

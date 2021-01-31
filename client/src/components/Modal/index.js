@@ -12,6 +12,7 @@ const Modal = (props) => {
         flyerInstructions,
         setlistInstructions,
         setListArr,
+        linksInstructions,
         handleSetlistSubmit
     } = props;
 
@@ -30,13 +31,13 @@ const Modal = (props) => {
         for (let i = 0; i < iterations; i++) {
             setlistInputs.push(
                 <div key={i}>
-                    <label htmlFor='song'>{i + 1}. </label>
+                    <label htmlFor='song' className='modal-setlist-label'>{i + 1}. </label>
                     <input
                         type='text'
                         id={'song' + i}
                         className='modal-setlist-input'
                         name={'song' + i}
-                        defaultValue=''
+                        defaultValue={setListArr[i] ? setListArr[i] : ''}
                     />
                 </div>
             );
@@ -84,7 +85,7 @@ const Modal = (props) => {
 
                 {type === 'setlist' &&
                     <div>
-                        <h2>Add Setlist</h2>
+                        <h2>Setlist</h2>
                         <p className='modal-instructions'>{setlistInstructions}</p>
                         {setlistRender()}
                         {/* <label htmlFor='song'>1. </label>
@@ -95,6 +96,19 @@ const Modal = (props) => {
                         // value={venue} 
                         // onChange={event => setVenue(event.target.value)} 
                         /> */}
+
+                        <div className='modal-button-div'>
+                            <button className='modal-close-button' type='button' onClick={() => handleCloseModal(type)}>Close</button>
+                            <button className='modal-submit-button' type='button' onClick={handleSetlistSubmit}>Submit</button>
+                        </div>
+                    </div>
+                }
+
+                {type === 'links' &&
+                    <div>
+                        <h2>Links</h2>
+                        <p className='modal-instructions'>{linksInstructions}</p>
+                        
 
                         <div className='modal-button-div'>
                             <button className='modal-close-button' type='button' onClick={() => handleCloseModal(type)}>Close</button>

@@ -15,26 +15,11 @@
 /* Modal Content/Box */
 .modal-content {
   background-color: #fefefe;
-  margin: 15% auto; /* 15% from the top and centered */
+  margin: 50px auto; /* 50px from the top and centered */
   padding: 20px;
   border: 1px solid #888;
   width: 70%; /* Could be more or less, depending on screen size */
 }
-  
-/* The Close Button */
-/* .close {
-  color: #aaa;
-  float: right;
-  font-size: 28px;
-  font-weight: bold;
-}
-
-.close:hover,
-.close:focus {
-  color: black;
-  text-decoration: none;
-  cursor: pointer;
-} */
 
 .modal-button-div {
   display: flex;
@@ -121,6 +106,21 @@
 
 .modal-instructions {
   margin: 12px 0;
+}
+
+.modal-setlist-input {
+  max-width: 300px;
+  padding: 12px 12px;
+  margin: 8px 0;
+  box-sizing: border-box;
+  border: 1px solid black;
+  outline:none;
+  height: 40px;
+}
+
+.modal-setlist-label {
+  width: 30px;
+  display: inline-block;
 }
 
 .modal-submit-button {
