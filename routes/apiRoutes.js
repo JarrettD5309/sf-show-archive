@@ -75,7 +75,7 @@ module.exports = app => {
                     .populate('audio.contributed', ['username'])
                     .populate('video.contributed', ['username'])
                     .populate('review.contributed', ['username'])
-                    .populate('attendance',['username'])
+                    .populate('attendance', ['username'])
                     .then(newResult => {
                         console.log(newResult);
                         res.json([newResult, result[0]]);
@@ -259,7 +259,8 @@ module.exports = app => {
         const mimetype = filetypes.test(file.mimetype);
 
         if (mimetype && extname) {
-            db.ShowDetails.find({ showId: req.body.showId })
+            if (req.body.showId) {
+                db.ShowDetails.find({ showId: req.body.showId })
                 .then(results => {
                     // only allow 2 flyers
                     if (results.length === 0 || results[0].flyer.length < 2) {
@@ -269,6 +270,10 @@ module.exports = app => {
                     }
                 })
                 .catch(err => console.log(err));
+            } else {
+                return cb({ message: 'Error: Form Not Valid'})
+            }
+            
 
         } else {
             cb({ message: 'Error: Images Only' });
@@ -323,23 +328,30 @@ module.exports = app => {
     // UPLOAD SETLIST
     app.post('/api/setlist', (req, res) => {
         if (req.session.loggedin) {
-            const setlistObj = {
-                setList: {
-                    songs: req.body.setlist,
-                    contributed: req.session.userID
+            if (req.body.showId) {
+                const setlistObj = {
+                    setList: {
+                        songs: req.body.setlist,
+                        contributed: req.session.userID
+                    }
                 }
+                db.ShowDetails.findOneAndUpdate(
+                    { showId: req.body.showId },
+                    setlistObj,
+                    {
+                        new: true,
+                        upsert: true,
+                        setDefaultsOnInsert: true
+                    }
+                )
+                    .then(result => res.json(result))
+                    .catch(err => res.json(err));
+            } else {
+                res.status(400).json({
+                    "message": "Error: Form not valid"
+                });
             }
-            db.ShowDetails.findOneAndUpdate(
-                { showId: req.body.showId },
-                setlistObj,
-                {
-                    new: true,
-                    upsert: true,
-                    setDefaultsOnInsert: true
-                }
-            )
-                .then(result => res.json(result))
-                .catch(err => res.json(err));
+
         } else {
             res.status(401).json({
                 "message": "Error: Must be logged in"
@@ -347,44 +359,71 @@ module.exports = app => {
         }
     });
 
+    // ADD LINKS
     app.post('/api/links', (req, res) => {
         if (req.session.loggedin) {
-            const linksObj = {
-                $push: {}
-            };
+            if (req.body.showId) {
+                const isValidUrl = (url) => {
+                    try {
+                        new URL(url);
+                    } catch (e) {
+                        // console.error(e);
+                        return false;
+                    }
+                    return true;
+                };
 
-            if (req.body.audio) {
-                linksObj.$push.audio = {
-                    link: req.body.audio,
-                    contributed: req.session.userID
+                const linksObj = {
+                    $push: {}
+                };
+
+                if (isValidUrl(req.body.audio)) {
+                    linksObj.$push.audio = {
+                        link: req.body.audio,
+                        contributed: req.session.userID
+                    }
                 }
+
+                if (isValidUrl(req.body.video)) {
+                    linksObj.$push.video = {
+                        link: req.body.video,
+                        contributed: req.session.userID
+                    }
+                }
+
+                if (isValidUrl(req.body.review)) {
+                    linksObj.$push.review = {
+                        link: req.body.review,
+                        contributed: req.session.userID
+                    }
+                }
+
+                if (linksObj.$push.audio || linksObj.$push.video || linksObj.$push.review) {
+
+                    db.ShowDetails.findOneAndUpdate(
+                        { showId: req.body.showId },
+                        linksObj,
+                        {
+                            new: true,
+                            upsert: true,
+                            setDefaultsOnInsert: true
+                        }
+                    )
+                        .then(result => res.json(result))
+                        .catch(err => res.json(err));
+
+                } else {
+                    res.status(400).json({
+                        "message": "Error: Form not valid"
+                    });
+                }
+
+            } else {
+                res.status(400).json({
+                    "message": "Error: Form not valid"
+                });
             }
 
-            if (req.body.video) {
-                linksObj.$push.video = {
-                    link: req.body.video,
-                    contributed: req.session.userID
-                }
-            }
-
-            if (req.body.review) {
-                linksObj.$push.review = {
-                    link: req.body.review,
-                    contributed: req.session.userID
-                }
-            }
-
-            db.ShowDetails.findOneAndUpdate(
-                { showId: req.body.showId },
-                linksObj,
-                {
-                    new: true,
-                    upsert: true,
-                    setDefaultsOnInsert: true
-                }
-            )
-                .then(result => res.json(result))
-                .catch(err => res.json(err));
         } else {
             res.status(401).json({
                 "message": "Error: Must be logged in"
@@ -395,21 +434,28 @@ module.exports = app => {
     // ATTENDANCE
     app.post('/api/attendance', (req, res) => {
         if (req.session.loggedin) {
-            db.ShowDetails.findOneAndUpdate(
-                { showId: req.body.showId },
-                {
-                    $push: {
-                        attendance: req.session.userID
+            if (req.body.showId) {
+                db.ShowDetails.findOneAndUpdate(
+                    { showId: req.body.showId },
+                    {
+                        $push: {
+                            attendance: req.session.userID
+                        }
+                    },
+                    {
+                        new: true,
+                        upsert: true,
+                        setDefaultsOnInsert: true
                     }
-                },
-                {
-                    new: true,
-                    upsert: true,
-                    setDefaultsOnInsert: true
-                }
-            )
-                .then(result => res.json(result))
-                .catch(err => res.json(err));
+                )
+                    .then(result => res.json(result))
+                    .catch(err => res.json(err));
+            } else {
+                res.status(400).json({
+                    "message": "Error: Form not valid"
+                });
+            }
+
         } else {
             res.status(401).json({
                 "message": "Error: Must be logged in"
