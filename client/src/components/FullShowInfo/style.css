@@ -89,6 +89,7 @@
 
 .full-show-image {
     width: 100%;
+    border: 1px solid rgb(224, 224, 224);
 }
 
 .full-show-info-border {
@@ -99,6 +100,7 @@
 
 .full-show-info-container {
     padding-top: 10px;
+    padding-bottom: 30px;
     line-height: 1.4;
     width: 654px;
     margin: 0 auto;
@@ -122,6 +124,26 @@
 
 .full-show-link-div {
     display: flex;
+    margin-bottom: 8px;
+}
+
+.full-show-links-link:link {
+    color: black;
+    text-decoration: none;
+}
+.full-show-links-link:visited {
+    color: black;
+    text-decoration: none;
+}
+.full-show-links-link:hover {
+    text-decoration: underline;
+}
+.full-show-links-link:active {
+    text-decoration: underline;
+}
+
+.full-show-links-map-div {
+    margin-bottom: 8px;
 }
 
 .full-show-link-title-col {

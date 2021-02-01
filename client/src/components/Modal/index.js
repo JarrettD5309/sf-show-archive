@@ -13,10 +13,17 @@ const Modal = (props) => {
         setlistInstructions,
         setListArr,
         linksInstructions,
-        handleSetlistSubmit
+        handleSetlistSubmit,
+        newAudioLink,
+        setNewAudioLink,
+        newVideoLink,
+        setNewVideoLink,
+        newReviewLink,
+        setNewReviewLink,
+        handleLinksSubmit,
+        attendanceInstructions,
+        handleAttendanceSubmit
     } = props;
-
-    // const [numSetlistInputs, setNumSetlistInputs] = React.useState(0);
 
     const setlistRender = () => {
         let iterations = 0;
@@ -43,7 +50,6 @@ const Modal = (props) => {
             );
         }
 
-        // setNumSetlistInputs(iterations);
         return setlistInputs;
     };
 
@@ -88,14 +94,6 @@ const Modal = (props) => {
                         <h2>Setlist</h2>
                         <p className='modal-instructions'>{setlistInstructions}</p>
                         {setlistRender()}
-                        {/* <label htmlFor='song'>1. </label>
-                        <input
-                            type='text'
-                            id='song'
-                            name='song'
-                        // value={venue} 
-                        // onChange={event => setVenue(event.target.value)} 
-                        /> */}
 
                         <div className='modal-button-div'>
                             <button className='modal-close-button' type='button' onClick={() => handleCloseModal(type)}>Close</button>
@@ -108,11 +106,50 @@ const Modal = (props) => {
                     <div>
                         <h2>Links</h2>
                         <p className='modal-instructions'>{linksInstructions}</p>
-                        
+                        {/* <h4>Audio</h4> */}
+                        <label htmlFor='audio' className='modal-links-label'><h4>Audio</h4></label>
+                        <input
+                            type='text'
+                            id='audio'
+                            className='modal-links-input'
+                            name='audio'
+                            value={newAudioLink}
+                            onChange={event => setNewAudioLink(event.target.value)}
+                        />
+                        <label htmlFor='video' className='modal-links-label'><h4>Video</h4></label>
+                        <input
+                            type='text'
+                            id='video'
+                            className='modal-links-input'
+                            name='video'
+                            value={newVideoLink}
+                            onChange={event => setNewVideoLink(event.target.value)}
+                        />
+                        <label htmlFor='review' className='modal-links-label'><h4>Review</h4></label>
+                        <input
+                            type='text'
+                            id='review'
+                            className='modal-links-input'
+                            name='review'
+                            value={newReviewLink}
+                            onChange={event => setNewReviewLink(event.target.value)}
+                        />
 
                         <div className='modal-button-div'>
                             <button className='modal-close-button' type='button' onClick={() => handleCloseModal(type)}>Close</button>
-                            <button className='modal-submit-button' type='button' onClick={handleSetlistSubmit}>Submit</button>
+                            <button className='modal-submit-button' type='button' onClick={handleLinksSubmit}>Submit</button>
+                        </div>
+                    </div>
+                }
+
+                {type === 'attendance' &&
+                    <div>
+                        <h2>Attendance</h2>
+                        <p className='modal-instructions'>{attendanceInstructions}</p>
+
+                        <div className='modal-button-div'>
+                            <button className='modal-close-button' type='button' onClick={() => handleCloseModal(type)}>Close</button>
+                            <button className='modal-submit-button' type='button' onClick={handleAttendanceSubmit}>Yes</button>
                         </div>
                     </div>
                 }

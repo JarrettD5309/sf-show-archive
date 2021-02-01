@@ -5,10 +5,10 @@ import ShowFlyer from '../../images/flyers/2009-08-29-1.jpg';
 
 function FullShowInfo(props) {
 
-    useEffect(() => {
-        console.log(props.showInfo);
-        console.log(props.showInfoDetails);
-    });
+    // useEffect(() => {
+    //     console.log(props.showInfo);
+    //     console.log(props.showInfoDetails);
+    // });
 
     const {
 
@@ -29,7 +29,7 @@ function FullShowInfo(props) {
     let audio = [];
     let flyer = [];
     let review = [];
-    let setList = {songs: []};
+    let setList = { songs: [] };
     let video = [];
 
     if (props.showInfoDetails) {
@@ -42,6 +42,20 @@ function FullShowInfo(props) {
     }
 
     const dateString = dateFunction(date);
+
+    const convertAttendanceUsers = () => {
+        let usersString = '';
+        for (let i = 0; i < attendance.length; i++) {
+            if (i < (attendance.length - 1)) {
+                usersString = usersString + attendance[i].username + ', ';
+            } else {
+                usersString = usersString + attendance[i].username;
+            }
+        }
+        return (
+            <p>{usersString}</p>
+        );
+    };
 
     return (
         <div className='full-show-info-container'>
@@ -104,8 +118,15 @@ function FullShowInfo(props) {
                         <p className='full-show-slight-bold'>Audio:</p>
                     </div>
                     <div className='full-show-links-details'>
-                        <p>http://www.livelink.com</p>
-                        <p>Contributed By: JD</p>
+                        {audio.length !== 0 ? audio.map((object, i) => (
+                            <div key={i} className='full-show-links-map-div'>
+                                <p><a href={object.link} target='_blank' rel="noopener noreferrer" className='full-show-links-link'>{object.link}</a></p>
+                                <p>Contributed by: {object.contributed.username}</p>
+                            </div>
+                        ))
+                            :
+                            (<p>N/A</p>)
+                        }
                     </div>
                 </div>
                 <div className='full-show-link-div'>
@@ -113,10 +134,15 @@ function FullShowInfo(props) {
                         <p className='full-show-slight-bold'>Video:</p>
                     </div>
                     <div className='full-show-links-details'>
-                        <p>http://www.youtube.com/10001/alotmorestuffoverheretoseewhathappens</p>
-                        <p>Contributed By: JD</p>
-                        <p>http://www.youtube.com/20001</p>
-                        <p>Contributed By: DJ</p>
+                        {video.length !== 0 ? video.map((object, i) => (
+                            <div key={i} className='full-show-links-map-div'>
+                                <p><a href={object.link} target='_blank' rel="noopener noreferrer" className='full-show-links-link'>{object.link}</a></p>
+                                <p>Contributed by: {object.contributed.username}</p>
+                            </div>
+                        ))
+                            :
+                            (<p>N/A</p>)
+                        }
                     </div>
                 </div>
                 <div className='full-show-link-div'>
@@ -124,17 +150,26 @@ function FullShowInfo(props) {
                         <p className='full-show-slight-bold'>Review:</p>
                     </div>
                     <div className='full-show-links-details'>
-                        <p>http://www.myblog.com</p>
-                        <p>Contributed By: JD</p>
-                        <p>http://www.villagevoice.com</p>
-                        <p>Contributed By: DJ</p>
+                        {review.length !== 0 ? review.map((object, i) => (
+                            <div key={i} className='full-show-links-map-div'>
+                                <p><a href={object.link} target='_blank' rel="noopener noreferrer" className='full-show-links-link'>{object.link}</a></p>
+                                <p>Contributed by: {object.contributed.username}</p>
+                            </div>
+                        ))
+                            :
+                            (<p>N/A</p>)
+                        }
                     </div>
                 </div>
             </div>
             <div>
                 <div className='full-show-header-margin'>
                     <h2>Attendance</h2>
-                    {loggedIn && <button className='full-show-add-button' type='button'>ADD</button>}
+                    {loggedIn && <button className='full-show-add-button' type='button' onClick={() => handleOpenModal('attendance')}>ADD</button>}
+                </div>
+                <div>
+                    {attendance.length !== 0 ? convertAttendanceUsers() :
+                        (<p>N/A</p>)}
                 </div>
             </div>
         </div>

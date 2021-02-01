@@ -15,7 +15,11 @@ const Show = (props) => {
     const [flyerInstructions, setFlyerInstructions] = React.useState('Please choose a image');
     const [setListArr, setSetListArr] = React.useState([]);
     const [setlistInstructions, setSetListInstructions] = React.useState('Please add songs');
-    const [linksInstructions,setLinkInstructions] = React.useState('Please add a link');
+    const [newAudioLink, setNewAudioLink] = React.useState('');
+    const [newVideoLink, setNewVideoLink] = React.useState('');
+    const [newReviewLink, setNewReviewLink] = React.useState('');
+    const [linksInstructions, setLinkInstructions] = React.useState('Please add a link (must include the ENTIRE url!)');
+    const [attendanceInstructions, setAttendanceInstructions] = React.useState('Did you attend this show?');
 
     const { loggedIn } = props;
 
@@ -127,6 +131,80 @@ const Show = (props) => {
             .catch(err => console.log(err));
     };
 
+    const handleLinksSubmit = () => {
+        const isValidUrl = (url) => {
+            try {
+                new URL(url);
+            } catch (e) {
+                // console.error(e);
+                return false;
+            }
+            return true;
+        };
+
+        const isValidForSend = (linkString) => {
+            if (isValidUrl(linkString) || linkString === '') {
+                return true;
+            } else {
+                return false;
+            }
+        };
+
+        const linksData = {
+            showId: showInfo._id,
+        };
+
+        if (isValidUrl(newAudioLink)) {
+            linksData.audio = newAudioLink;
+        }
+
+        if (isValidUrl(newVideoLink)) {
+            linksData.video = newVideoLink;
+        }
+
+        if (isValidUrl(newReviewLink)) {
+            linksData.review = newReviewLink;
+        }
+
+        if (linksData.audio || linksData.video || linksData.review) {
+
+            if (isValidForSend(newAudioLink) && isValidForSend(newVideoLink) && isValidForSend(newReviewLink)) {
+                // console.log('send!');
+                axios.post('/api/links', linksData)
+                    .then(res => {
+                        console.log(res);
+                        setLinkInstructions('Success!')
+                        setTimeout(() => {
+                            handleCloseModal('links');
+                            getDetails();
+                        }, 900);
+                    })
+                    .catch(err => console.log(err));
+
+            } else {
+                setLinkInstructions('Please enter valid links');
+            }
+
+        } else {
+            setLinkInstructions('Please enter valid links');
+        }
+
+    };
+
+    const handleAttendanceSubmit = () => {
+        // console.log('send');
+        axios.post('/api/attendance', { showId: showInfo._id, })
+            .then(res => {
+                console.log(res);
+                setAttendanceInstructions('Thank you!')
+                setTimeout(() => {
+                    handleCloseModal('attendance');
+                    getDetails();
+                }, 900);
+            })
+            .catch(err => console.log(err));
+    };
+
     const handleCloseModal = (type) => {
         setDisplayModal(false);
         document.body.style.overflowY = 'visible';
@@ -135,8 +213,15 @@ const Show = (props) => {
             setImageFileName('');
             setImageFile(null);
             setFlyerInstructions('Please choose a image');
-        } else if (type='setlist') {
+        } else if (type === 'setlist') {
             setSetListInstructions('Please add songs');
+        } else if (type === 'links') {
+            setLinkInstructions('Please add a link (must include the ENTIRE url!)');
+            setNewAudioLink('');
+            setNewVideoLink('');
+            setNewReviewLink('');
+        } else if (type === 'attendance') {
+            setAttendanceInstructions('Did you attend this show?');
         }
     };
 
@@ -167,7 +252,16 @@ const Show = (props) => {
                         handleSetlistSubmit={handleSetlistSubmit}
                         setlistInstructions={setlistInstructions}
                         setListArr={setListArr}
+                        newAudioLink={newAudioLink}
+                        setNewAudioLink={setNewAudioLink}
+                        newVideoLink={newVideoLink}
+                        setNewVideoLink={setNewVideoLink}
+                        newReviewLink={newReviewLink}
+                        setNewReviewLink={setNewReviewLink}
+                        handleLinksSubmit={handleLinksSubmit}
                         linksInstructions={linksInstructions}
+                        handleAttendanceSubmit={handleAttendanceSubmit}
+                        attendanceInstructions={attendanceInstructions}
                     />}
 
                 </div>

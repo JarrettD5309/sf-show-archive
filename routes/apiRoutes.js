@@ -70,8 +70,12 @@ module.exports = app => {
             .then(result => {
                 db.ShowDetails.findOne({ showId: result[0]._id })
                     .populate('showId')
-                    .populate('flyer.contributed',['username','email'])
-                    .populate('setList.contributed',['username'])
+                    .populate('flyer.contributed', ['username', 'email'])
+                    .populate('setList.contributed', ['username'])
+                    .populate('audio.contributed', ['username'])
+                    .populate('video.contributed', ['username'])
+                    .populate('review.contributed', ['username'])
+                    .populate('attendance',['username'])
                     .then(newResult => {
                         console.log(newResult);
                         res.json([newResult, result[0]]);
@@ -271,6 +275,7 @@ module.exports = app => {
         }
     };
 
+    // UPLOAD FLYER
     app.post('/api/showflyer', (req, res) => {
         if (req.session.loggedin) {
 
@@ -315,6 +320,7 @@ module.exports = app => {
         }
     });
 
+    // UPLOAD SETLIST
     app.post('/api/setlist', (req, res) => {
         if (req.session.loggedin) {
             const setlistObj = {
@@ -326,6 +332,76 @@ module.exports = app => {
             db.ShowDetails.findOneAndUpdate(
                 { showId: req.body.showId },
                 setlistObj,
+                {
+                    new: true,
+                    upsert: true,
+                    setDefaultsOnInsert: true
+                }
+            )
+                .then(result => res.json(result))
+                .catch(err => res.json(err));
+        } else {
+            res.status(401).json({
+                "message": "Error: Must be logged in"
+            });
+        }
+    });
+
+    app.post('/api/links', (req, res) => {
+        if (req.session.loggedin) {
+            const linksObj = {
+                $push: {}
+            };
+
+            if (req.body.audio) {
+                linksObj.$push.audio = {
+                    link: req.body.audio,
+                    contributed: req.session.userID
+                }
+            }
+
+            if (req.body.video) {
+                linksObj.$push.video = {
+                    link: req.body.video,
+                    contributed: req.session.userID
+                }
+            }
+
+            if (req.body.review) {
+                linksObj.$push.review = {
+                    link: req.body.review,
+                    contributed: req.session.userID
+                }
+            }
+
+            db.ShowDetails.findOneAndUpdate(
+                { showId: req.body.showId },
+                linksObj,
+                {
+                    new: true,
+                    upsert: true,
+                    setDefaultsOnInsert: true
+                }
+            )
+                .then(result => res.json(result))
+                .catch(err => res.json(err));
+        } else {
+            res.status(401).json({
+                "message": "Error: Must be logged in"
+            });
+        }
+    });
+
+    // ATTENDANCE
+    app.post('/api/attendance', (req, res) => {
+        if (req.session.loggedin) {
+            db.ShowDetails.findOneAndUpdate(
+                { showId: req.body.showId },
+                {
+                    $push: {
+                        attendance: req.session.userID
+                    }
+                },
                 {
                     new: true,
                     upsert: true,
