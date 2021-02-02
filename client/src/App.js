@@ -2,13 +2,14 @@ import React, { useEffect } from 'react';
 import { BrowserRouter as Router, Route } from 'react-router-dom';
 import Backdrop from './components/SlideDrawer/Backdrop';
 import CreateAccount from './pages/CreateAccount';
-import HomePage from './pages/HomePage';
 import Login from './pages/Login';
 import NavBar from './components/NavBar';
+import Profile from './pages/Profile';
 import Search from './pages/Search';
 import Show from './pages/Show';
 import SlideDrawer from './components/SlideDrawer/SlideDrawer';
 import TimelinePage from './pages/TimelinePage';
+import withAuth from './withAuth';
 import axios from 'axios';
 
 
@@ -16,31 +17,32 @@ const App = () => {
     const [drawerOpen, setDrawerOpen] = React.useState(false);
     const [loggedIn, setLoggedIn] = React.useState(false);
     const [userInfo, setUserInfo] = React.useState();
+    const [loading, setLoading] = React.useState(true);
 
     useEffect(() => {
+        const checkLoggedIn = () => {
+            axios.get('/api/checklogin')
+                .then(res => {
+                    if (res.status === 200) {
+                        setLoggedIn(true);
+                        getUserInfo();
+                        console.log('LOGGED IN');
+                    } else {
+                        console.log('not logged in');
+                        setLoading(false);
+                    }
+                })
+                .catch(err => {
+                    console.log(err);
+                    setLoading(false);
+                });
+        };
+
         checkLoggedIn();
+        
     }, []);
 
-    useEffect(()=>{
-        getUserInfo();
-        console.log('getting user info');
-    },[]);
-
-    const checkLoggedIn = () => {
-        axios.get('/api/checklogin')
-            .then(res => {
-                if (res.status === 200) {
-                    setLoggedIn(true);
-                    console.log('LOGGED IN');
-                } else {
-                    console.log('not logged in');
-                }
-            })
-            .catch(err => {
-                console.log(err);
-
-            });
-    };
+    
 
     const getUserInfo = () => {
         axios.get('/api/getuser')
@@ -49,7 +51,8 @@ const App = () => {
                 console.log(res.data);
                 setUserInfo(res.data);
             })  
-            .catch(err=>console.log(err));
+            .catch(err=>console.log(err))
+            .then(()=>setLoading(false));
     };
 
     const handleDrawerToggle = () => {
@@ -61,6 +64,8 @@ const App = () => {
     };
 
     return (
+        loading ?
+        null :
         <Router>
             <NavBar handleDrawerToggle={handleDrawerToggle} />
             <SlideDrawer handleBackdrop={handleBackdrop} setDrawerOpen={setDrawerOpen} show={drawerOpen} loggedIn={loggedIn} setLoggedIn={setLoggedIn} />
@@ -70,8 +75,11 @@ const App = () => {
             <Route exact path='/search' component={Search} />
             <Route exact path='/login' component={() => <Login setLoggedIn={setLoggedIn} getUserInfo={getUserInfo} />} />
             <Route exact path='/create-account' component={CreateAccount} />
+            
+            <Route exact path='/profile' component={withAuth(()=> <Profile userInfo={userInfo} />)} />
+            
             <Route path='/show/:id' component={()=> <Show loggedIn={loggedIn} />} />
-            <Route exact path='/all-shows' component={HomePage} />
+            {/* <Route path='*' component={() => '404 NOT FOUND'} /> */}
         </Router>
     );
 }

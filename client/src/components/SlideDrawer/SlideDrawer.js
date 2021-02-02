@@ -37,9 +37,14 @@ const SlideDrawer = (props) => {
                 </li>
                 {props.loggedIn ?
                     (
+                        <div>
+                        <li className='nav-item'>
+                        <a href="/profile" className='nav-text'>Profile</a>
+                        </li>
                         <li className='nav-item'>
                             <p className='nav-text' onClick={handleLogout} >Logout</p>
                         </li>
+                        </div>
                     )
                     :
                     (

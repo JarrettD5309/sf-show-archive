@@ -46,7 +46,7 @@ const Show = (props) => {
             .catch(err => console.log(err));
 
         return () => mounted = false;
-    }, []);
+    }, [id]);
 
     const getDetails = () => {
         axios.get('/api/showdetails', {

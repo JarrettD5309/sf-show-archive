@@ -63,6 +63,7 @@ const Modal = (props) => {
                         <p className='modal-instructions'>{flyerInstructions}</p>
                         <div className='modal-file-div'>
                             <div className='modal-file-text-area'>
+                                {/* eslint-disable-next-line */}
                                 {imageFileName.replace(/.*[\/\\]/, '')}
                             </div>
                             <label htmlFor='flyer-image' className='modal-file-label'>

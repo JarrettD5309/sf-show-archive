@@ -1,14 +1,8 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import './style.css';
 import dateFunction from '../../other/dateFunction';
-import ShowFlyer from '../../images/flyers/2009-08-29-1.jpg';
 
 function FullShowInfo(props) {
-
-    // useEffect(() => {
-    //     console.log(props.showInfo);
-    //     console.log(props.showInfoDetails);
-    // });
 
     const {
 
