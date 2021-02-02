@@ -25,8 +25,12 @@ const Profile = (props) => {
                 console.log(res.data);
                 const dates = res.data.map(show=>{
                    const dateString = dateFunction(show.showId.date,true);
-                   return dateString;
+                   return {
+                       dateString: dateString,
+                       showNum: parseInt(show.showId.showNum)
+                    };
                 });
+                dates.sort((a, b) => a.showNum - b.showNum);
                 setAttendedArray(dates);
             })
             .catch(err=>{
@@ -94,9 +98,9 @@ const Profile = (props) => {
                     <div className='profile-info-details'>
                         <p>{attendedArray.map((date,i) => {
                             if (i<(attendedArray.length-1)) {
-                                return `${date}, `;
+                                return <span key={i}><a href={`/show/${date.showNum}`} className='profile-date-link'>{date.dateString}</a>, </span>;
                             } else {
-                                return `${date}`;
+                                return <a href={`/show/${date.showNum}`} className='profile-date-link' key={i}>{date.dateString}</a>;
                             }
                             
                             })}</p>

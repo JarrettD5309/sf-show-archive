@@ -1,3 +1,18 @@
+.profile-date-link:link {
+    color: black;
+    text-decoration: none;
+}
+.profile-date-link:visited {
+    color: black;
+    text-decoration: none;
+}
+.profile-date-link:hover {
+    text-decoration: underline;
+}
+.profile-date-link:active {
+    text-decoration: underline;
+}
+
 .profile-info-details {
     flex:1;
     line-height: 1.3;
