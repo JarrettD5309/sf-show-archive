@@ -1,4 +1,4 @@
-const dateFunction = (yyyymmdd) => {
+const dateFunction = (yyyymmdd, nocomma) => {
     const yearNum = yyyymmdd.slice(0,4);
     const monthNum = yyyymmdd.slice(5,7);
     const dayNum = yyyymmdd.slice(8,10);
@@ -31,7 +31,14 @@ const dateFunction = (yyyymmdd) => {
         monthName='Dec'
     }
 
-    const dateString = `${monthName} ${dayNum}, ${yearNum}`;
+    let dateString;
+    if (nocomma) {
+        dateString = `${monthName} ${dayNum} ${yearNum}`;
+    } else {
+        dateString = `${monthName} ${dayNum}, ${yearNum}`;
+    }
+
+    
     return dateString;
 };
 

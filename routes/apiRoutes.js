@@ -230,6 +230,18 @@ module.exports = app => {
         }
     });
 
+    // GET USER ATTENDANCE
+    app.get('/api/userattendance', (req, res) => {
+        const userID = req.query.userID;
+        console.log(userID);
+        db.ShowDetails.find({ attendance: userID }, { showId: 1 })
+            .populate('showId')
+            .then(results => {
+                res.json(results);
+            })
+            .catch(err => console.log(err));
+    });
+
     // Image Upload 
     // Set Storage Engine
     const storage = multer.diskStorage({
@@ -261,19 +273,19 @@ module.exports = app => {
         if (mimetype && extname) {
             if (req.body.showId) {
                 db.ShowDetails.find({ showId: req.body.showId })
-                .then(results => {
-                    // only allow 2 flyers
-                    if (results.length === 0 || results[0].flyer.length < 2) {
-                        return cb(null, true);
-                    } else {
-                        return cb({ message: 'Error: Only 2 Flyers' })
-                    }
-                })
-                .catch(err => console.log(err));
+                    .then(results => {
+                        // only allow 2 flyers
+                        if (results.length === 0 || results[0].flyer.length < 2) {
+                            return cb(null, true);
+                        } else {
+                            return cb({ message: 'Error: Only 2 Flyers' })
+                        }
+                    })
+                    .catch(err => console.log(err));
             } else {
-                return cb({ message: 'Error: Form Not Valid'})
+                return cb({ message: 'Error: Form Not Valid' })
             }
-            
+
 
         } else {
             cb({ message: 'Error: Images Only' });
@@ -431,14 +443,14 @@ module.exports = app => {
         }
     });
 
-    // ATTENDANCE
+    // ADD ATTENDANCE
     app.post('/api/attendance', (req, res) => {
         if (req.session.loggedin) {
             if (req.body.showId) {
                 db.ShowDetails.findOneAndUpdate(
                     { showId: req.body.showId },
                     {
-                        $push: {
+                        $addToSet: {
                             attendance: req.session.userID
                         }
                     },
