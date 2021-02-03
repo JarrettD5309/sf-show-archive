@@ -234,12 +234,24 @@ module.exports = app => {
     app.get('/api/userattendance', (req, res) => {
         const userID = req.query.userID;
         console.log(userID);
+        let combinedResults =[]
         db.ShowDetails.find({ attendance: userID }, { showId: 1 })
             .populate('showId')
             .then(results => {
-                res.json(results);
+                // res.json(results);
+                combinedResults.push(results);
             })
             .catch(err => console.log(err));
+        db.ShowDetails.find({$or: [{ "audio.contributed":userID},{ "video.contributed":userID},{ "review.contributed":userID}]}, { showId: 1 })
+        .populate('showId')
+        .then(results => {
+            // console.log(results);
+            combinedResults.push(results);
+        })
+        .catch(err => console.log(err))
+        .then(()=>{
+            res.json(combinedResults);
+        });
     });
 
     // Image Upload 

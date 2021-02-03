@@ -6,6 +6,7 @@ import './style.css';
 const Profile = (props) => {
 
     const [attendedArray, setAttendedArray] = React.useState([]);
+    const [contributedArray, setContributedArray] = React.useState([]);
 
     const {
         email,
@@ -23,15 +24,25 @@ const Profile = (props) => {
             })
             .then(res=>{
                 console.log(res.data);
-                const dates = res.data.map(show=>{
+                const attendedDates = res.data[0].map(show=>{
                    const dateString = dateFunction(show.showId.date,true);
                    return {
                        dateString: dateString,
                        showNum: parseInt(show.showId.showNum)
                     };
                 });
-                dates.sort((a, b) => a.showNum - b.showNum);
-                setAttendedArray(dates);
+                attendedDates.sort((a, b) => a.showNum - b.showNum);
+                setAttendedArray(attendedDates);
+
+                const contributedDates = res.data[1].map(show=>{
+                   const dateString = dateFunction(show.showId.date,true);
+                   return {
+                       dateString: dateString,
+                       showNum: parseInt(show.showId.showNum)
+                    };
+                });
+                contributedDates.sort((a, b) => a.showNum - b.showNum);
+                setContributedArray(contributedDates);
             })
             .catch(err=>{
                 console.log(err);
@@ -40,6 +51,10 @@ const Profile = (props) => {
 
         getShowsAttended();
     },[]);
+
+    useEffect(()=>{
+        console.log(JSON.stringify(contributedArray));
+    });
 
     
 
@@ -88,7 +103,14 @@ const Profile = (props) => {
                         <p className='slight-bold'>Contributions:</p>
                     </div>
                     <div className='profile-info-details'>
-                        <p>Jan 08 2010, Feb 22 2012</p>
+                    <p>{contributedArray.map((date,i) => {
+                            if (i<(contributedArray.length-1)) {
+                                return <span key={i}><a href={`/show/${date.showNum}`} className='profile-date-link'>{date.dateString}</a>, </span>;
+                            } else {
+                                return <a href={`/show/${date.showNum}`} className='profile-date-link' key={i}>{date.dateString}</a>;
+                            }
+                            
+                            })}</p>
                     </div>
                 </div>
                 <div className='profile-info-div'>
