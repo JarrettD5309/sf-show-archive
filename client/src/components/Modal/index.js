@@ -22,7 +22,14 @@ const Modal = (props) => {
         setNewReviewLink,
         handleLinksSubmit,
         attendanceInstructions,
-        handleAttendanceSubmit
+        handleAttendanceSubmit,
+        profileInstructions,
+        newEmail,
+        setNewEmail,
+        newInstagram,
+        setNewInstagram,
+        newTwitter,
+        setNewTwitter
     } = props;
 
     const setlistRender = () => {
@@ -107,7 +114,6 @@ const Modal = (props) => {
                     <div>
                         <h2>Links</h2>
                         <p className='modal-instructions'>{linksInstructions}</p>
-                        {/* <h4>Audio</h4> */}
                         <label htmlFor='audio' className='modal-links-label'><h4>Audio</h4></label>
                         <input
                             type='text'
@@ -151,6 +157,45 @@ const Modal = (props) => {
                         <div className='modal-button-div'>
                             <button className='modal-close-button' type='button' onClick={() => handleCloseModal(type)}>Close</button>
                             <button className='modal-submit-button' type='button' onClick={handleAttendanceSubmit}>Yes</button>
+                        </div>
+                    </div>
+                }
+
+                {type === 'profile' &&
+                    <div>
+                        <h2>Profile</h2>
+                        <p className='modal-instructions'>{profileInstructions}</p>
+                        <label htmlFor='profile-email' className='modal-links-label'><h4>Email</h4></label>
+                        <input
+                            type='text'
+                            id='profile-email'
+                            className='modal-links-input'
+                            name='profile-email'
+                            value={newEmail}
+                            onChange={event => setNewEmail(event.target.value)}
+                        />
+                        <label htmlFor='profile-twitter' className='modal-links-label'><h4>Twitter</h4></label>
+                        <input
+                            type='text'
+                            id='profile-twitter'
+                            className='modal-links-input'
+                            name='profile-twitter'
+                            value={newTwitter}
+                            onChange={event => setNewTwitter(event.target.value)}
+                        />
+                        <label htmlFor='profile-instagram' className='modal-links-label'><h4>Instagram</h4></label>
+                        <input
+                            type='text'
+                            id='profile-instagram'
+                            className='modal-links-input'
+                            name='profile-instagram'
+                            value={newInstagram}
+                            onChange={event => setNewInstagram(event.target.value)}
+                        />
+
+                        <div className='modal-button-div'>
+                            <button className='modal-close-button' type='button' onClick={() => handleCloseModal(type)}>Close</button>
+                            <button className='modal-submit-button' type='button' onClick={() => console.log('click')}>Submit</button>
                         </div>
                     </div>
                 }

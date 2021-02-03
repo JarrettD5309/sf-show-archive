@@ -4,12 +4,14 @@ const multer = require('multer');
 const path = require('path');
 
 module.exports = app => {
+    // GETS ALL STATES AND COUNTRIES FOR DROPDOWN
     app.get('/api/allstates', (req, res) => {
         db.Show.distinct('stateCountry')
             .then(result => res.json(result))
             .catch(err => res.json(err));
     });
 
+    // FOR SHOW SEARCH
     app.get('/api/shows', (req, res) => {
         // console.log(req.query);
 
@@ -65,6 +67,7 @@ module.exports = app => {
             .catch(err => res.json(err))
     });
 
+    // GETS SHOW DETAILS
     app.get('/api/showdetails', (req, res) => {
         db.Show.find({ showNum: req.query.showNum })
             .then(result => {
@@ -86,6 +89,7 @@ module.exports = app => {
             .catch(err => res.json(err))
     });
 
+    // FOR USE WITH TIMELINE
     app.get('/api/shows/month', (req, res) => {
         console.log(req.query);
 
@@ -131,7 +135,7 @@ module.exports = app => {
     app.post('/api/user', (req, res) => {
         // console.log(req.body);
 
-        const username = req.body.username;
+        const username = req.body.username.toLowerCase();
         const password = req.body.password;
         const email = req.body.email;
         const passwordConfirm = req.body.passwordConfirm;
@@ -191,7 +195,7 @@ module.exports = app => {
 
     // LOGIN
     app.post('/api/login', (req, res) => {
-        const username = req.body.username;
+        const username = req.body.username.toLowerCase();
         const password = req.body.password;
 
         if (username && password) {
@@ -220,7 +224,7 @@ module.exports = app => {
     // GET USER INFO
     app.get('/api/getuser', (req, res) => {
         if (req.session.loggedin) {
-            db.User.findById(req.session.userID, { _id: 1, username: 1, email: 1 })
+            db.User.findById(req.session.userID, { _id: 1, username: 1, email: 1, twitter: 1, instagram: 1 })
                 .then(results => {
                     res.json(results);
                 })
@@ -230,7 +234,7 @@ module.exports = app => {
         }
     });
 
-    // GET USER ATTENDANCE
+    // GET USER ATTENDANCE AND CONTRIBUTIONS
     app.get('/api/userattendance', (req, res) => {
         const userID = req.query.userID;
         console.log(userID);
@@ -242,7 +246,7 @@ module.exports = app => {
                 combinedResults.push(results);
             })
             .catch(err => console.log(err));
-        db.ShowDetails.find({$or: [{ "audio.contributed":userID},{ "video.contributed":userID},{ "review.contributed":userID}]}, { showId: 1 })
+        db.ShowDetails.find({$or: [{ "audio.contributed":userID},{ "video.contributed":userID},{ "review.contributed":userID},{ "flyer.contributed":userID},{ "setList.contributed":userID}]}, { showId: 1 })
         .populate('showId')
         .then(results => {
             // console.log(results);

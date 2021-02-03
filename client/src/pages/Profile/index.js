@@ -1,18 +1,39 @@
 import React, { useEffect } from 'react';
+import ProfileDisplay from '../../components/ProfileDisplay';
 import dateFunction from '../../other/dateFunction';
+import Modal from '../../components/Modal';
 import axios from 'axios';
-import './style.css';
 
 const Profile = (props) => {
 
     const [attendedArray, setAttendedArray] = React.useState([]);
     const [contributedArray, setContributedArray] = React.useState([]);
+    const [displayModal, setDisplayModal] = React.useState(false);
+    const [modalType, setModalType] = React.useState('');
+    const [newEmail, setNewEmail] = React.useState('');
+    const [newInstagram, setNewInstagram] = React.useState('');
+    const [newTwitter, setNewTwitter] = React.useState('');
+    const [profileInstructions, setProfileInstructions] = React.useState('Please edit your profile');
 
     const {
         email,
         username,
-        _id
+        _id,
+        instagram,
+        twitter
     } = props.userInfo;
+
+    const handleCloseModal = (type) => {
+        setDisplayModal(false);
+        document.body.style.overflowY = 'visible';
+
+    };
+
+    const handleOpenModal = (type) => {
+        setModalType(type);
+        setDisplayModal(true);
+        document.body.style.overflowY = 'hidden';
+    };
 
     useEffect(()=>{
         console.log('props: ' + JSON.stringify(props.userInfo));
@@ -59,77 +80,29 @@ const Profile = (props) => {
     
 
     return (
-        <div className='sub-root'>
-            <div className='main-header-div'>
-                <div className='child-header-div'>
-                <h1>Profile</h1>
-                </div>
-            </div>
-            <div className='profile-sub-container'>
-                <div className='profile-info-div'>
-                    <div className='profile-info-type'>
-                        <p className='slight-bold'>Username:</p>
-                    </div>
-                    <div className='profile-info-details'>
-                        <p>{username}</p>
-                    </div>
-                </div>
-                <div className='profile-info-div'>
-                    <div className='profile-info-type'>
-                        <p className='slight-bold'>Email:</p>
-                    </div>
-                    <div className='profile-info-details'>
-                        <p>{email}</p>
-                    </div>
-                </div>
-                <div className='profile-info-div'>
-                    <div className='profile-info-type'>
-                        <p className='slight-bold'>Twitter:</p>
-                    </div>
-                    <div className='profile-info-details'>
-                        <p>@official_screamales</p>
-                    </div>
-                </div>
-                <div className='profile-info-div'>
-                    <div className='profile-info-type'>
-                        <p className='slight-bold'>Instagram:</p>
-                    </div>
-                    <div className='profile-info-details'>
-                        <p>@official_screamales</p>
-                    </div>
-                </div>
-                <div className='profile-info-div'>
-                    <div className='profile-info-type'>
-                        <p className='slight-bold'>Contributions:</p>
-                    </div>
-                    <div className='profile-info-details'>
-                    <p>{contributedArray.map((date,i) => {
-                            if (i<(contributedArray.length-1)) {
-                                return <span key={i}><a href={`/show/${date.showNum}`} className='profile-date-link'>{date.dateString}</a>, </span>;
-                            } else {
-                                return <a href={`/show/${date.showNum}`} className='profile-date-link' key={i}>{date.dateString}</a>;
-                            }
-                            
-                            })}</p>
-                    </div>
-                </div>
-                <div className='profile-info-div'>
-                    <div className='profile-info-type'>
-                        <p className='slight-bold'>Attended:</p>
-                    </div>
-                    <div className='profile-info-details'>
-                        <p>{attendedArray.map((date,i) => {
-                            if (i<(attendedArray.length-1)) {
-                                return <span key={i}><a href={`/show/${date.showNum}`} className='profile-date-link'>{date.dateString}</a>, </span>;
-                            } else {
-                                return <a href={`/show/${date.showNum}`} className='profile-date-link' key={i}>{date.dateString}</a>;
-                            }
-                            
-                            })}</p>
-                    </div>
-                </div>
-                
-            </div>
+        <div>
+
+            <ProfileDisplay 
+                username={username}
+                email={email}
+                instagram={instagram}
+                twitter={twitter}
+                contributedArray={contributedArray}
+                attendedArray={attendedArray}
+                handleOpenModal={handleOpenModal}
+            />
+
+            {displayModal && <Modal 
+                type={modalType}
+                handleCloseModal={handleCloseModal}
+                profileInstructions={profileInstructions}
+                newEmail={newEmail}
+                setNewEmail={setNewEmail}
+                newInstagram={newInstagram}
+                setNewInstagram={setNewInstagram}
+                newTwitter={newTwitter}
+                setNewTwitter={setNewTwitter}
+            />}
         </div>
     );
 
