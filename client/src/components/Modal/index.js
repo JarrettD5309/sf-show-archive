@@ -29,7 +29,8 @@ const Modal = (props) => {
         newInstagram,
         setNewInstagram,
         newTwitter,
-        setNewTwitter
+        setNewTwitter,
+        handleUserUpdate
     } = props;
 
     const setlistRender = () => {
@@ -195,7 +196,7 @@ const Modal = (props) => {
 
                         <div className='modal-button-div'>
                             <button className='modal-close-button' type='button' onClick={() => handleCloseModal(type)}>Close</button>
-                            <button className='modal-submit-button' type='button' onClick={() => console.log('click')}>Submit</button>
+                            <button className='modal-submit-button' type='button' onClick={handleUserUpdate}>Submit</button>
                         </div>
                     </div>
                 }

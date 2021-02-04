@@ -2,6 +2,7 @@ const db = require('../models');
 const bcrypt = require('bcrypt');
 const multer = require('multer');
 const path = require('path');
+const e = require('express');
 
 module.exports = app => {
     // GETS ALL STATES AND COUNTRIES FOR DROPDOWN
@@ -193,6 +194,92 @@ module.exports = app => {
 
     });
 
+    // UPDATE USER ACCOUNT
+    app.put('/api/userupdate', (req, res) => {
+        if (req.session.loggedin) {
+            const isValidUrl = (url) => {
+                try {
+                    new URL(url);
+                } catch (e) {
+                    // console.error(e);
+                    return false;
+                }
+                return true;
+            };
+
+            const isValidForSend = (linkString, type) => {
+                if (type === 'email') {
+                    const emailIsValid = /\S+@\S+\.\S+/.test(linkString);
+                    if (emailIsValid || linkString === '') {
+                        return true;
+                    } else {
+                        return false;
+                    }
+
+                } else if (type === 'twitter') {
+                    if (isValidUrl(linkString) || linkString === '') {
+                        return true;
+                    } else {
+                        return false;
+                    }
+
+                } else if (type === 'instagram') {
+                    if (isValidUrl(linkString) || linkString === '') {
+                        return true;
+                    } else {
+                        return false;
+                    }
+                }
+
+            };
+
+            const email = req.body.email;
+            const instagram = req.body.instagram;
+            const twitter = req.body.twitter;
+
+            const userUpdateObj = {};
+
+            const emailIsValid = /\S+@\S+\.\S+/.test(email);
+
+            if (emailIsValid) {
+                userUpdateObj.email = email;
+            }
+
+            if (isValidUrl(instagram)) {
+                userUpdateObj.instagram = instagram;
+            }
+
+            if (isValidUrl(twitter)) {
+                userUpdateObj.twitter = twitter;
+            }
+
+            if (userUpdateObj.email || userUpdateObj.instagram || userUpdateObj.twitter) {
+
+                if (isValidForSend(email, 'email') && isValidForSend(instagram, 'instagram') && isValidForSend(twitter, 'twitter')) {
+                    db.User.updateOne(
+                        { _id: req.session.userID },
+                        userUpdateObj
+                    )
+                        .then(result => res.json(result))
+                        .catch(err => res.json(err));
+
+                } else {
+                    res.status(400).send('Please enter valid email/links');
+                }
+
+            } else {
+                res.status(400).send('Please enter valid email/links');
+            }
+
+
+        } else {
+            res.sendStatus(404);
+        }
+
+
+
+    });
+
     // LOGIN
     app.post('/api/login', (req, res) => {
         const username = req.body.username.toLowerCase();
@@ -238,7 +325,7 @@ module.exports = app => {
     app.get('/api/userattendance', (req, res) => {
         const userID = req.query.userID;
         console.log(userID);
-        let combinedResults =[]
+        let combinedResults = []
         db.ShowDetails.find({ attendance: userID }, { showId: 1 })
             .populate('showId')
             .then(results => {
@@ -246,16 +333,16 @@ module.exports = app => {
                 combinedResults.push(results);
             })
             .catch(err => console.log(err));
-        db.ShowDetails.find({$or: [{ "audio.contributed":userID},{ "video.contributed":userID},{ "review.contributed":userID},{ "flyer.contributed":userID},{ "setList.contributed":userID}]}, { showId: 1 })
-        .populate('showId')
-        .then(results => {
-            // console.log(results);
-            combinedResults.push(results);
-        })
-        .catch(err => console.log(err))
-        .then(()=>{
-            res.json(combinedResults);
-        });
+        db.ShowDetails.find({ $or: [{ "audio.contributed": userID }, { "video.contributed": userID }, { "review.contributed": userID }, { "flyer.contributed": userID }, { "setList.contributed": userID }] }, { showId: 1 })
+            .populate('showId')
+            .then(results => {
+                // console.log(results);
+                combinedResults.push(results);
+            })
+            .catch(err => console.log(err))
+            .then(() => {
+                res.json(combinedResults);
+            });
     });
 
     // Image Upload 

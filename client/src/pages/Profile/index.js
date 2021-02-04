@@ -23,20 +23,11 @@ const Profile = (props) => {
         twitter
     } = props.userInfo;
 
-    const handleCloseModal = (type) => {
-        setDisplayModal(false);
-        document.body.style.overflowY = 'visible';
-
-    };
-
-    const handleOpenModal = (type) => {
-        setModalType(type);
-        setDisplayModal(true);
-        document.body.style.overflowY = 'hidden';
-    };
-
     useEffect(()=>{
         console.log('props: ' + JSON.stringify(props.userInfo));
+        setNewEmail(props.userInfo.email);
+        setNewInstagram(props.userInfo.instagram);
+        setNewTwitter(props.userInfo.twitter);
         const getShowsAttended = ()=> {
             axios.get('/api/userattendance', {
                 params: {
@@ -73,11 +64,39 @@ const Profile = (props) => {
         getShowsAttended();
     },[]);
 
-    useEffect(()=>{
-        console.log(JSON.stringify(contributedArray));
-    });
+    const handleUserUpdate = () => {
+        const userUpdate = {
+            email: newEmail,
+            instagram: newInstagram,
+            twitter: newTwitter
+        }
+        axios.put('/api/userupdate', userUpdate)
+            .then (res => {
+                console.log(res);
+                setProfileInstructions('Success!');
+                setTimeout(() => {
+                    handleCloseModal('profile');
+                    
+                }, 900);
+            })
+            .catch(err => {
+                console.log(err);
+                handleCloseModal('profile');
+            });
+        
+    };
 
-    
+    const handleCloseModal = (type) => {
+        setDisplayModal(false);
+        document.body.style.overflowY = 'visible';
+
+    };
+
+    const handleOpenModal = (type) => {
+        setModalType(type);
+        setDisplayModal(true);
+        document.body.style.overflowY = 'hidden';
+    };
 
     return (
         <div>
@@ -102,6 +121,7 @@ const Profile = (props) => {
                 setNewInstagram={setNewInstagram}
                 newTwitter={newTwitter}
                 setNewTwitter={setNewTwitter}
+                handleUserUpdate={handleUserUpdate}
             />}
         </div>
     );

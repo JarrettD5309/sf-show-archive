@@ -173,7 +173,7 @@ const Show = (props) => {
                 axios.post('/api/links', linksData)
                     .then(res => {
                         console.log(res);
-                        setLinkInstructions('Success!')
+                        setLinkInstructions('Success!');
                         setTimeout(() => {
                             handleCloseModal('links');
                             getDetails();
