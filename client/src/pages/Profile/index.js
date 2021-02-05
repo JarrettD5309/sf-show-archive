@@ -13,7 +13,7 @@ const Profile = (props) => {
     const [newEmail, setNewEmail] = React.useState('');
     const [newInstagram, setNewInstagram] = React.useState('');
     const [newTwitter, setNewTwitter] = React.useState('');
-    const [profileInstructions, setProfileInstructions] = React.useState('Please edit your profile');
+    const [profileInstructions, setProfileInstructions] = React.useState('Please edit your profile (must include the ENTIRE url!)');
 
     const {
         email,
@@ -23,11 +23,16 @@ const Profile = (props) => {
         twitter
     } = props.userInfo;
 
+    const {
+        getUserInfo
+    } = props;
+
     useEffect(()=>{
         console.log('props: ' + JSON.stringify(props.userInfo));
         setNewEmail(props.userInfo.email);
         setNewInstagram(props.userInfo.instagram);
         setNewTwitter(props.userInfo.twitter);
+
         const getShowsAttended = ()=> {
             axios.get('/api/userattendance', {
                 params: {
@@ -45,7 +50,7 @@ const Profile = (props) => {
                 });
                 attendedDates.sort((a, b) => a.showNum - b.showNum);
                 setAttendedArray(attendedDates);
-
+    
                 const contributedDates = res.data[1].map(show=>{
                    const dateString = dateFunction(show.showId.date,true);
                    return {
@@ -70,24 +75,30 @@ const Profile = (props) => {
             instagram: newInstagram,
             twitter: newTwitter
         }
+        console.log(userUpdate);
+
         axios.put('/api/userupdate', userUpdate)
             .then (res => {
                 console.log(res);
                 setProfileInstructions('Success!');
                 setTimeout(() => {
                     handleCloseModal('profile');
-                    
+                    getUserInfo();
                 }, 900);
             })
             .catch(err => {
                 console.log(err);
-                handleCloseModal('profile');
+                setProfileInstructions(err.response.data);
             });
         
     };
 
     const handleCloseModal = (type) => {
         setDisplayModal(false);
+        setProfileInstructions('Please edit your profile (must include the ENTIRE url!)');
+        setNewEmail(props.userInfo.email);
+        setNewInstagram(props.userInfo.instagram);
+        setNewTwitter(props.userInfo.twitter);
         document.body.style.overflowY = 'visible';
 
     };

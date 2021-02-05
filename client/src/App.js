@@ -76,7 +76,7 @@ const App = () => {
             <Route exact path='/login' component={() => <Login setLoggedIn={setLoggedIn} getUserInfo={getUserInfo} />} />
             <Route exact path='/create-account' component={CreateAccount} />
             
-            <Route exact path='/profile' component={withAuth(()=> <Profile userInfo={userInfo} />)} />
+            <Route exact path='/profile' component={withAuth(()=> <Profile userInfo={userInfo} getUserInfo={getUserInfo} />)} />
             
             <Route path='/show/:id' component={()=> <Show loggedIn={loggedIn} />} />
             {/* <Route path='*' component={() => '404 NOT FOUND'} /> */}

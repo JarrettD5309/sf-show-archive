@@ -197,34 +197,20 @@ module.exports = app => {
     // UPDATE USER ACCOUNT
     app.put('/api/userupdate', (req, res) => {
         if (req.session.loggedin) {
-            const isValidUrl = (url) => {
-                try {
-                    new URL(url);
-                } catch (e) {
-                    // console.error(e);
-                    return false;
-                }
-                return true;
-            };
 
             const isValidForSend = (linkString, type) => {
-                if (type === 'email') {
-                    const emailIsValid = /\S+@\S+\.\S+/.test(linkString);
-                    if (emailIsValid || linkString === '') {
-                        return true;
-                    } else {
-                        return false;
-                    }
-
-                } else if (type === 'twitter') {
-                    if (isValidUrl(linkString) || linkString === '') {
+                if (type === 'twitter') {
+                    const validTwitter = /http(?:s)?:\/\/(?:www\.)?twitter\.com\/([a-zA-Z0-9_]+)/.test(linkString);
+                    if (validTwitter || linkString === '') {
                         return true;
                     } else {
                         return false;
                     }
 
                 } else if (type === 'instagram') {
-                    if (isValidUrl(linkString) || linkString === '') {
+                    const validInstagram = /http(?:s)?:\/\/(?:www\.)?instagram\.com\/([a-zA-Z0-9_]+)/.test(linkString);
+                    console.log(validInstagram);
+                    if (validInstagram || linkString === '') {
                         return true;
                     } else {
                         return false;
@@ -237,25 +223,15 @@ module.exports = app => {
             const instagram = req.body.instagram;
             const twitter = req.body.twitter;
 
-            const userUpdateObj = {};
+            const userUpdateObj = {
+                email: email,
+                instagram: instagram,
+                twitter: twitter
+            };
 
             const emailIsValid = /\S+@\S+\.\S+/.test(email);
 
-            if (emailIsValid) {
-                userUpdateObj.email = email;
-            }
-
-            if (isValidUrl(instagram)) {
-                userUpdateObj.instagram = instagram;
-            }
-
-            if (isValidUrl(twitter)) {
-                userUpdateObj.twitter = twitter;
-            }
-
-            if (userUpdateObj.email || userUpdateObj.instagram || userUpdateObj.twitter) {
-
-                if (isValidForSend(email, 'email') && isValidForSend(instagram, 'instagram') && isValidForSend(twitter, 'twitter')) {
+                if (emailIsValid && isValidForSend(instagram, 'instagram') && isValidForSend(twitter, 'twitter')) {
                     db.User.updateOne(
                         { _id: req.session.userID },
                         userUpdateObj
@@ -266,11 +242,6 @@ module.exports = app => {
                 } else {
                     res.status(400).send('Please enter valid email/links');
                 }
-
-            } else {
-                res.status(400).send('Please enter valid email/links');
-            }
-
 
         } else {
             res.sendStatus(404);
