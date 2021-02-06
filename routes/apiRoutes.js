@@ -59,7 +59,7 @@ module.exports = app => {
             queryObj = {};
         }
 
-        console.log(queryObj);
+        // console.log(queryObj);
 
         db.Show.find(queryObj)
             // .sort('showNum')
@@ -81,7 +81,7 @@ module.exports = app => {
                     .populate('review.contributed', ['username'])
                     .populate('attendance', ['username'])
                     .then(newResult => {
-                        console.log(newResult);
+                        // console.log(newResult);
                         res.json([newResult, result[0]]);
                     })
                     .catch(err => res.json(err));
@@ -92,7 +92,7 @@ module.exports = app => {
 
     // FOR USE WITH TIMELINE
     app.get('/api/shows/month', (req, res) => {
-        console.log(req.query);
+        // console.log(req.query);
 
         let currentMonth = req.query.month;
         let currentYear = req.query.year;
@@ -209,7 +209,7 @@ module.exports = app => {
 
                 } else if (type === 'instagram') {
                     const validInstagram = /http(?:s)?:\/\/(?:www\.)?instagram\.com\/([a-zA-Z0-9_]+)/.test(linkString);
-                    console.log(validInstagram);
+                    // console.log(validInstagram);
                     if (validInstagram || linkString === '') {
                         return true;
                     } else {
@@ -231,17 +231,17 @@ module.exports = app => {
 
             const emailIsValid = /\S+@\S+\.\S+/.test(email);
 
-                if (emailIsValid && isValidForSend(instagram, 'instagram') && isValidForSend(twitter, 'twitter')) {
-                    db.User.updateOne(
-                        { _id: req.session.userID },
-                        userUpdateObj
-                    )
-                        .then(result => res.json(result))
-                        .catch(err => res.json(err));
+            if (emailIsValid && isValidForSend(instagram, 'instagram') && isValidForSend(twitter, 'twitter')) {
+                db.User.updateOne(
+                    { _id: req.session.userID },
+                    userUpdateObj
+                )
+                    .then(result => res.json(result))
+                    .catch(err => res.json(err));
 
-                } else {
-                    res.status(400).send('Please enter valid email/links');
-                }
+            } else {
+                res.status(400).send('Please enter valid email/links');
+            }
 
         } else {
             res.sendStatus(404);
@@ -267,7 +267,7 @@ module.exports = app => {
                         bcrypt.compare(password, hash, (err, result) => {
                             if (result) {
                                 req.session.loggedin = true;
-                                console.log(results[0]._id);
+                                // console.log(results[0]._id);
                                 req.session.userID = results[0]._id;
                                 res.status(200).send('loggedIn');
                             } else {
@@ -279,7 +279,7 @@ module.exports = app => {
         }
     });
 
-    // GET USER INFO
+    // GET USER INFO PRIVATE
     app.get('/api/getuser', (req, res) => {
         if (req.session.loggedin) {
             db.User.findById(req.session.userID, { _id: 1, username: 1, email: 1, twitter: 1, instagram: 1 })
@@ -295,7 +295,7 @@ module.exports = app => {
     // GET USER ATTENDANCE AND CONTRIBUTIONS
     app.get('/api/userattendance', (req, res) => {
         const userID = req.query.userID;
-        console.log(userID);
+        // console.log(userID);
         let combinedResults = []
         db.ShowDetails.find({ attendance: userID }, { showId: 1 })
             .populate('showId')
@@ -303,17 +303,64 @@ module.exports = app => {
                 // res.json(results);
                 combinedResults.push(results);
             })
-            .catch(err => console.log(err));
-        db.ShowDetails.find({ $or: [{ "audio.contributed": userID }, { "video.contributed": userID }, { "review.contributed": userID }, { "flyer.contributed": userID }, { "setList.contributed": userID }] }, { showId: 1 })
-            .populate('showId')
-            .then(results => {
-                // console.log(results);
-                combinedResults.push(results);
-            })
-            .catch(err => console.log(err))
+            // .catch(err => console.log(err))
             .then(() => {
-                res.json(combinedResults);
+                db.ShowDetails.find({ $or: [{ "audio.contributed": userID }, { "video.contributed": userID }, { "review.contributed": userID }, { "flyer.contributed": userID }, { "setList.contributed": userID }] }, { showId: 1 })
+                    .populate('showId')
+                    .then(results => {
+                        // console.log(results);
+                        combinedResults.push(results);
+                    })
+                    .catch(err => console.log(err))
+                    .then(() => {
+                        res.json(combinedResults);
+                    });
             });
+
+    });
+
+    // GET USER PUBLIC
+    app.get('/api/publicuser', (req, res) => {
+        let combinedResults = []
+        let userID;
+        // get user info
+        db.User.find({ username: req.query.username }, { _id: 1, username: 1, twitter: 1, instagram: 1 })
+            .then(result => {
+                combinedResults.push(result);
+                userID = result[0]?._id;
+                // console.log(JSON.stringify(result[0]._id));
+            })
+            // .catch(err => res.json(err))
+            .then(() => {
+                // get user attendance
+                db.ShowDetails.find({ attendance: userID }, { showId: 1 })
+                    .populate('showId')
+                    .then(results => {
+                        // res.json(results);
+                        // console.log('hit: ' + userID);
+                        // console.log(JSON.stringify(results));
+                        combinedResults.push(results);
+                    })
+                    // .catch(err => console.log(err))
+                    .then(() => {
+                        // get user contributions
+                        db.ShowDetails.find({ $or: [{ "audio.contributed": userID }, { "video.contributed": userID }, { "review.contributed": userID }, { "flyer.contributed": userID }, { "setList.contributed": userID }] }, { showId: 1 })
+                            .populate('showId')
+                            .then(results2 => {
+                                // console.log(results);
+                                // console.log(userID);
+                                if (userID === undefined) {
+                                    combinedResults.push([])
+                                } else {
+                                    combinedResults.push(results2);
+                                }
+                            })
+                            .catch(err => console.log(err))
+                            .then(() => {
+                                res.json(combinedResults);
+                            });
+                    })
+            })
     });
 
     // Image Upload 
@@ -371,7 +418,7 @@ module.exports = app => {
         if (req.session.loggedin) {
 
             upload(req, res, (err) => {
-                console.log(req.file);
+                // console.log(req.file);
                 if (err) {
                     console.log(err);
                     res.status(400).json(err);

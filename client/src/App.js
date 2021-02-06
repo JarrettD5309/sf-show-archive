@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { BrowserRouter as Router, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import Backdrop from './components/SlideDrawer/Backdrop';
 import CreateAccount from './pages/CreateAccount';
 import Login from './pages/Login';
@@ -9,8 +9,10 @@ import Search from './pages/Search';
 import Show from './pages/Show';
 import SlideDrawer from './components/SlideDrawer/SlideDrawer';
 import TimelinePage from './pages/TimelinePage';
+import User from './pages/User';
 import withAuth from './withAuth';
 import axios from 'axios';
+
 
 
 const App = () => {
@@ -39,20 +41,20 @@ const App = () => {
         };
 
         checkLoggedIn();
-        
+
     }, []);
 
-    
+
 
     const getUserInfo = () => {
         axios.get('/api/getuser')
-            .then(res=> {
+            .then(res => {
                 console.log('get info');
                 console.log(res.data);
                 setUserInfo(res.data);
-            })  
-            .catch(err=>console.log(err))
-            .then(()=>setLoading(false));
+            })
+            .catch(err => console.log(err))
+            .then(() => setLoading(false));
     };
 
     const handleDrawerToggle = () => {
@@ -65,22 +67,25 @@ const App = () => {
 
     return (
         loading ?
-        null :
-        <Router>
-            <NavBar handleDrawerToggle={handleDrawerToggle} />
-            <SlideDrawer handleBackdrop={handleBackdrop} setDrawerOpen={setDrawerOpen} show={drawerOpen} loggedIn={loggedIn} setLoggedIn={setLoggedIn} />
-            <Backdrop handleBackdrop={handleBackdrop} show={drawerOpen} />
-            {/* {drawerOpen && <Backdrop handleBackdrop={handleBackdrop} show={drawerOpen}/>} */}
-            <Route exact path='/' component={TimelinePage} />
-            <Route exact path='/search' component={Search} />
-            <Route exact path='/login' component={() => <Login setLoggedIn={setLoggedIn} getUserInfo={getUserInfo} />} />
-            <Route exact path='/create-account' component={CreateAccount} />
-            
-            <Route exact path='/profile' component={withAuth(()=> <Profile userInfo={userInfo} getUserInfo={getUserInfo} />)} />
-            
-            <Route path='/show/:id' component={()=> <Show loggedIn={loggedIn} />} />
-            {/* <Route path='*' component={() => '404 NOT FOUND'} /> */}
-        </Router>
+            null :
+            <Router>
+                <NavBar handleDrawerToggle={handleDrawerToggle} />
+                <SlideDrawer handleBackdrop={handleBackdrop} setDrawerOpen={setDrawerOpen} show={drawerOpen} loggedIn={loggedIn} setLoggedIn={setLoggedIn} />
+                <Backdrop handleBackdrop={handleBackdrop} show={drawerOpen} />
+                <Switch>
+                    <Route exact path='/' component={TimelinePage} />
+                    <Route exact path='/search' component={Search} />
+                    <Route exact path='/login' component={() => <Login setLoggedIn={setLoggedIn} getUserInfo={getUserInfo} />} />
+                    <Route exact path='/create-account' component={CreateAccount} />
+
+                    <Route exact path='/profile' component={withAuth(() => <Profile userInfo={userInfo} getUserInfo={getUserInfo} />)} />
+
+                    <Route path='/show/:id' component={() => <Show loggedIn={loggedIn} />} />
+
+                    <Route path='/user/:username' component={User} />
+                    <Route path='*' component={() => <h1 style={{textAlign:'center'}} >404 NOT FOUND</h1>} /> 
+                </Switch>
+            </Router>
     );
 }
 
