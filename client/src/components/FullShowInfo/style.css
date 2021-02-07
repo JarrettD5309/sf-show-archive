@@ -113,7 +113,7 @@
 .full-show-links-details {
     flex: 1;
     min-width: 0;
-    
+    overflow-wrap: break-word;
 }
 
 .full-show-links-details > p {

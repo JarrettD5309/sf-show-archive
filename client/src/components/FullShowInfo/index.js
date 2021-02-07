@@ -75,7 +75,7 @@ function FullShowInfo(props) {
                         return (
                             <div key={eachFlyer._id}>
                                 <img src={`/uploads/${imgName}`} className='full-show-image' alt={`Flyer from ${date}`} key={eachFlyer._id} />
-                                <p>Contributed by: {username}</p>
+                                <p>Contributed by: <a href={`/user/${username}`} className='full-show-links-link'>{username}</a></p>
                             </div>
                         )
                     }
@@ -94,7 +94,8 @@ function FullShowInfo(props) {
                             {setList.songs.map((song, i) =>
                                 <p key={i}>{i + 1}. {song}</p>
                             )}
-                            <p>Contributed by: {setList.contributed.username} </p>
+                            <p>Contributed by: <a href={`/user/${setList.contributed.username}`} className='full-show-links-link'>{setList.contributed.username}</a></p>
+                            {/* <p>Contributed by: {setList.contributed.username} </p> */}
                         </div>
 
                     ) :
@@ -115,7 +116,7 @@ function FullShowInfo(props) {
                         {audio.length !== 0 ? audio.map((object, i) => (
                             <div key={i} className='full-show-links-map-div'>
                                 <p><a href={object.link} target='_blank' rel="noopener noreferrer" className='full-show-links-link'>{object.link}</a></p>
-                                <p>Contributed by: {object.contributed.username}</p>
+                                <p>Contributed by: <a href={`/user/${object.contributed.username}`} className='full-show-links-link'>{object.contributed.username}</a></p>
                             </div>
                         ))
                             :
@@ -131,7 +132,7 @@ function FullShowInfo(props) {
                         {video.length !== 0 ? video.map((object, i) => (
                             <div key={i} className='full-show-links-map-div'>
                                 <p><a href={object.link} target='_blank' rel="noopener noreferrer" className='full-show-links-link'>{object.link}</a></p>
-                                <p>Contributed by: {object.contributed.username}</p>
+                                <p>Contributed by: <a href={`/user/${object.contributed.username}`} className='full-show-links-link'>{object.contributed.username}</a></p>
                             </div>
                         ))
                             :
@@ -147,7 +148,7 @@ function FullShowInfo(props) {
                         {review.length !== 0 ? review.map((object, i) => (
                             <div key={i} className='full-show-links-map-div'>
                                 <p><a href={object.link} target='_blank' rel="noopener noreferrer" className='full-show-links-link'>{object.link}</a></p>
-                                <p>Contributed by: {object.contributed.username}</p>
+                                <p>Contributed by: <a href={`/user/${object.contributed.username}`} className='full-show-links-link'>{object.contributed.username}</a></p>
                             </div>
                         ))
                             :
@@ -162,7 +163,14 @@ function FullShowInfo(props) {
                     {loggedIn && <button className='full-show-add-button' type='button' onClick={() => handleOpenModal('attendance')}>ADD</button>}
                 </div>
                 <div>
-                    {attendance.length !== 0 ? convertAttendanceUsers() :
+                    {attendance.length !== 0 ? attendance.map((user, i) => {
+                            if (i < (attendance.length - 1)) {
+                                return <span key={i}><a href={`/user/${attendance[i].username}`} className='full-show-links-link'>{attendance[i].username}</a>, </span>;
+                            } else {
+                                return <a href={`/user/${attendance[i].username}`} className='full-show-links-link' key={i}>{attendance[i].username}</a>;
+                            }
+
+                        }) :
                         (<p>N/A</p>)}
                 </div>
             </div>

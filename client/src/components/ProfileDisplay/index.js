@@ -40,8 +40,7 @@ const ProfileDisplay = (props) => {
                         <p className='slight-bold'>Twitter:</p>
                     </div>
                     <div className='profile-info-details'>
-                        {/* <p>@official_screamales</p> */}
-                        <p>{twitter==='' ? 'N/A' : twitter}</p>
+                        <p>{twitter === '' ? 'N/A' : <a href={twitter} target='_blank' rel="noopener noreferrer" className='profile-info-link'>{twitter}</a>}</p>
                     </div>
                 </div>
                 <div className='profile-info-div'>
@@ -49,8 +48,7 @@ const ProfileDisplay = (props) => {
                         <p className='slight-bold'>Instagram:</p>
                     </div>
                     <div className='profile-info-details'>
-                        {/* <p>@official_screamales</p> */}
-                        <p>{instagram==='' ? 'N/A' : instagram}</p>
+                        <p>{instagram === '' ? 'N/A' : <a href={instagram} target='_blank' rel="noopener noreferrer" className='profile-info-link'>{instagram}</a>}</p>
                     </div>
                 </div>
                 <div className='profile-info-div'>
@@ -58,7 +56,7 @@ const ProfileDisplay = (props) => {
                         <p className='slight-bold'>Contributions:</p>
                     </div>
                     <div className='profile-info-details'>
-                        <p>{contributedArray.length===0 ? 'N/A' : contributedArray.map((date, i) => {
+                        <p>{contributedArray.length === 0 ? 'N/A' : contributedArray.map((date, i) => {
                             if (i < (contributedArray.length - 1)) {
                                 return <span key={i}><a href={`/show/${date.showNum}`} className='profile-date-link'>{date.dateString}</a>, </span>;
                             } else {
@@ -73,7 +71,7 @@ const ProfileDisplay = (props) => {
                         <p className='slight-bold'>Attended:</p>
                     </div>
                     <div className='profile-info-details'>
-                        <p>{attendedArray.length===0 ? 'N/A' : attendedArray.map((date, i) => {
+                        <p>{attendedArray.length === 0 ? 'N/A' : attendedArray.map((date, i) => {
                             if (i < (attendedArray.length - 1)) {
                                 return <span key={i}><a href={`/show/${date.showNum}`} className='profile-date-link'>{date.dateString}</a>, </span>;
                             } else {
