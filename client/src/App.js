@@ -80,7 +80,7 @@ const App = () => {
 
                     <Route exact path='/profile' component={withAuth(() => <Profile userInfo={userInfo} getUserInfo={getUserInfo} />)} />
 
-                    <Route path='/show/:id' component={() => <Show loggedIn={loggedIn} />} />
+                    <Route path='/show/:id' component={() => <Show loggedIn={loggedIn} userInfo={userInfo} />} />
 
                     <Route path='/user/:username' component={User} />
                     <Route path='*' component={() => <h1 style={{textAlign:'center'}} >404 NOT FOUND</h1>} /> 

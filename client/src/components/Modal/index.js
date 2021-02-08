@@ -23,6 +23,8 @@ const Modal = (props) => {
         handleLinksSubmit,
         attendanceInstructions,
         handleAttendanceSubmit,
+        attendanceRemoveInstructions,
+        handleAttendanceRemoveSubmit,
         profileInstructions,
         newEmail,
         setNewEmail,
@@ -158,6 +160,18 @@ const Modal = (props) => {
                         <div className='modal-button-div'>
                             <button className='modal-close-button' type='button' onClick={() => handleCloseModal(type)}>Close</button>
                             <button className='modal-submit-button' type='button' onClick={handleAttendanceSubmit}>Yes</button>
+                        </div>
+                    </div>
+                }
+
+                {type === 'attendance-remove' &&
+                    <div>
+                        <h2>Attendance</h2>
+                        <p className='modal-instructions'>{attendanceRemoveInstructions}</p>
+
+                        <div className='modal-button-div'>
+                            <button className='modal-close-button' type='button' onClick={() => handleCloseModal(type)}>Close</button>
+                            <button className='modal-submit-button' type='button' onClick={handleAttendanceRemoveSubmit}>Remove</button>
                         </div>
                     </div>
                 }

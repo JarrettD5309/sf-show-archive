@@ -20,10 +20,15 @@ const Show = (props) => {
     const [newReviewLink, setNewReviewLink] = React.useState('');
     const [linksInstructions, setLinkInstructions] = React.useState('Please add a link (must include the ENTIRE url!)');
     const [attendanceInstructions, setAttendanceInstructions] = React.useState('Did you attend this show?');
+    const [attendanceRemoveInstructions, setAttendanceRemoveInstructions] = React.useState('You are already marked as ATTENDED. Want to be removed?');
 
-    const { loggedIn } = props;
+    const { 
+        loggedIn,
+        userInfo
+    } = props;
 
     useEffect(() => {
+        // console.log(userInfo._id);
         // deals with react unmounted component issue
         let mounted = true;
 
@@ -71,7 +76,7 @@ const Show = (props) => {
         formData.append('showId', showInfo._id);
         formData.append('date', showInfo.date);
         formData.append('flyerImg', imageFile);
-        console.log(formData);
+        // console.log(formData);
         const config = {
             headers: {
                 'content-type': 'multipart/form-data'
@@ -80,7 +85,7 @@ const Show = (props) => {
 
         axios.post('/api/showflyer', formData, config)
             .then(res => {
-                console.log(res);
+                // console.log(res);
                 setFlyerInstructions('Success!');
                 setTimeout(() => {
                     handleCloseModal('flyer');
@@ -92,7 +97,7 @@ const Show = (props) => {
             })
             .catch(err => {
                 console.log(err);
-                console.log(err.response.data.message);
+                // console.log(err.response.data.message);
                 setFlyerInstructions(err.response.data.message);
                 setImageFile(null);
                 setImageFileName('')
@@ -102,22 +107,22 @@ const Show = (props) => {
     const handleSetlistSubmit = () => {
         let newSetlist = [];
         const inputArr = document.getElementsByClassName('modal-setlist-input');
-        console.log(inputArr.length);
+        // console.log(inputArr.length);
         for (let i = 0; i < inputArr.length; i++) {
             const currentInput = document.getElementById('song' + i);
-            console.log(currentInput.value);
+            // console.log(currentInput.value);
             if (currentInput.value !== '') {
                 newSetlist.push(currentInput.value);
             }
         }
-        console.log(newSetlist);
+        // console.log(newSetlist);
         const setlistData = {
             showId: showInfo._id,
             setlist: newSetlist
         }
         axios.post('/api/setlist', setlistData)
             .then(res => {
-                console.log(res);
+                // console.log(res);
                 setSetListInstructions('Success!')
                 setTimeout(() => {
                     // setDisplayModal(false);
@@ -172,7 +177,7 @@ const Show = (props) => {
                 // console.log('send!');
                 axios.post('/api/links', linksData)
                     .then(res => {
-                        console.log(res);
+                        // console.log(res);
                         setLinkInstructions('Success!');
                         setTimeout(() => {
                             handleCloseModal('links');
@@ -195,7 +200,7 @@ const Show = (props) => {
         // console.log('send');
         axios.post('/api/attendance', { showId: showInfo._id, })
             .then(res => {
-                console.log(res);
+                // console.log(res);
                 setAttendanceInstructions('Thank you!')
                 setTimeout(() => {
                     handleCloseModal('attendance');
@@ -204,6 +209,20 @@ const Show = (props) => {
             })
             .catch(err => console.log(err));
     };
+
+    const handleAttendanceRemoveSubmit = () => {
+        console.log('remove');
+        axios.put('/api/attendance', {showId: showInfo._id})
+        .then(res => {
+            console.log(res);
+            setAttendanceRemoveInstructions('Thank you!');
+            setTimeout(() => {
+                handleCloseModal('attendance-remove');
+                getDetails();
+            }, 900);
+        })
+        .catch(err => console.log(err));
+    }
 
     const handleCloseModal = (type) => {
         setDisplayModal(false);
@@ -222,6 +241,8 @@ const Show = (props) => {
             setNewReviewLink('');
         } else if (type === 'attendance') {
             setAttendanceInstructions('Did you attend this show?');
+        } else if (type === 'attendance-remove') {
+            setAttendanceRemoveInstructions('You are already marked as ATTENDED. Want to be removed?')
         }
     };
 
@@ -240,6 +261,7 @@ const Show = (props) => {
                         showInfoDetails={showInfoDetails}
                         loggedIn={loggedIn}
                         handleOpenModal={handleOpenModal}
+                        userInfo={userInfo}
                     />
                     {displayModal && <Modal
                         type={modalType}
@@ -262,6 +284,8 @@ const Show = (props) => {
                         linksInstructions={linksInstructions}
                         handleAttendanceSubmit={handleAttendanceSubmit}
                         attendanceInstructions={attendanceInstructions}
+                        handleAttendanceRemoveSubmit={handleAttendanceRemoveSubmit}
+                        attendanceRemoveInstructions={attendanceRemoveInstructions}
                     />}
 
                 </div>

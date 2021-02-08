@@ -5,9 +5,9 @@ import dateFunction from '../../other/dateFunction';
 function FullShowInfo(props) {
 
     const {
-
         loggedIn,
-        handleOpenModal
+        handleOpenModal,
+        userInfo
     } = props;
 
     const {
@@ -37,19 +37,29 @@ function FullShowInfo(props) {
 
     const dateString = dateFunction(date);
 
-    const convertAttendanceUsers = () => {
-        let usersString = '';
-        for (let i = 0; i < attendance.length; i++) {
-            if (i < (attendance.length - 1)) {
-                usersString = usersString + attendance[i].username + ', ';
-            } else {
-                usersString = usersString + attendance[i].username;
+    // const convertAttendanceUsers = () => {
+    //     let usersString = '';
+    //     for (let i = 0; i < attendance.length; i++) {
+    //         if (i < (attendance.length - 1)) {
+    //             usersString = usersString + attendance[i].username + ', ';
+    //         } else {
+    //             usersString = usersString + attendance[i].username;
+    //         }
+    //     }
+    //     return (
+    //         <p>{usersString}</p>
+    //     );
+    // };
+
+    const attendButton = () => {
+        let found = false;
+        for (let i=0;i<attendance.length;i++) {
+            if (userInfo._id===attendance[i]._id) {
+                found = true;
             }
         }
-        return (
-            <p>{usersString}</p>
-        );
-    };
+        return found;
+    }
 
     return (
         <div className='full-show-info-container'>
@@ -160,7 +170,14 @@ function FullShowInfo(props) {
             <div>
                 <div className='full-show-header-margin'>
                     <h2>Attendance</h2>
-                    {loggedIn && <button className='full-show-add-button' type='button' onClick={() => handleOpenModal('attendance')}>ADD</button>}
+                    {loggedIn && 
+                    <button className='full-show-add-button' type='button' onClick={() => {
+                        attendButton() ? 
+                        handleOpenModal('attendance-remove') :
+                        handleOpenModal('attendance')
+                        ;
+                    }}>ADD</button>
+                    }
                 </div>
                 <div>
                     {attendance.length !== 0 ? attendance.map((user, i) => {

@@ -596,6 +596,30 @@ module.exports = app => {
         }
     });
 
+    //REMOVE ATTENDANCE
+    app.put('/api/attendance', (req, res) => {
+        if (req.session.loggedin) {
+            if (req.body.showId) {
+                db.ShowDetails.updateOne({ showId: req.body.showId },
+                    {
+                        $pullAll: {
+                            attendance: [req.session.userID]
+                        }
+                    })
+                    .then(result => res.json(result))
+                    .catch(err => res.json(err));
+            } else {
+                res.status(400).json({
+                    "message": "Error: Form not valid"
+                });
+            }
+        } else {
+            res.status(401).json({
+                "message": "Error: Must be logged in"
+            });
+        }
+    });
+
 
     app.get('/api/checklogin', (req, res) => {
         if (req.session.loggedin) {
