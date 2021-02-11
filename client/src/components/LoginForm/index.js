@@ -41,7 +41,7 @@ const LoginForm = (props) => {
                 <div>
                     <button className='login-button' type='button' onClick={handleSubmit}>Login</button>
                 </div>
-                <p>Forgot your password?</p>
+                <p>Forgot your password? <a href='/forgot-password' className='login-link'>Reset</a></p>
                 <p>First time here? <a href='/create-account' className='login-link'>Create account</a></p>
             </div>
         </div>

@@ -2,9 +2,11 @@ import React, { useEffect } from 'react';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import Backdrop from './components/SlideDrawer/Backdrop';
 import CreateAccount from './pages/CreateAccount';
+import ForgotPassword from './pages/ForgotPassword';
 import Login from './pages/Login';
 import NavBar from './components/NavBar';
 import Profile from './pages/Profile';
+import ResetPassword from './pages/ResetPassword';
 import Search from './pages/Search';
 import Show from './pages/Show';
 import SlideDrawer from './components/SlideDrawer/SlideDrawer';
@@ -12,8 +14,6 @@ import TimelinePage from './pages/TimelinePage';
 import User from './pages/User';
 import withAuth from './withAuth';
 import axios from 'axios';
-
-
 
 const App = () => {
     const [drawerOpen, setDrawerOpen] = React.useState(false);
@@ -79,7 +79,8 @@ const App = () => {
                     <Route exact path='/create-account' component={CreateAccount} />
 
                     <Route exact path='/profile' component={withAuth(() => <Profile userInfo={userInfo} getUserInfo={getUserInfo} />)} />
-
+                    <Route exact path='/forgot-password' component={ForgotPassword} />
+                    <Route exact path='/reset-password/:token/:email' component={ResetPassword} />
                     <Route path='/show/:id' component={() => <Show loggedIn={loggedIn} userInfo={userInfo} />} />
 
                     <Route path='/user/:username' component={User} />

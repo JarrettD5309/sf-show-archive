@@ -2,7 +2,19 @@ const db = require('../models');
 const bcrypt = require('bcrypt');
 const multer = require('multer');
 const path = require('path');
-const e = require('express');
+// const e = require('express');
+const nodemailer = require('nodemailer');
+const crypto = require('crypto');
+
+// const transport = nodemailer.createTransport({
+//     host: process.env.EMAIL_HOST,
+//     port: process.env.EMAIL_PORT,
+//     secure: true,
+//     auth: {
+//         user: process.env.EMAIL_USER,
+//         pass: process.env.EMAIL_PASS
+//     }
+// });
 
 module.exports = app => {
     // GETS ALL STATES AND COUNTRIES FOR DROPDOWN
@@ -632,5 +644,147 @@ module.exports = app => {
     app.get('/api/logout', (req, res) => {
         req.session.destroy();
         res.sendStatus(200);
+    });
+
+    // PASSWORD RESET ROUTES
+
+    app.post('/api/forgot-password', async (req, res, next) => {
+        const transport = nodemailer.createTransport({
+            host: process.env.EMAIL_HOST,
+            port: process.env.EMAIL_PORT,
+            secure: false,
+            auth: {
+                user: process.env.EMAIL_USER,
+                pass: process.env.EMAIL_PASS
+            }
+        });
+        const email = await db.User.findOne({ email: req.body.email });
+
+        if (email == null) {
+            return res.json({ status: 'ok' });
+        }
+
+        await db.ResetTokens.updateMany(
+            {
+                email: req.body.email
+            },
+            {
+                used: 1
+            }
+        );
+
+        const token = crypto.randomBytes(64).toString('base64');
+
+        const expireDate = new Date();
+        expireDate.setTime(expireDate.getTime() + (1 * 60 * 60 * 1000));
+        console.log(expireDate);
+
+        await db.ResetTokens.create({
+            email: req.body.email,
+            expiration: expireDate,
+            token: token,
+            used: 0
+        });
+
+        const message = {
+            from: process.env.SENDER_ADDRESS,
+            // from: 'Screaming Females <postmaster@screamingfemalestourarchive.com>',
+            to: req.body.email,
+            // replyTo: process.env.REPLYTO_ADDRESS,
+            subject: process.env.FORGOT_PASS_SUBJECT_LINE,
+            // subject: 'Reset your Screaming Females Tour Archive Password',
+            text: 'To reset your password, please click the link below.\n\nhttp://' + process.env.DOMAIN + '/reset-password/' + encodeURIComponent(token) + '/' + req.body.email
+            // text: 'test test test'
+        };
+
+        transport.sendMail(message, (err, info) => {
+            if (err) { console.log(err); }
+            else { console.log(info); }
+        });
+
+        return res.json({ status: 'ok' });
+    });
+
+    app.get('/api/reset-password', async (req, res, next) => {
+        console.log(req.query.email);
+        console.log(req.query.token);
+        await db.ResetTokens.deleteMany({
+            expiration: { $lt: Date.now() }
+        });
+        // .then(res=>console.log(res));
+
+        const record = await db.ResetTokens.findOne({
+            email: req.query.email,
+            expiration: { $gt: Date.now() },
+            token: decodeURIComponent(req.query.token),
+            used: 0
+        });
+
+        if (record == null) {
+            res.status(400).send('tokenExpired');
+        } else {
+            res.status(200).send('showForm');
+        }
+    });
+
+    app.post('/api/reset-password', (req, res) => {
+        const token = decodeURIComponent(req.body.token);
+        const email = req.body.email;
+        const password = req.body.password;
+        const passwordConfirm = req.body.passwordConfirm;
+
+        const stringLengthTest = (string, min, max) => {
+            const stringLength = string.length;
+
+            if (stringLength < min || stringLength > max) {
+                return false;
+            } else {
+                return true;
+            }
+        };
+
+        if (token && email && password && passwordConfirm) {
+            const passwordIsLength = stringLengthTest(password, 7, 100);
+
+            if (password !== passwordConfirm) {
+                res.status(400).send('passwordMismatch');
+            } else if (!passwordIsLength) {
+                res.status(400).send('passwordLength');
+            } else {
+                db.ResetTokens.findOne({
+                    email: email,
+                    expiration: { $gt: Date.now() },
+                    token: token,
+                    used: 0
+                })
+                .then(results=> {
+                    if (results) {
+                        db.ResetTokens.updateMany({
+                            email: req.body.email
+                        },
+                        {
+                            used: 1
+                        })
+                        .then(()=>{
+                            bcrypt.hash(password, 10, (err, hash) =>{
+                                const passwordUpdateObj = {
+                                    password: hash
+                                };
+                                db.User.updateOne({
+                                    email: req.body.email
+                                },passwordUpdateObj)
+                                .then(result=>res.json(result))
+                                .catch(err=>res.json(err));
+                            });
+                        })
+                    } else {
+                        res.status(400).send('tokenNotFound');
+                    }
+                })
+            }
+        } else {
+            res.status(400).send('formNotComplete');
+        }
+
     });
 };
