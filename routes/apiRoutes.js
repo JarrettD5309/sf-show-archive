@@ -648,6 +648,7 @@ module.exports = app => {
 
     // PASSWORD RESET ROUTES
 
+    // CREATES TOKEN IN DB AND SENDS EMAIL
     app.post('/api/forgot-password', async (req, res, next) => {
         const transport = nodemailer.createTransport({
             host: process.env.EMAIL_HOST,
@@ -705,9 +706,10 @@ module.exports = app => {
         return res.json({ status: 'ok' });
     });
 
+    // CLEANS UP OLD TOKENS IN DB AND CHECKS CURRENT TOKEN FOR VALID
     app.get('/api/reset-password', async (req, res, next) => {
-        console.log(req.query.email);
-        console.log(req.query.token);
+        // console.log(req.query.email);
+        // console.log(req.query.token);
         await db.ResetTokens.deleteMany({
             expiration: { $lt: Date.now() }
         });
@@ -727,6 +729,7 @@ module.exports = app => {
         }
     });
 
+    // VALIDATES NEW PASSWORD, CHECKS TOKEN, AND RESETS USER PASSWORD
     app.post('/api/reset-password', (req, res) => {
         const token = decodeURIComponent(req.body.token);
         const email = req.body.email;

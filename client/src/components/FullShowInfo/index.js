@@ -84,7 +84,7 @@ function FullShowInfo(props) {
                         const username = eachFlyer.contributed.username;
                         return (
                             <div key={eachFlyer._id}>
-                                <img src={`/uploads/${imgName}`} className='full-show-image' alt={`Flyer from ${date}`} key={eachFlyer._id} />
+                                <img src={process.env.PUBLIC_URL + `/uploads/${imgName}`} className='full-show-image' alt={`Flyer from ${date}`} key={eachFlyer._id} />
                                 <p>Contributed by: <a href={`/user/${username}`} className='full-show-links-link'>{username}</a></p>
                             </div>
                         )
