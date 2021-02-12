@@ -1,22 +1,20 @@
 import React, { useEffect } from 'react';
+import ResetPasswordForm from '../../components/ResetPasswordForm';
 import { useParams } from 'react-router-dom';
+import { useHistory } from "react-router-dom";
 import axios from 'axios';
 
 const ResetPassword = () => {
+    let history = useHistory();
     const { token, email } = useParams();
     const [loading, setLoading] = React.useState(true);
     const [showForm, setShowForm] = React.useState(false);
+    // const [showForm, setShowForm] = React.useState(true);
     const [resetPassword, setResetPassword] = React.useState('');
     const [resetPasswordConfirm, setResetPasswordConfirm] = React.useState('');
-    const [resettoken, setResetToken] = React.useState('');
-    const [resetEmail, setResetEmail] = React.useState('');
+    const [resetPasswordInstructions, setResetPasswordInstructions] = React.useState('Token has expired. Please try reset again.');
 
     useEffect(() => {
-        const resetObj = {
-            // email: email,
-            token: token
-        };
-        console.log(resetObj);
         axios.get('/api/reset-password', {
             params: {
                 email: email,
@@ -27,6 +25,7 @@ const ResetPassword = () => {
                 console.log(res);
                 if (res.data === 'showForm') {
                     setShowForm(true);
+                    setResetPasswordInstructions('Please enter a new password');
                 }
             })
             .catch(err => {
@@ -34,16 +33,12 @@ const ResetPassword = () => {
                 if (err.response.data === 'tokenExpired') {
                     console.log('expired');
                     setShowForm(false);
+                    setResetPasswordInstructions('Token has expired. Please try reset again.');
                 }
             })
             .then(() => {
                 setLoading(false);
             });
-
-        // console.log(token);
-        // console.log(email);
-        // setResetEmail(email);
-        // setResetToken(token);
     }, []);
 
     const handleSubmit = () => {
@@ -57,53 +52,37 @@ const ResetPassword = () => {
         axios.post('/api/reset-password', newPasswordObj)
             .then(res => {
                 console.log(res);
+                setResetPasswordInstructions('Success! Wait to be redirected.');
+                setTimeout(()=>{
+                    history.push('/login');
+                },1500);
             })
-            .catch(err => console.log(err));
+            .catch(err => {
+                console.log(err);
+                if (err.response.data==='formNotComplete') {
+                    setResetPasswordInstructions('Please complete form');
+                } else if (err.response.data==='tokenNotFound') {
+                    setShowForm(false);
+                    setResetPasswordInstructions('Token has expired. Please try reset again.');
+                } else if (err.response.data==='passwordMismatch') {
+                    setResetPasswordInstructions('Password confirmation does not match');
+                } else if (err.response.data==='passwordLength') {
+                    setResetPasswordInstructions('Password must be between 7 and 100 characters');
+                } 
+            });
     };
 
     return (
         loading ? null :
-            <div className='create-root'>
-                <div className='create-box'>
-                    <h1>Password Reset</h1>
-                    <div className='create-instructions-div'>
-                        {/* <p>{createInstructions}</p> */}
-                        {showForm ?
-                            <p>Show Form</p>
-                            :
-                            <p>No Form</p>}
-                    </div>
-                    <div>
-                        {showForm &&
-                            <div>
-                                <label htmlFor='create-password'>Password</label><br />
-                                <input
-                                    type='password'
-                                    id='create-password'
-                                    name='create-password'
-                                    value={resetPassword}
-                                    onChange={event => setResetPassword(event.target.value)}
-                                    className='create-input'
-                                /><br />
-                                <label htmlFor='create-password-confirm'>Password Confirm</label><br />
-                                <input
-                                    type='password'
-                                    id='create-password-confirm'
-                                    name='create-password-confirm'
-                                    value={resetPasswordConfirm}
-                                    onChange={event => setResetPasswordConfirm(event.target.value)}
-                                    className='create-input'
-                                />
-                            </div>
-                        }
-
-                    </div>
-                    <div>
-                        <button className='create-button' type='button' onClick={handleSubmit}>Send</button>
-                    </div>
-                    {/* <p>Already have an account? <a href='/login' className='create-link'>Login</a></p> */}
-                </div>
-            </div>
+            <ResetPasswordForm 
+                showForm={showForm}
+                resetPassword={resetPassword}
+                setResetPassword={setResetPassword}
+                resetPasswordConfirm={resetPasswordConfirm}
+                setResetPasswordConfirm={setResetPasswordConfirm}
+                resetPasswordInstructions={resetPasswordInstructions}
+                handleSubmit={handleSubmit}
+            />
     );
 };
 

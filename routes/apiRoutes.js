@@ -678,7 +678,6 @@ module.exports = app => {
 
         const expireDate = new Date();
         expireDate.setTime(expireDate.getTime() + (1 * 60 * 60 * 1000));
-        console.log(expireDate);
 
         await db.ResetTokens.create({
             email: req.body.email,
@@ -708,12 +707,10 @@ module.exports = app => {
 
     // CLEANS UP OLD TOKENS IN DB AND CHECKS CURRENT TOKEN FOR VALID
     app.get('/api/reset-password', async (req, res, next) => {
-        // console.log(req.query.email);
-        // console.log(req.query.token);
+
         await db.ResetTokens.deleteMany({
             expiration: { $lt: Date.now() }
         });
-        // .then(res=>console.log(res));
 
         const record = await db.ResetTokens.findOne({
             email: req.query.email,

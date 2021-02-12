@@ -26,7 +26,7 @@ const CreateAccount = () => {
                 setCreateInstructions('Success! Wait to be redirected.');
                 setTimeout(()=>{
                     history.push('/login');
-                },2000);
+                },1500);
             })
             .catch(err=>{
                 console.log(err);

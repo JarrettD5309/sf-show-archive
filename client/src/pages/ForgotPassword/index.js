@@ -14,7 +14,8 @@ const ForgotPassword = () => {
         axios.post('/api/forgot-password', resetObj)
             .then(res=>{
                 console.log(res);
-                setForgotPasswordInstructions('Check your email for reset link')
+                setForgotPasswordInstructions('Check your email for reset link');
+                setResetEmail('');
             })
             .catch(err=>console.log(err));
     };

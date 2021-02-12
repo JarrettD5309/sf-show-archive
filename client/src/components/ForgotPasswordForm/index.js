@@ -36,7 +36,7 @@ const ForgotPasswordForm = (props) => {
                 <div>
                     <button className='forgot-password-button' type='button' onClick={handleSubmit}>Send</button>
                 </div>
-                <p>Here by mistake? <a href='/login' className='create-link'>Login</a></p>
+                <p>Here by mistake? <a href='/login' className='forgot-password-link'>Login</a></p>
             </div>
         </div>
     );
