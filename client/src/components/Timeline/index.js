@@ -72,9 +72,9 @@ const Timeline = (props) => {
                 monthsTimeline();
                 fadeMonthsTimelineIn();
                 createBackButton();
-            } else if (event.target.id === 'triangle-end-right-month') {
+            } else if (event.target.id === 'clickable-end-right-month') {
                 moveRightMonth();
-            } else if (event.target.id === 'triangle-end-left-month') {
+            } else if (event.target.id === 'clickable-end-left-month') {
                 moveLeftMonth();
             } else if (/^month/.test(event.target.id)) {
                 const currentMonth = event.target.textContent.toLowerCase();
@@ -267,6 +267,10 @@ const Timeline = (props) => {
         const leftEndTriangle = document.getElementById('triangle-end-left-month');
         leftEndTriangle.style.visibility = leftEndTriangleVisibility;
 
+        // mobile clickable end caps over triangle
+        const leftEndClickable = document.getElementById('clickable-end-left-month');
+        leftEndClickable.style.visibility = leftEndTriangleVisibility;
+
         const leftEndCircle = document.getElementById('circle-end-left-month');
         leftEndCircle.style.visibility = leftEndCircleVisibility;
 
@@ -275,6 +279,10 @@ const Timeline = (props) => {
 
         const rightEndTriangle = document.getElementById('triangle-end-right-month');
         setTimeout(() => rightEndTriangle.style.visibility = rightEndTriangleVisibility, (seconds * 1000));
+
+        // mobile clickable end caps over triangle
+        const rightEndClickable = document.getElementById('clickable-end-right-month');
+        setTimeout(() => rightEndClickable.style.visibility = rightEndTriangleVisibility, (seconds * 1000));
 
         const branchElement = document.getElementsByClassName(animateBranchId);
         for (let i = 0; i < branchElement.length; i++) {
@@ -323,6 +331,10 @@ const Timeline = (props) => {
         const leftEndTriangle = document.getElementById('triangle-end-left-month');
         setTimeout(() => leftEndTriangle.style.visibility = leftEndTriangleVisibility, (seconds * 1000));
 
+        // mobile clickable end caps over triangle
+        const leftEndClickable = document.getElementById('clickable-end-left-month');
+        setTimeout(() => leftEndClickable.style.visibility = leftEndTriangleVisibility, (seconds * 1000));
+
         const leftEndCircle = document.getElementById('circle-end-left-month');
         setTimeout(() => leftEndCircle.style.visibility = leftEndCircleVisibility, (seconds * 1000));
 
@@ -331,6 +343,10 @@ const Timeline = (props) => {
 
         const rightEndTriangle = document.getElementById('triangle-end-right-month');
         rightEndTriangle.style.visibility = rightEndTriangleVisibility;
+
+        // mobile clickable end caps over triangle
+        const rightEndClickable = document.getElementById('clickable-end-right-month');
+        rightEndClickable.style.visibility = rightEndTriangleVisibility;
 
         const branchElement = document.getElementsByClassName(animateBranchId);
         for (let i = 0; i < branchElement.length; i++) {
@@ -691,6 +707,39 @@ const Timeline = (props) => {
         monthTimeline.appendChild(makeTriEnds((mobile ? 40 : 20), 'left'));
         monthTimeline.appendChild(makeTriEnds((mobile ? 1000 : 1020), 'right'));
 
+        // create clickable area for triangle endcap
+        const makeClickableEnds = (refPoint, side) => {
+            const rectangle = document.createElementNS(svgNS, 'polygon');
+            if (side === 'left') {
+                rectangle.setAttribute('id', 'clickable-end-left-month');
+                let pointsString;
+                if (mobile) {
+                    pointsString = (refPoint + 40) + ',225 ' + (refPoint + 40) + ',375 ' + (refPoint - 40) + ',375 ' + (refPoint - 40) + ',225';
+                } else {
+                    pointsString = (refPoint + 20) + ',270 ' + (refPoint + 20) + ',330 ' + (refPoint - 20) + ',330 ' + (refPoint - 20) + ',270';
+                }
+                rectangle.setAttribute('points', pointsString);
+                rectangle.style.visibility = 'hidden';
+                rectangle.style.cursor = 'pointer';
+            } else if (side === 'right') {
+                rectangle.setAttribute('id', 'clickable-end-right-month');
+                let pointsString;
+                if (mobile) {
+                    pointsString = (refPoint - 40) + ',225 ' + (refPoint - 40) + ',375 ' + (refPoint + 40) + ',375 ' + (refPoint + 40) + ',225';
+                } else {
+                    pointsString = (refPoint - 20) + ',270 ' + (refPoint - 20) + ',330 ' + (refPoint + 20) + ',330 ' + (refPoint + 20) + ',270';
+                }
+                rectangle.setAttribute('points', pointsString);
+                rectangle.style.cursor = 'pointer';
+            }
+            // rectangle.setAttribute('fill','red');
+            rectangle.setAttribute('opacity','0.0');
+            return rectangle;
+        };
+
+        monthTimeline.appendChild(makeClickableEnds((mobile ? 40 : 20), 'left'));
+        monthTimeline.appendChild(makeClickableEnds((mobile ? 1000 : 1020), 'right'));
+
         mainTimeline.appendChild(monthTimeline);
 
     };
@@ -987,7 +1036,6 @@ const Timeline = (props) => {
         yearTimeline.appendChild(makeTriEnds((mobile ? 1000 : 1020), 'right'));
 
         // create clickable area for triangle endcap
-
         const makeClickableEnds = (refPoint, side) => {
             const rectangle = document.createElementNS(svgNS, 'polygon');
             if (side === 'left') {
@@ -1012,8 +1060,8 @@ const Timeline = (props) => {
                 rectangle.setAttribute('points', pointsString);
                 rectangle.style.cursor = 'pointer';
             }
-            rectangle.setAttribute('fill','red');
-            rectangle.setAttribute('opacity','0.4');
+            // rectangle.setAttribute('fill','red');
+            rectangle.setAttribute('opacity','0.0');
             return rectangle;
         };
 
