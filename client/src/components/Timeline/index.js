@@ -351,7 +351,7 @@ const Timeline = (props) => {
 
         const yearText = document.createElementNS(svgNS, 'text');
         yearText.setAttribute('id', 'year-header-text');
-        yearText.setAttribute('font-size', mobile ? 46 : 36);
+        yearText.setAttribute('font-size', mobile ? 50 : 36);
         yearText.setAttribute('font-family', 'sans-serif');
         yearText.setAttribute('text-anchor', 'middle');
         yearText.setAttribute('x', xPosition);
@@ -570,7 +570,7 @@ const Timeline = (props) => {
             // anchor.setAttributeNS('http://www.w3.org/1999/xlink', 'xlink:href', 'http://screamingfemales.com/' + monthArray[currentMonthIndex] + currentYear);
 
             const monthText = document.createElementNS(svgNS, 'text');
-            monthText.setAttribute('font-size', mobile ? 46 : 36);
+            monthText.setAttribute('font-size', mobile ? 50 : 36);
             monthText.setAttribute('font-family', 'sans-serif');
             monthText.setAttribute('text-anchor', 'middle');
             monthText.setAttribute('x', xLocation);
@@ -655,13 +655,13 @@ const Timeline = (props) => {
             // triangle.setAttribute('points', '270,30 330,30 300,10');
             if (side === 'left') {
                 triangle.setAttribute('id', 'triangle-end-left-month');
-                const pointsString = (refPoint + 10) + (mobile ? ',270 ' : ',280 ') + (refPoint + 10) + (mobile ? ',330 ' : ',320 ') + (refPoint - (mobile ? 30 : 20)) + ',300';
+                const pointsString = (refPoint + 10) + (mobile ? ',260 ' : ',280 ') + (refPoint + 10) + (mobile ? ',340 ' : ',320 ') + (refPoint - (mobile ? 40 : 20)) + ',300';
                 triangle.setAttribute('points', pointsString);
                 triangle.style.visibility = 'hidden';
                 triangle.style.cursor = 'pointer';
             } else if (side === 'right') {
                 triangle.setAttribute('id', 'triangle-end-right-month');
-                const pointsString = (refPoint - 10) + (mobile ? ',270 ' : ',280 ') + (refPoint - 10) + (mobile ? ',330 ' : ',320 ') + (refPoint + (mobile ? 30 : 20)) + ',300';
+                const pointsString = (refPoint - 10) + (mobile ? ',260 ' : ',280 ') + (refPoint - 10) + (mobile ? ',340 ' : ',320 ') + (refPoint + (mobile ? 40 : 20)) + ',300';
                 triangle.setAttribute('points', pointsString);
                 triangle.style.cursor = 'pointer';
             }
@@ -670,8 +670,8 @@ const Timeline = (props) => {
             return triangle
         }
 
-        monthTimeline.appendChild(makeTriEnds((mobile ? 30 : 20), 'left'));
-        monthTimeline.appendChild(makeTriEnds((mobile ? 1010 : 1020), 'right'));
+        monthTimeline.appendChild(makeTriEnds((mobile ? 40 : 20), 'left'));
+        monthTimeline.appendChild(makeTriEnds((mobile ? 1000 : 1020), 'right'));
 
         mainTimeline.appendChild(monthTimeline);
 
@@ -699,7 +699,7 @@ const Timeline = (props) => {
 
         const backText = document.createElementNS(svgNS, 'text');
         backText.setAttribute('id', 'back-button');
-        backText.setAttribute('font-size', mobile ? 46 : 36);
+        backText.setAttribute('font-size', mobile ? 50 : 36);
         backText.setAttribute('font-family', 'sans-serif');
         backText.setAttribute('text-anchor', 'middle');
         backText.setAttribute('x', 930);
@@ -865,7 +865,7 @@ const Timeline = (props) => {
             // anchor.setAttributeNS('http://www.w3.org/1999/xlink', 'xlink:href', 'http://screamingfemales.com/' + currentYear);
 
             const yearText = document.createElementNS(svgNS, 'text');
-            yearText.setAttribute('font-size', mobile ? 46 : 36);
+            yearText.setAttribute('font-size', mobile ? 50 : 36);
             yearText.setAttribute('font-family', 'sans-serif');
             yearText.setAttribute('text-anchor', 'middle');
             yearText.setAttribute('x', xLocation);
@@ -950,13 +950,13 @@ const Timeline = (props) => {
             // triangle.setAttribute('points', '270,30 330,30 300,10');
             if (side === 'left') {
                 triangle.setAttribute('id', 'triangle-end-left');
-                const pointsString = (refPoint + 10) + (mobile ? ',270 ' : ',280 ') + (refPoint + 10) + (mobile ? ',330 ' : ',320 ') + (refPoint - (mobile ? 30 : 20)) + ',300';
+                const pointsString = (refPoint + 10) + (mobile ? ',260 ' : ',280 ') + (refPoint + 10) + (mobile ? ',340 ' : ',320 ') + (refPoint - (mobile ? 40 : 20)) + ',300';
                 triangle.setAttribute('points', pointsString);
                 triangle.style.visibility = 'hidden';
                 triangle.style.cursor = 'pointer';
             } else if (side === 'right') {
                 triangle.setAttribute('id', 'triangle-end-right');
-                const pointsString = (refPoint - 10) + (mobile ? ',270 ' : ',280 ') + (refPoint - 10) + (mobile ? ',330 ' : ',320 ') + (refPoint + (mobile ? 30 : 20)) + ',300';
+                const pointsString = (refPoint - 10) + (mobile ? ',260 ' : ',280 ') + (refPoint - 10) + (mobile ? ',340 ' : ',320 ') + (refPoint + (mobile ? 40 : 20)) + ',300';
                 triangle.setAttribute('points', pointsString);
                 triangle.style.cursor = 'pointer';
             }
@@ -965,8 +965,8 @@ const Timeline = (props) => {
             return triangle
         }
 
-        yearTimeline.appendChild(makeTriEnds((mobile ? 30 : 20), 'left'));
-        yearTimeline.appendChild(makeTriEnds((mobile ? 1010 : 1020), 'right'));
+        yearTimeline.appendChild(makeTriEnds((mobile ? 40 : 20), 'left'));
+        yearTimeline.appendChild(makeTriEnds((mobile ? 1000 : 1020), 'right'));
 
         svg.appendChild(yearTimeline);
         // appends svg to div
