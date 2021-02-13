@@ -5,8 +5,10 @@ const Timeline = (props) => {
         setCurrentYear, 
         setCurrentMonth, 
         pageBackButton,
-        setTimelineMini
+        setTimelineMini,
+        mobile
     } = props;
+
     const seconds = 1.5;
     const numBranches = 10;
     let numScreens = 0;
@@ -24,6 +26,9 @@ const Timeline = (props) => {
     const currentYear = currentDate.getFullYear();
 
     useEffect(() => {
+        if (document.getElementById('timeline-svg')) {
+            document.getElementById('timeline-svg').remove();
+        }
         createSVG(2005, currentYear);
 
         // all clickable triggers
@@ -33,7 +38,7 @@ const Timeline = (props) => {
         return function cleanup() {
             document.removeEventListener('click', handler);
         };
-    }, []);
+    }, [mobile]);
 
     const handler = (event) => {
         if (locked !== true) {
@@ -346,7 +351,7 @@ const Timeline = (props) => {
 
         const yearText = document.createElementNS(svgNS, 'text');
         yearText.setAttribute('id', 'year-header-text');
-        yearText.setAttribute('font-size', '36');
+        yearText.setAttribute('font-size', mobile ? 46 : 36);
         yearText.setAttribute('font-family', 'sans-serif');
         yearText.setAttribute('text-anchor', 'middle');
         yearText.setAttribute('x', xPosition);
@@ -565,7 +570,7 @@ const Timeline = (props) => {
             // anchor.setAttributeNS('http://www.w3.org/1999/xlink', 'xlink:href', 'http://screamingfemales.com/' + monthArray[currentMonthIndex] + currentYear);
 
             const monthText = document.createElementNS(svgNS, 'text');
-            monthText.setAttribute('font-size', '36');
+            monthText.setAttribute('font-size', mobile ? 46 : 36);
             monthText.setAttribute('font-family', 'sans-serif');
             monthText.setAttribute('text-anchor', 'middle');
             monthText.setAttribute('x', xLocation);
@@ -694,7 +699,7 @@ const Timeline = (props) => {
 
         const backText = document.createElementNS(svgNS, 'text');
         backText.setAttribute('id', 'back-button');
-        backText.setAttribute('font-size', '36');
+        backText.setAttribute('font-size', mobile ? 46 : 36);
         backText.setAttribute('font-family', 'sans-serif');
         backText.setAttribute('text-anchor', 'middle');
         backText.setAttribute('x', 930);
@@ -860,7 +865,7 @@ const Timeline = (props) => {
             // anchor.setAttributeNS('http://www.w3.org/1999/xlink', 'xlink:href', 'http://screamingfemales.com/' + currentYear);
 
             const yearText = document.createElementNS(svgNS, 'text');
-            yearText.setAttribute('font-size', '36');
+            yearText.setAttribute('font-size', mobile ? 46 : 36);
             yearText.setAttribute('font-family', 'sans-serif');
             yearText.setAttribute('text-anchor', 'middle');
             yearText.setAttribute('x', xLocation);

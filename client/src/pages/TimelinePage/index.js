@@ -10,6 +10,15 @@ const TimelinePage = (props) => {
     const [shows, setShows] = React.useState([]);
     const [fadeShows, setFadeShows] = React.useState(false);
     const [timelineMini, setTimelineMini] = React.useState(false);
+    const [mobile, setMobile] = React.useState(window.innerWidth<=500);
+
+    const handleResize = () => {
+        if (window.innerWidth>500) {
+            setMobile(false);
+        } else {
+            setMobile(true);
+        }
+    };
 
     useEffect(() => {
         if (currentMonth) {
@@ -26,6 +35,14 @@ const TimelinePage = (props) => {
                 .catch(err => console.log(err));
         }
     }, [currentMonth]);
+
+    useEffect(()=>{
+        window.addEventListener('resize', handleResize);
+
+        return () => {
+            window.removeEventListener('resize', handleResize);
+        }
+    });
 
     const pageBackButton = () => {
         setCurrentYear(undefined);
@@ -63,6 +80,7 @@ const TimelinePage = (props) => {
                     setFadeShows={setFadeShows}
                     pageBackButton={pageBackButton}
                     setTimelineMini={setTimelineMini}
+                    mobile={mobile}
                 />
             </div>
             <div className={fadeShows ? 'fadeIn' : 'fadeOut'} >
