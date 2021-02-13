@@ -47,7 +47,7 @@ const Timeline = (props) => {
                 moveRight();
             } else if (event.target.id === 'triangle-end-left') {
                 moveLeft();
-            } else if (/^year/.test(event.target.id)) {
+            } else if (/^year/.test(event.target.id) && event.target.id!=='year-header-text') {
                 fadeTimeline();
 
                 const currentYear = event.target.textContent;
@@ -655,13 +655,13 @@ const Timeline = (props) => {
             // triangle.setAttribute('points', '270,30 330,30 300,10');
             if (side === 'left') {
                 triangle.setAttribute('id', 'triangle-end-left-month');
-                const pointsString = (refPoint + 10) + ',280 ' + (refPoint + 10) + ',320 ' + (refPoint - 20) + ',300';
+                const pointsString = (refPoint + 10) + (mobile ? ',270 ' : ',280 ') + (refPoint + 10) + (mobile ? ',330 ' : ',320 ') + (refPoint - (mobile ? 30 : 20)) + ',300';
                 triangle.setAttribute('points', pointsString);
                 triangle.style.visibility = 'hidden';
                 triangle.style.cursor = 'pointer';
             } else if (side === 'right') {
                 triangle.setAttribute('id', 'triangle-end-right-month');
-                const pointsString = (refPoint - 10) + ',280 ' + (refPoint - 10) + ',320 ' + (refPoint + 20) + ',300';
+                const pointsString = (refPoint - 10) + (mobile ? ',270 ' : ',280 ') + (refPoint - 10) + (mobile ? ',330 ' : ',320 ') + (refPoint + (mobile ? 30 : 20)) + ',300';
                 triangle.setAttribute('points', pointsString);
                 triangle.style.cursor = 'pointer';
             }
@@ -670,8 +670,8 @@ const Timeline = (props) => {
             return triangle
         }
 
-        monthTimeline.appendChild(makeTriEnds(20, 'left'));
-        monthTimeline.appendChild(makeTriEnds(1020, 'right'));
+        monthTimeline.appendChild(makeTriEnds((mobile ? 30 : 20), 'left'));
+        monthTimeline.appendChild(makeTriEnds((mobile ? 1010 : 1020), 'right'));
 
         mainTimeline.appendChild(monthTimeline);
 
@@ -950,13 +950,13 @@ const Timeline = (props) => {
             // triangle.setAttribute('points', '270,30 330,30 300,10');
             if (side === 'left') {
                 triangle.setAttribute('id', 'triangle-end-left');
-                const pointsString = (refPoint + 10) + ',280 ' + (refPoint + 10) + ',320 ' + (refPoint - 20) + ',300';
+                const pointsString = (refPoint + 10) + (mobile ? ',270 ' : ',280 ') + (refPoint + 10) + (mobile ? ',330 ' : ',320 ') + (refPoint - (mobile ? 30 : 20)) + ',300';
                 triangle.setAttribute('points', pointsString);
                 triangle.style.visibility = 'hidden';
                 triangle.style.cursor = 'pointer';
             } else if (side === 'right') {
                 triangle.setAttribute('id', 'triangle-end-right');
-                const pointsString = (refPoint - 10) + ',280 ' + (refPoint - 10) + ',320 ' + (refPoint + 20) + ',300';
+                const pointsString = (refPoint - 10) + (mobile ? ',270 ' : ',280 ') + (refPoint - 10) + (mobile ? ',330 ' : ',320 ') + (refPoint + (mobile ? 30 : 20)) + ',300';
                 triangle.setAttribute('points', pointsString);
                 triangle.style.cursor = 'pointer';
             }
@@ -965,8 +965,8 @@ const Timeline = (props) => {
             return triangle
         }
 
-        yearTimeline.appendChild(makeTriEnds(20, 'left'));
-        yearTimeline.appendChild(makeTriEnds(1020, 'right'));
+        yearTimeline.appendChild(makeTriEnds((mobile ? 30 : 20), 'left'));
+        yearTimeline.appendChild(makeTriEnds((mobile ? 1010 : 1020), 'right'));
 
         svg.appendChild(yearTimeline);
         // appends svg to div

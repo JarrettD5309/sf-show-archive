@@ -62,7 +62,7 @@
         width: 310px;
     }
     .timeline-div {
-        width: 300px;
+        width: 290px;
         margin: -4px auto 0 auto;
         transition: width 1s, border 1s, box-shadow 1s, transform 1s, background-color 1s cubic-bezier(.92,.19,.72,.28);
     }

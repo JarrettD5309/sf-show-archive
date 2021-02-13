@@ -10,10 +10,10 @@ const TimelinePage = (props) => {
     const [shows, setShows] = React.useState([]);
     const [fadeShows, setFadeShows] = React.useState(false);
     const [timelineMini, setTimelineMini] = React.useState(false);
-    const [mobile, setMobile] = React.useState(window.innerWidth<=500);
+    const [mobile, setMobile] = React.useState(window.innerWidth<=575);
 
     const handleResize = () => {
-        if (window.innerWidth>500) {
+        if (window.innerWidth>575) {
             setMobile(false);
         } else {
             setMobile(true);
