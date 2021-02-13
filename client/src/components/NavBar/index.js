@@ -6,11 +6,14 @@ const NavBar = (props) => {
     return (
         <div className='hamburger-root'>
             <div className='hamburger-div'>
-                <svg id='hamburger' viewBox="0 0 100 75" height="100%" onClick={props.handleDrawerToggle}>
+                <div className='test-click' onClick={props.handleDrawerToggle}>
+
+                <svg id='hamburger'  viewBox="0 0 100 75" height="100%" >
                     <rect width="100" height="15"></rect>
                     <rect y="30" width="100" height="15"></rect>
                     <rect y="60" width="100" height="15"></rect>
                 </svg>
+                </div>
             </div>
         </div>
     )

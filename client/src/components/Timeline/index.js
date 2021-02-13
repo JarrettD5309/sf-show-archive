@@ -10,7 +10,7 @@ const Timeline = (props) => {
     } = props;
 
     const seconds = 1.5;
-    const numBranches = 10;
+    const numBranches =  mobile ? 6 : 10;
     let numScreens = 0;
     let currentScreen = 0;
 
@@ -43,9 +43,11 @@ const Timeline = (props) => {
     const handler = (event) => {
         if (locked !== true) {
     
-            if (event.target.id === 'triangle-end-right') {
+            // if (event.target.id === 'triangle-end-right') {
+            if (event.target.id === 'clickable-end-right') {
                 moveRight();
-            } else if (event.target.id === 'triangle-end-left') {
+            // } else if (event.target.id === 'triangle-end-left') {
+            } else if (event.target.id === 'clickable-end-left') {
                 moveLeft();
             } else if (/^year/.test(event.target.id) && event.target.id!=='year-header-text') {
                 fadeTimeline();
@@ -137,6 +139,10 @@ const Timeline = (props) => {
         const leftEndTriangle = document.getElementById('triangle-end-left');
         leftEndTriangleVisibility === 'hidden' ? leftEndTriangle.style.visibility = leftEndTriangleVisibility : leftEndTriangle.style.removeProperty('visibility');
 
+        // mobile clickable end caps over triangle
+        const leftEndClickable = document.getElementById('clickable-end-left');
+        leftEndTriangleVisibility === 'hidden' ? leftEndClickable.style.visibility = leftEndTriangleVisibility : leftEndClickable.style.removeProperty('visibility');
+
         const leftEndCircle = document.getElementById('circle-end-left');
         leftEndCircleVisibility === 'hidden' ? leftEndCircle.style.visibility = leftEndCircleVisibility : leftEndCircle.style.removeProperty('visibility');
 
@@ -145,6 +151,10 @@ const Timeline = (props) => {
 
         const rightEndTriangle = document.getElementById('triangle-end-right');
         setTimeout(() => rightEndTriangleVisibility === 'hidden' ? rightEndTriangle.style.visibility = rightEndTriangleVisibility : rightEndTriangle.style.removeProperty('visibility'), (seconds * 1000));
+
+        // mobile clickable end caps over triangle
+        const rightEndClickable = document.getElementById('clickable-end-right');
+        setTimeout(() => rightEndTriangleVisibility === 'hidden' ? rightEndClickable.style.visibility = rightEndTriangleVisibility : rightEndClickable.style.removeProperty('visibility'), (seconds * 1000));
 
         const branchElement = document.getElementsByClassName(animateBranchId);
         for (let i = 0; i < branchElement.length; i++) {
@@ -194,6 +204,10 @@ const Timeline = (props) => {
         const leftEndTriangle = document.getElementById('triangle-end-left');
         setTimeout(() => leftEndTriangleVisibility === 'hidden' ? leftEndTriangle.style.visibility = leftEndTriangleVisibility : leftEndTriangle.style.removeProperty('visibility'), (seconds * 1000));
 
+        // mobile clickable end caps over triangle
+        const leftEndClickable = document.getElementById('clickable-end-left');
+        setTimeout(() => leftEndTriangleVisibility === 'hidden' ? leftEndClickable.style.visibility = leftEndTriangleVisibility : leftEndClickable.style.removeProperty('visibility'), (seconds * 1000));
+
         const leftEndCircle = document.getElementById('circle-end-left');
         setTimeout(() => leftEndCircleVisibility === 'hidden' ? leftEndCircle.style.visibility = leftEndCircleVisibility : leftEndCircle.style.removeProperty('visibility'), (seconds * 1000));
 
@@ -202,6 +216,10 @@ const Timeline = (props) => {
 
         const rightEndTriangle = document.getElementById('triangle-end-right');
         rightEndTriangleVisibility === 'hidden' ? rightEndTriangle.style.visibility = rightEndTriangleVisibility : rightEndTriangle.style.removeProperty('visibility');
+
+        // mobile clickable end caps over triangle
+        const rightEndClickable = document.getElementById('clickable-end-right');
+        rightEndTriangleVisibility === 'hidden' ? rightEndClickable.style.visibility = rightEndTriangleVisibility : rightEndClickable.style.removeProperty('visibility');
 
         const branchElement = document.getElementsByClassName(animateBranchId);
         for (let i = 0; i < branchElement.length; i++) {
@@ -967,6 +985,30 @@ const Timeline = (props) => {
 
         yearTimeline.appendChild(makeTriEnds((mobile ? 40 : 20), 'left'));
         yearTimeline.appendChild(makeTriEnds((mobile ? 1000 : 1020), 'right'));
+
+        // create clickable area for triangle endcap
+
+        const makeClickableEnds = (refPoint, side) => {
+            const rectangle = document.createElementNS(svgNS, 'polygon');
+            if (side === 'left') {
+                rectangle.setAttribute('id', 'clickable-end-left');
+                const pointsString = (refPoint + 30) + ',230 ' + (refPoint + 30) + ',365 ' + (refPoint - 40) + ',365 ' + (refPoint - 40) + ',230';
+                rectangle.setAttribute('points', pointsString);
+                rectangle.style.visibility = 'hidden';
+                rectangle.style.cursor = 'pointer';
+            } else if (side === 'right') {
+                rectangle.setAttribute('id', 'clickable-end-right');
+                const pointsString = (refPoint - 30) + ',230 ' + (refPoint - 30) + ',365 ' + (refPoint + 40) + ',365 ' + (refPoint + 40) + ',230';
+                rectangle.setAttribute('points', pointsString);
+                rectangle.style.cursor = 'pointer';
+            }
+            rectangle.setAttribute('fill','red');
+            rectangle.setAttribute('opacity','0.4');
+            return rectangle;
+        };
+
+        mobile && yearTimeline.appendChild(makeClickableEnds(1000, 'right'));
+        mobile && yearTimeline.appendChild(makeClickableEnds(40, 'left'));
 
         svg.appendChild(yearTimeline);
         // appends svg to div
