@@ -992,13 +992,23 @@ const Timeline = (props) => {
             const rectangle = document.createElementNS(svgNS, 'polygon');
             if (side === 'left') {
                 rectangle.setAttribute('id', 'clickable-end-left');
-                const pointsString = (refPoint + 30) + ',230 ' + (refPoint + 30) + ',365 ' + (refPoint - 40) + ',365 ' + (refPoint - 40) + ',230';
+                let pointsString;
+                if (mobile) {
+                    pointsString = (refPoint + 40) + ',225 ' + (refPoint + 40) + ',375 ' + (refPoint - 40) + ',375 ' + (refPoint - 40) + ',225';
+                } else {
+                    pointsString = (refPoint + 20) + ',270 ' + (refPoint + 20) + ',330 ' + (refPoint - 20) + ',330 ' + (refPoint - 20) + ',270';
+                }
                 rectangle.setAttribute('points', pointsString);
                 rectangle.style.visibility = 'hidden';
                 rectangle.style.cursor = 'pointer';
             } else if (side === 'right') {
                 rectangle.setAttribute('id', 'clickable-end-right');
-                const pointsString = (refPoint - 30) + ',230 ' + (refPoint - 30) + ',365 ' + (refPoint + 40) + ',365 ' + (refPoint + 40) + ',230';
+                let pointsString;
+                if (mobile) {
+                    pointsString = (refPoint - 40) + ',225 ' + (refPoint - 40) + ',375 ' + (refPoint + 40) + ',375 ' + (refPoint + 40) + ',225';
+                } else {
+                    pointsString = (refPoint - 20) + ',270 ' + (refPoint - 20) + ',330 ' + (refPoint + 20) + ',330 ' + (refPoint + 20) + ',270';
+                }
                 rectangle.setAttribute('points', pointsString);
                 rectangle.style.cursor = 'pointer';
             }
@@ -1007,8 +1017,8 @@ const Timeline = (props) => {
             return rectangle;
         };
 
-        mobile && yearTimeline.appendChild(makeClickableEnds(1000, 'right'));
-        mobile && yearTimeline.appendChild(makeClickableEnds(40, 'left'));
+        yearTimeline.appendChild(makeClickableEnds((mobile ? 40 : 20), 'left'));
+        yearTimeline.appendChild(makeClickableEnds((mobile ? 1000 : 1020), 'right'));
 
         svg.appendChild(yearTimeline);
         // appends svg to div
