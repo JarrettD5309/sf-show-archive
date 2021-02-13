@@ -1,8 +1,9 @@
 import React, { useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import axios from 'axios';
 import FullShowInfo from '../../components/FullShowInfo';
 import Modal from '../../components/Modal';
+import imageCompression from 'browser-image-compression';
+import axios from 'axios';
 
 const Show = (props) => {
     const { id } = useParams();
@@ -22,7 +23,7 @@ const Show = (props) => {
     const [attendanceInstructions, setAttendanceInstructions] = React.useState('Did you attend this show?');
     const [attendanceRemoveInstructions, setAttendanceRemoveInstructions] = React.useState('You are already marked as ATTENDED. Want to be removed?');
 
-    const { 
+    const {
         loggedIn,
         userInfo
     } = props;
@@ -70,38 +71,58 @@ const Show = (props) => {
             .catch(err => console.log(err));
     };
 
-    const handleFlyerSubmit = () => {
-        const formData = new FormData();
-
-        formData.append('showId', showInfo._id);
-        formData.append('date', showInfo.date);
-        formData.append('flyerImg', imageFile);
-        // console.log(formData);
-        const config = {
-            headers: {
-                'content-type': 'multipart/form-data'
-            }
+    const handleFlyerSubmit = async () => {
+        const options = {
+            maxSizeMB: 1.5
         };
 
-        axios.post('/api/showflyer', formData, config)
-            .then(res => {
-                // console.log(res);
-                setFlyerInstructions('Success!');
-                setTimeout(() => {
-                    handleCloseModal('flyer');
-                    // setImageFile(null);
-                    // setImageFileName('');
-                    // setFlyerInstructions('Please choose a image');
-                    getDetails();
-                }, 900);
-            })
-            .catch(err => {
-                console.log(err);
-                // console.log(err.response.data.message);
-                setFlyerInstructions(err.response.data.message);
-                setImageFile(null);
-                setImageFileName('')
-            });
+        try {
+
+            const compressedFile = await imageCompression(imageFile, options);
+
+            const formData = new FormData();
+
+            formData.append('showId', showInfo._id);
+            formData.append('date', showInfo.date);
+            formData.append('flyerImg', compressedFile);
+            // console.log(formData);
+            const config = {
+                headers: {
+                    'content-type': 'multipart/form-data'
+                }
+            };
+
+            axios.post('/api/showflyer', formData, config)
+                .then(res => {
+                    // console.log(res);
+                    setFlyerInstructions('Success!');
+                    setTimeout(() => {
+                        handleCloseModal('flyer');
+                        // setImageFile(null);
+                        // setImageFileName('');
+                        // setFlyerInstructions('Please choose a image');
+                        getDetails();
+                    }, 900);
+                })
+                .catch(err => {
+                    console.log(err);
+                    // console.log(err.response.data.message);
+                    setFlyerInstructions(err.response.data.message);
+                    setImageFile(null);
+                    setImageFileName('')
+                });
+
+        } catch (error) {
+            console.log(error);
+            if(error.toString()==='Error: The file given is not an image') {
+                setFlyerInstructions('Error: Images Only');
+            } else if (error.toString()==='Error: The file given is not an instance of Blob or File') {
+                setFlyerInstructions('Error: No File Selected');
+            } else {
+                setFlyerInstructions('Oops! Something went wrong. Please try again.');
+            }
+        }
+
     };
 
     const handleSetlistSubmit = () => {
@@ -212,16 +233,16 @@ const Show = (props) => {
 
     const handleAttendanceRemoveSubmit = () => {
         console.log('remove');
-        axios.put('/api/attendance', {showId: showInfo._id})
-        .then(res => {
-            console.log(res);
-            setAttendanceRemoveInstructions('Thank you!');
-            setTimeout(() => {
-                handleCloseModal('attendance-remove');
-                getDetails();
-            }, 900);
-        })
-        .catch(err => console.log(err));
+        axios.put('/api/attendance', { showId: showInfo._id })
+            .then(res => {
+                console.log(res);
+                setAttendanceRemoveInstructions('Thank you!');
+                setTimeout(() => {
+                    handleCloseModal('attendance-remove');
+                    getDetails();
+                }, 900);
+            })
+            .catch(err => console.log(err));
     }
 
     const handleCloseModal = (type) => {

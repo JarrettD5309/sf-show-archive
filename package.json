@@ -25,10 +25,12 @@
   "homepage": "https://github.com/JarrettD5309/sf-show-archive#readme",
   "dependencies": {
     "bcrypt": "^5.0.0",
+    "browser-image-compression": "^1.0.14",
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
     "express-session": "^1.17.1",
     "if-env": "^1.0.4",
+    "mime-types": "^2.1.27",
     "mongoose": "^5.10.9",
     "multer": "^1.4.2",
     "nodemailer": "^6.4.17",

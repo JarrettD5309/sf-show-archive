@@ -5,16 +5,7 @@ const path = require('path');
 // const e = require('express');
 const nodemailer = require('nodemailer');
 const crypto = require('crypto');
-
-// const transport = nodemailer.createTransport({
-//     host: process.env.EMAIL_HOST,
-//     port: process.env.EMAIL_PORT,
-//     secure: true,
-//     auth: {
-//         user: process.env.EMAIL_USER,
-//         pass: process.env.EMAIL_PASS
-//     }
-// });
+const mime = require('mime-types');
 
 module.exports = app => {
     // GETS ALL STATES AND COUNTRIES FOR DROPDOWN
@@ -380,7 +371,7 @@ module.exports = app => {
     const storage = multer.diskStorage({
         destination: './client/public/uploads/',
         filename: (req, file, cb) => {
-            cb(null, req.body.date + '-' + Date.now() + path.extname(file.originalname));
+            cb(null, req.body.date + '-' + Date.now() + '.' + mime.extension(file.mimetype));
         }
     });
 
@@ -389,7 +380,6 @@ module.exports = app => {
         storage: storage,
         limits: { fileSize: 2000000 },
         fileFilter: (req, file, cb) => {
-            // console.log('body' + JSON.stringify(req.body));
             checkFileType(req, file, cb);
         }
     }).single('flyerImg');
@@ -398,12 +388,14 @@ module.exports = app => {
     const checkFileType = (req, file, cb) => {
         // Allowed ext
         const filetypes = /jpeg|jpg|png/;
+
         // Check ext
         const extname = filetypes.test(path.extname(file.originalname).toLowerCase());
+        
         // Check mime type
         const mimetype = filetypes.test(file.mimetype);
 
-        if (mimetype && extname) {
+        if (mimetype ) {
             if (req.body.showId) {
                 db.ShowDetails.find({ showId: req.body.showId })
                     .then(results => {
