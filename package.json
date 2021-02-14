@@ -26,6 +26,7 @@
   "dependencies": {
     "bcrypt": "^5.0.0",
     "browser-image-compression": "^1.0.14",
+    "connect-mongo": "^3.2.0",
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
     "express-session": "^1.17.1",

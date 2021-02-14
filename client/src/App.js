@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
+import AdminPanel from './pages/AdminPanel';
 import Backdrop from './components/SlideDrawer/Backdrop';
 import CreateAccount from './pages/CreateAccount';
 import ForgotPassword from './pages/ForgotPassword';
@@ -79,6 +80,7 @@ const App = () => {
                     <Route exact path='/create-account' component={CreateAccount} />
 
                     <Route exact path='/profile' component={withAuth(() => <Profile userInfo={userInfo} getUserInfo={getUserInfo} />)} />
+                    <Route exact path='/admin-panel' component={AdminPanel} />
                     <Route exact path='/forgot-password' component={ForgotPassword} />
                     <Route exact path='/reset-password/:token/:email' component={ResetPassword} />
                     <Route path='/show/:id' component={() => <Show loggedIn={loggedIn} userInfo={userInfo} />} />
