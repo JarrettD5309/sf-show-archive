@@ -1,20 +1,7 @@
-.admin-show-details-div {
-    height: 250px;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-around;
+.admin-flyer {
+    max-width: 500px;
+    max-height: 500px;
 }
-
-.admin-show-info-div {
-    height: 250px;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-around;
-}
-
-.admin-user-info-div {
-    height: 250px;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-around;
+.admin-margin-bottom {
+    margin-bottom: 10px;
 }
