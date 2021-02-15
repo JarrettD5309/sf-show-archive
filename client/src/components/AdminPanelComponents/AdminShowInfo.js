@@ -6,6 +6,7 @@ const AdminShowInfo = (props) => {
         searchShowNum,
         setSearchShowNum,
         handleShowSearch,
+        handleOpenModal
     } = props;
 
     const {
@@ -39,6 +40,7 @@ const AdminShowInfo = (props) => {
             <p className='admin-margin-bottom'><span className='slight-bold'>address:</span> {address}</p>
             <p className='admin-margin-bottom'><span className='slight-bold'>city:</span> {city}</p>
             <p className='admin-margin-bottom'><span className='slight-bold'>stateCountry:</span> {stateCountry}</p>
+            <button type='button' onClick={()=>handleOpenModal('showInfo')}>Edit</button>
         </div>
     )
 };

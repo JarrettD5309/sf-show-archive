@@ -33,9 +33,9 @@ const AdminShowDetails = (props) => {
                 {attendance.map(user => `${user.username} (${user._id}), `)}
             </p>
             <p className='slight-bold admin-margin-bottom'>audio: </p>
-            {audio.map(audio =>
+            {audio.map((audio, i) =>
             (
-                <div>
+                <div key={i}>
                     <a href={audio.link} target='_blank' rel="noopener noreferrer">{audio.link}</a><br />
                     <p>{`${audio.contributed.username} (${audio.contributed._id})`}</p>
                     <br />
@@ -44,9 +44,9 @@ const AdminShowDetails = (props) => {
             )
             )}
             <p className='slight-bold admin-margin-bottom'>review: </p>
-            {review.map(review =>
+            {review.map((review, i) =>
             (
-                <div>
+                <div key={i}>
                     <a href={review.link} target='_blank' rel="noopener noreferrer">{review.link}</a><br />
                     <p>{`${review.contributed.username} (${review.contributed._id})`}</p>
                     <br />
@@ -55,9 +55,9 @@ const AdminShowDetails = (props) => {
             )
             )}
             <p className='slight-bold admin-margin-bottom'>video: </p>
-            {video.map(video =>
+            {video.map((video, i) =>
             (
-                <div>
+                <div key={i}>
                     <a href={video.link} target='_blank' rel="noopener noreferrer">{video.link}</a><br />
                     <p>{`${video.contributed.username} (${video.contributed._id})`}</p>
                     <br />
@@ -70,7 +70,7 @@ const AdminShowDetails = (props) => {
             {setList.contributed &&
                 <div>
                     {setList.songs.map((song, i) =>
-                        <p>{i + 1}. {song}</p>
+                        <p key={i}>{i + 1}. {song}</p>
                     )}
                     <p>{setList.contributed.username} ({setList.contributed._id})</p><br />
                 </div>
