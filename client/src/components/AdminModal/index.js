@@ -22,7 +22,26 @@ const AdminModal = (props) => {
         checkScreamales,
         setCheckScreamales,
         updateShowInstructions,
-        handleUpdateShow
+        handleUpdateShow,
+        addShowInstructions,
+        addShowNum,
+        setAddShowNum,
+        addShowDate,
+        setAddShowDate,
+        addShowVenue,
+        setAddShowVenue,
+        addShowAddress,
+        setAddShowAddress,
+        addShowCity,
+        setAddShowCity,
+        addShowStateCountry,
+        setAddShowStateCountry,
+        handleAddShow,
+        handleInitialDelete,
+        handleDeleteShow,
+        checkDeleteShow,
+        setCheckDeleteShow,
+        finalDelete
     } = props;
     return (
         <div id='myModal' className='modal'>
@@ -91,13 +110,25 @@ const AdminModal = (props) => {
                                 /><br /><br />
                             </div>
                         }
+                        {finalDelete &&
+                            <div>
+                                <label htmlFor='admin-check-delete-this-show'>Type in delete this show</label><br />
+                                <input
+                                    type='text'
+                                    id='admin-check-delete-this-show'
+                                    name='admin-check-delete-this-show'
+                                    value={checkDeleteShow}
+                                    onChange={event => setCheckDeleteShow(event.target.value)}
+                                /><br /><br />
+                            </div>
+                        }
                         <button
                             type='button'
                             onClick={() => handleCloseModal(type)}
                         >
                             Close
                         </button>
-                        {!finalSubmit &&
+                        {!finalSubmit && !finalDelete &&
                             <button
                                 type='button'
                                 onClick={handleInitialSubmit}
@@ -105,14 +136,109 @@ const AdminModal = (props) => {
                                 Submit
                             </button>
                         }
+                        {!finalDelete && !finalSubmit &&
+                            <button
+                                type='button'
+                                onClick={handleInitialDelete}
+                            >
+                                Delete
+                            </button>
+                        }
                         {finalSubmit &&
                             <button
                                 type='button'
                                 onClick={handleUpdateShow}
                             >
-                                Final
+                                Final Update
                             </button>
                         }
+                        {finalDelete &&
+                            <button
+                                type='button'
+                                onClick={handleDeleteShow}
+                            >
+                                Final Delete
+                            </button>
+                        }
+                    </div>
+                }
+
+                {type === 'addShow' &&
+                    <div>
+                        <h2>Add Show</h2><br />
+                        <p>{addShowInstructions}</p><br />
+                        <label htmlFor='admin-new-show-num'>ShowNum</label><br />
+                        <input
+                            type='text'
+                            id='admin-new-show-num'
+                            name='admin-new-show-num'
+                            value={addShowNum}
+                            onChange={event => setAddShowNum(event.target.value)}
+                        /><br /><br />
+                        <label htmlFor='admin-new-show-date'>Date (YYYY-MM-DD)</label><br />
+                        <input
+                            type='text'
+                            id='admin-new-show-date'
+                            name='admin-new-show-date'
+                            value={addShowDate}
+                            onChange={event => setAddShowDate(event.target.value)}
+                        /><br /><br />
+                        <label htmlFor='admin-new-show-venue'>Venue</label><br />
+                        <input
+                            type='text'
+                            id='admin-new-show-venue'
+                            name='admin-new-show-venue'
+                            value={addShowVenue}
+                            onChange={event => setAddShowVenue(event.target.value)}
+                        /><br /><br />
+                        <label htmlFor='admin-new-show-address'>Address</label><br />
+                        <input
+                            type='text'
+                            id='admin-new-show-address'
+                            name='admin-new-show-address'
+                            value={addShowAddress}
+                            onChange={event => setAddShowAddress(event.target.value)}
+                        /><br /><br />
+                        <label htmlFor='admin-new-show-city'>City</label><br />
+                        <input
+                            type='text'
+                            id='admin-new-show-city'
+                            name='admin-new-show-city'
+                            value={addShowCity}
+                            onChange={event => setAddShowCity(event.target.value)}
+                        /><br /><br />
+                        <label htmlFor='admin-new-show-state-country'>State/Country (2 uppercase letters)</label><br />
+                        <input
+                            type='text'
+                            id='admin-new-show-state-country'
+                            name='admin-new-show-state-country'
+                            value={addShowStateCountry}
+                            onChange={event => setAddShowStateCountry(event.target.value)}
+                        /><br /><br />
+                        {finalSubmit &&
+                            <div>
+                                <label htmlFor='admin-check-screamales'>Type in screamales</label><br />
+                                <input
+                                    type='text'
+                                    id='admin-check-screamales'
+                                    name='admin-check-screamales'
+                                    value={checkScreamales}
+                                    onChange={event => setCheckScreamales(event.target.value)}
+                                /><br /><br />
+                            </div>
+                        }
+                        <button
+                            type='button'
+                            onClick={() => handleCloseModal(type)}
+                        >
+                            Close
+                        </button>
+                        <button
+                            type='button'
+                            onClick={handleAddShow}
+                        >
+                            Submit
+                        </button>
                     </div>
                 }
             </div>

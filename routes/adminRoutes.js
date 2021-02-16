@@ -19,20 +19,107 @@ module.exports = app => {
             }
             db.Show.find(queryObj)
                 .then(result => {
-                    db.ShowDetails.findOne({ showId: result[0]._id})
-                    .populate('showId')
-                    .populate('flyer.contributed')
-                    .populate('setList.contributed')
-                    .populate('audio.contributed')
-                    .populate('video.contributed')
-                    .populate('review.contributed')
-                    .populate('attendance')
-                    .then(newResult => {
-                        res.json([newResult, result[0]]);
-                    })
-                    .catch(err => res.json(err));
+                    db.ShowDetails.findOne({ showId: result[0]._id })
+                        .populate('showId')
+                        .populate('flyer.contributed')
+                        .populate('setList.contributed')
+                        .populate('audio.contributed')
+                        .populate('video.contributed')
+                        .populate('review.contributed')
+                        .populate('attendance')
+                        .then(newResult => {
+                            res.json([newResult, result[0]]);
+                        })
+                        .catch(err => res.json(err));
                 })
                 .catch(err => res.json(err));
+        } else {
+            res.sendStatus(404);
+        }
+    });
+
+    app.put('/admin/shows', (req, res) => {
+        if (isAdmin) {
+            const _id = req.body._id;
+            const showNum = req.body.showNum;
+            const date = req.body.date;
+            const venue = req.body.venue;
+            const address = req.body.address;
+            const city = req.body.city;
+            const stateCountry = req.body.stateCountry;
+
+            const updateObj = {
+                showNum: showNum,
+                date: date,
+                venue: venue,
+                address: address,
+                city: city,
+                stateCountry: stateCountry
+            }
+
+            if (_id && showNum && date && city && stateCountry) {
+                db.Show.updateOne({ _id: _id },
+                    updateObj
+                )
+                    .then(result => res.json(result))
+                    .catch(err => res.json(err));
+            } else {
+                res.sendStatus(404);
+            }
+        } else {
+            res.sendStatus(404);
+        }
+    });
+
+    app.post('/admin/shows', (req, res) => {
+        if (isAdmin) {
+            const showNum = req.body.showNum;
+            const date = req.body.date;
+            const venue = req.body.venue;
+            const address = req.body.address;
+            const city = req.body.city;
+            const stateCountry = req.body.stateCountry;
+
+            const newShow = {
+                showNum: showNum,
+                date: date,
+                venue: venue,
+                address: address,
+                city: city,
+                stateCountry: stateCountry
+            };
+
+            if (showNum && date && city && stateCountry) {
+                db.Show.find({ showNum: showNum })
+                    .then(results => {
+                        if (results.length === 0) {
+                            db.Show.create(newShow)
+                                .then(result => res.json(result))
+                                .catch(err => res.json(err));
+                        } else {
+                            res.status(400).send('showNumExists');
+                        }
+                    })
+            } else {
+                res.sendStatus(404);
+            }
+        } else {
+            res.sendStatus(404);
+        }
+    });
+
+    app.delete('/admin/delete-show', (req, res) => {
+        if (isAdmin) {
+            const _id = req.query._id;
+            console.log(req.query._id);
+
+            db.Show.deleteOne({
+                _id: _id
+            })
+            .then(results=> {
+                res.json(results)
+            })
+            .catch(err=>console.log(err));
         } else {
             res.sendStatus(404);
         }
