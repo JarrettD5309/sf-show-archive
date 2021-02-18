@@ -41,7 +41,14 @@ const AdminModal = (props) => {
         handleDeleteShow,
         checkDeleteShow,
         setCheckDeleteShow,
-        finalDelete
+        finalDelete,
+        banUserInstructions,
+        userSearchUsername,
+        checkBanUser,
+        setCheckBanUser,
+        handleBanUser,
+        unbanUserInstructions,
+        handleUnbanUser
     } = props;
     return (
         <div id='myModal' className='modal'>
@@ -236,6 +243,56 @@ const AdminModal = (props) => {
                         <button
                             type='button'
                             onClick={handleAddShow}
+                        >
+                            Submit
+                        </button>
+                    </div>
+                }
+
+                {type === 'ban-user' &&
+                    <div>
+                        <h2>Ban User</h2><br />
+                        <p>{banUserInstructions}</p><br />
+                        <p className='slight-bold'>{userSearchUsername}</p><br />
+                        <div>
+                            <label htmlFor='admin-check-ban-user'>Type in ban this user</label><br />
+                            <input
+                                type='text'
+                                id='admin-check-ban-user'
+                                name='admin-check-ban-user'
+                                value={checkBanUser}
+                                onChange={event => setCheckBanUser(event.target.value)}
+                            /><br /><br />
+                        </div>
+                        <button
+                            type='button'
+                            onClick={() => handleCloseModal(type)}
+                        >
+                            Close
+                        </button>
+                        <button
+                            type='button'
+                            onClick={handleBanUser}
+                        >
+                            Submit
+                        </button>
+                    </div>
+                }
+
+                {type === 'unban-user' &&
+                    <div>
+                        <h2>Unban User</h2><br />
+                        <p>{unbanUserInstructions}</p><br />
+                        <p className='slight-bold'>{userSearchUsername}</p><br />
+                        <button
+                            type='button'
+                            onClick={() => handleCloseModal(type)}
+                        >
+                            Close
+                        </button>
+                        <button
+                            type='button'
+                            onClick={handleUnbanUser}
                         >
                             Submit
                         </button>

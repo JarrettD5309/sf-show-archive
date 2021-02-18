@@ -35,6 +35,12 @@ const AdminPanel = () => {
     const [addShowCity, setAddShowCity] = React.useState('');
     const [addShowStateCountry, setAddShowStateCountry] = React.useState('');
     const [checkAddShowEmpties, setCheckAddShowEmpties] = React.useState(false);
+    const [usernameSearch, setUsernameSearch] = React.useState('');
+    const [userSearchInfo, setUserSearchInfo] = React.useState();
+    const [banUserInstructions, setBanUserInstructions] = React.useState('Are you sure you want to ban this user?');
+    const [userSearchUsername, setUserSearchUsername] = React.useState('');
+    const [checkBanUser, setCheckBanUser] = React.useState('');
+    const [unbanUserInstructions, setUnbanUserInstructions] = React.useState('Are you sure you want to unban this user?');
 
     const handleShowSearch = () => {
         if (searchShowNum !== '') {
@@ -91,6 +97,10 @@ const AdminPanel = () => {
             setAddShowCity('');
             setAddShowStateCountry('');
             setCheckAddShowEmpties(false);
+        } else if(type === 'ban-user') {
+            setBanUserInstructions('Are you sure you want to ban this user?');
+        } else if (type=== 'unban-user') {
+            setUnbanUserInstructions('Are you sure you want to unban this user?')
         }
     };
 
@@ -114,7 +124,7 @@ const AdminPanel = () => {
         const deleteObj = {
             showNum: newShowNum
         };
-        if (checkDeleteShow!=='delete this show') {
+        if (checkDeleteShow !== 'delete this show') {
             setUpdateShowInstructions('That does not match');
         } else {
             console.log(deleteObj);
@@ -123,17 +133,17 @@ const AdminPanel = () => {
                     _id: newShowId
                 }
             })
-            .then(res=> {
-                console.log(res);
-                setUpdateShowInstructions('DELETED!');
+                .then(res => {
+                    console.log(res);
+                    setUpdateShowInstructions('DELETED!');
                     setTimeout(() => {
                         handleCloseModal('showInfo');
                         handleShowSearch();
-                    },1000);
-            })
-            .catch(err=>{
-                console.log(err);
-            });
+                    }, 1000);
+                })
+                .catch(err => {
+                    console.log(err);
+                });
         }
     };
 
@@ -157,7 +167,7 @@ const AdminPanel = () => {
                     setTimeout(() => {
                         handleCloseModal('showInfo');
                         handleShowSearch();
-                    },1000);
+                    }, 1000);
                 })
                 .catch(err => {
                     console.log(err);
@@ -183,7 +193,7 @@ const AdminPanel = () => {
                     setAddShowInstructions('SHOW ADDED!');
                     setTimeout(() => {
                         handleCloseModal('addShow');
-                    },1000);
+                    }, 1000);
                 })
                 .catch(err => {
                     console.log(err);
@@ -210,6 +220,64 @@ const AdminPanel = () => {
 
     };
 
+    const handleUserSearch = () => {
+        axios.get('/admin/user', {
+            params: {
+                username: usernameSearch
+            }
+        })
+            .then(res => {
+                console.log(res);
+                setUserSearchInfo(res.data);
+                setUserSearchUsername(res.data.username);
+            })
+            .catch(err => console.log(err));
+    };
+
+    const handleBanUser = () => {
+        if (checkBanUser !== 'ban this user') {
+            setBanUserInstructions('That does not match');
+        } else {
+            const updateUserObj = {
+                username: userSearchUsername,
+                banned: true
+            };
+            axios.put('/admin/user', updateUserObj)
+                .then(res => {
+                    console.log(res);
+                    setBanUserInstructions('BANNED!');
+                    setTimeout(() => {
+                        handleCloseModal('ban-user');
+                        handleUserSearch();
+                    }, 1000);
+                })
+                .catch(err => {
+                    console.log(err);
+                    setBanUserInstructions('Something went wrong');
+                });
+        }
+    };
+
+    const handleUnbanUser = () => {
+            const updateUserObj = {
+                username: userSearchUsername,
+                banned: false
+            };
+            axios.put('/admin/user', updateUserObj)
+                .then(res => {
+                    console.log(res);
+                    setUnbanUserInstructions('UNBANNED!');
+                    setTimeout(() => {
+                        handleCloseModal('unban-user');
+                        handleUserSearch();
+                    }, 1000);
+                })
+                .catch(err => {
+                    console.log(err);
+                    setUnbanUserInstructions('Something went wrong');
+                });
+    };
+
     return (
         <div className='admin-sub-root'>
             <h1>Admin</h1>
@@ -232,7 +300,13 @@ const AdminPanel = () => {
                 showDetails={showDetails}
             />
             <br />
-            <AdminUserInfo />
+            <AdminUserInfo 
+                handleUserSearch={handleUserSearch}
+                usernameSearch={usernameSearch}
+                setUsernameSearch={setUsernameSearch}
+                userSearchInfo={userSearchInfo}
+                handleOpenModal={handleOpenModal}
+            />
             {displayModal && <AdminModal
                 type={modalType}
                 handleCloseModal={handleCloseModal}
@@ -273,6 +347,13 @@ const AdminPanel = () => {
                 checkDeleteShow={checkDeleteShow}
                 setCheckDeleteShow={setCheckDeleteShow}
                 finalDelete={finalDelete}
+                banUserInstructions={banUserInstructions}
+                userSearchUsername={userSearchUsername}
+                checkBanUser={checkBanUser}
+                setCheckBanUser={setCheckBanUser}
+                handleBanUser={handleBanUser}
+                unbanUserInstructions={unbanUserInstructions}
+                handleUnbanUser={handleUnbanUser}
             />
             }
         </div>

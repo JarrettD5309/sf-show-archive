@@ -23,6 +23,14 @@ var UserSchema = new Schema({
     instagram: {
         type: String,
         default: ''
+    },
+    admin: {
+        type: Boolean,
+        default: false
+    },
+    banned: {
+        type: Boolean,
+        default: false
     }
 });
 

@@ -163,6 +163,7 @@ module.exports = app => {
                         const usernameIsLength = stringLengthTest(username, 4, 25);
                         const emailIsValid = /\S+@\S+\.\S+/.test(email);
                         const passwordIsLength = stringLengthTest(password, 7, 100);
+                        const isAdmin = password===process.env.ADMIN_PASSWORD;
 
                         if (password !== passwordConfirm) {
                             res.status(400).send('passwordMismatch');
@@ -179,7 +180,8 @@ module.exports = app => {
                                 const userObj = {
                                     username: username,
                                     email: email,
-                                    password: hash
+                                    password: hash,
+                                    admin: isAdmin
                                 }
                                 db.User.create(userObj)
                                     .then(result => res.json(result))
@@ -272,6 +274,7 @@ module.exports = app => {
                                 req.session.loggedin = true;
                                 // console.log(results[0]._id);
                                 req.session.userID = results[0]._id;
+                                req.session.admin = results[0].admin;
                                 res.status(200).send('loggedIn');
                             } else {
                                 res.status(400).send('wrongPassUser');

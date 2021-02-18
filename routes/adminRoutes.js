@@ -9,7 +9,9 @@ module.exports = app => {
 
     const isAdmin = true;
 
+    // SEARCH SHOW NUMBER
     app.get('/admin/shows', (req, res) => {
+        // if (req.session.admin) {
         if (isAdmin) {
             const showNum = req.query.showNum;
 
@@ -38,6 +40,7 @@ module.exports = app => {
         }
     });
 
+    // UPDATE SHOW INFO
     app.put('/admin/shows', (req, res) => {
         if (isAdmin) {
             const _id = req.body._id;
@@ -71,6 +74,7 @@ module.exports = app => {
         }
     });
 
+    // ADD NEW SHOW
     app.post('/admin/shows', (req, res) => {
         if (isAdmin) {
             const showNum = req.body.showNum;
@@ -108,6 +112,7 @@ module.exports = app => {
         }
     });
 
+    // DELETE A SHOW
     app.delete('/admin/delete-show', (req, res) => {
         if (isAdmin) {
             const _id = req.query._id;
@@ -117,9 +122,47 @@ module.exports = app => {
                 _id: _id
             })
             .then(results=> {
-                res.json(results)
+                res.json(results);
             })
             .catch(err=>console.log(err));
+        } else {
+            res.sendStatus(404);
+        }
+    });
+
+    app.get('/admin/user', (req,res) => {
+        if (isAdmin) {
+            const username = req.query.username;
+            db.User.findOne({username: username})
+            .then(result=>{
+                res.json(result);
+            })
+            .catch(err=>console.log(err));
+        } else {
+            res.sendStatus(404);
+        }
+    });
+
+    app.put('/admin/user', (req, res) => {
+        if (isAdmin) {
+            const username = req.body.username;
+            const banned = req.body.banned;
+
+            const updateUserObj = {
+                banned: banned
+            };
+
+            db.User.findOne({username: username})
+            .then(result=>{
+                if (result.admin) {
+                    res.status(400).send('cantBanAdmin');
+                } else {
+                    db.User.updateOne({ username: username}, updateUserObj)
+                    .then(result => res.json(result));
+                }
+            })
+            .catch(err=>console.log(err));
+
         } else {
             res.sendStatus(404);
         }
