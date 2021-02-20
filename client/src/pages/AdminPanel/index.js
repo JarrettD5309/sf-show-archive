@@ -299,6 +299,23 @@ const AdminPanel = () => {
             });
     };
 
+    const handleRemoveDetail = (detailType, detailId, showId) => {
+        const updateObj = {
+            showId: showId,
+            detailId: detailId,
+            detailType: detailType
+        };
+
+        console.log(updateObj);
+        
+        axios.put('/admin/delete-detail', updateObj)
+        .then(res=>{
+            console.log(res);
+            handleShowSearch();
+        })
+        .catch(err=>console.log(err));
+    };
+
     return (
         <div className='admin-sub-root'>
             <h1>Admin</h1>
@@ -320,6 +337,7 @@ const AdminPanel = () => {
             <AdminShowDetails
                 showDetails={showDetails}
                 handleOpenModal={handleOpenModal}
+                handleRemoveDetail={handleRemoveDetail}
             />
             <br />
             <AdminUserInfo

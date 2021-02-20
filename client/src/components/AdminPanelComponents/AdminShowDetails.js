@@ -24,7 +24,8 @@ const AdminShowDetails = (props) => {
     }
 
     const {
-        handleOpenModal
+        handleOpenModal,
+        handleRemoveDetail
     } = props;
 
     return (
@@ -43,6 +44,7 @@ const AdminShowDetails = (props) => {
                 <div key={i}>
                     <a href={audio.link} target='_blank' rel="noopener noreferrer">{audio.link}</a><br />
                     <p>{`${audio.contributed.username} (${audio.contributed._id})`}</p>
+                    <button type='button' onClick={()=>handleRemoveDetail('audio',audio._id,showID)}>Delete</button>
                     <br />
                     <br />
                 </div>
@@ -54,6 +56,7 @@ const AdminShowDetails = (props) => {
                 <div key={i}>
                     <a href={review.link} target='_blank' rel="noopener noreferrer">{review.link}</a><br />
                     <p>{`${review.contributed.username} (${review.contributed._id})`}</p>
+                    <button type='button' onClick={()=>handleRemoveDetail('review',review._id,showID)}>Delete</button>
                     <br />
                     <br />
                 </div>
@@ -65,6 +68,7 @@ const AdminShowDetails = (props) => {
                 <div key={i}>
                     <a href={video.link} target='_blank' rel="noopener noreferrer">{video.link}</a><br />
                     <p>{`${video.contributed.username} (${video.contributed._id})`}</p>
+                    <button type='button' onClick={()=>handleRemoveDetail('video',video._id,showID)}>Delete</button>
                     <br />
                     <br />
                 </div>

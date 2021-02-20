@@ -196,4 +196,47 @@ module.exports = app => {
         }
     });
 
+    // REMOVE SHOW DETAIL
+    app.put('/admin/delete-detail', (req, res) => {
+        if (isAdmin) {
+
+            if (req.body.detailId && req.body.showId && req.body.detailType) {
+                const detailId = req.body.detailId;
+                const showId = req.body.showId;
+                const detailType = req.body.detailType;
+
+                const updateObj = {};
+
+                if (detailType === 'audio') {
+                    updateObj.$pull = {
+                        audio: {
+                            _id: detailId
+                        }
+                    };
+                } else if (detailType === 'video') {
+                    updateObj.$pull = {
+                        video: {
+                            _id: detailId
+                        }
+                    };
+                } else if (detailType === 'review') {
+                    updateObj.$pull = {
+                        review: {
+                            _id: detailId
+                        }
+                    };
+                }
+
+                db.ShowDetails.updateOne({ showId: showId }, updateObj)
+                    .then(result => res.json(result))
+                    .catch(err => res.json(err));
+            } else {
+                res.sendStatus(400);
+            }
+
+        } else {
+            res.sendStatus(404);
+        }
+    });
+
 };
