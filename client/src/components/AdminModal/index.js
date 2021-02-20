@@ -51,7 +51,9 @@ const AdminModal = (props) => {
         handleUnbanUser,
         attendanceInstructions,
         showDetails,
-        handleRemoveUserAttendance
+        handleRemoveUserAttendance,
+        setlistInstructions,
+        handleSetlistSubmit
     } = props;
     return (
         <div id='myModal' className='modal'>
@@ -306,18 +308,58 @@ const AdminModal = (props) => {
                     <div>
                         <h2>Attendance</h2><br />
                         <p>{attendanceInstructions}</p><br />
-                        {showDetails.attendance.map(user => (
-                            <div key={user._id}>
-                                <p>{user.username} ({user._id}) </p>
-                                <button type='button' className='admin-margin-bottom' onClick={()=>handleRemoveUserAttendance(user._id,showDetails.showId._id)}>Remove</button>
-                            </div>
-                        ))}
+                        {showDetails ?
+                            showDetails.attendance.map(user => (
+                                <div key={user._id}>
+                                    <p>{user.username} ({user._id}) </p>
+                                    <button type='button' className='admin-margin-bottom' onClick={() => handleRemoveUserAttendance(user._id, showDetails.showId._id)}>Remove</button>
+                                </div>
+                            ))
+                            :
+                            <p>No details</p>
+                        }
                         <br />
                         <button
                             type='button'
                             onClick={() => handleCloseModal(type)}
                         >
                             Close
+                        </button>
+                    </div>
+                }
+
+                {type === 'setlist' &&
+                    <div>
+                        <h2>Setlist</h2><br />
+                        <p>{setlistInstructions}</p><br />
+                        {showDetails ?
+                            showDetails.setList.songs.map((song, i) => (
+                                <div key={i}>
+                                    <label htmlFor='song' className='modal-setlist-label'>{i + 1}. </label>
+                                    <input
+                                        type='text'
+                                        id={'admin-song' + i}
+                                        className='admin-modal-setlist-input'
+                                        name={'admin-song' + i}
+                                        defaultValue={song}
+                                    />
+                                </div>
+                            ))
+                            :
+                            <p>No details</p>
+                        }
+                        <br />
+                        <button
+                            type='button'
+                            onClick={() => handleCloseModal(type)}
+                        >
+                            Close
+                        </button>
+                        <button
+                            type='button'
+                            onClick={() => handleSetlistSubmit(showDetails.showId._id)}
+                        >
+                            Submit
                         </button>
                     </div>
                 }

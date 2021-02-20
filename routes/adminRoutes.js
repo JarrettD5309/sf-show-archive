@@ -239,4 +239,27 @@ module.exports = app => {
         }
     });
 
+    // UPDATE SETLIST
+    app.put('/admin/setlist', (req, res) => {
+        if (isAdmin) {
+
+            if (req.body.showId && req.body.setlist) {
+                const showId = req.body.showId;
+                const setlist = req.body.setlist;
+                db.ShowDetails.updateOne({ showId: showId }, {
+                    $set: {
+                        'setList.songs': setlist
+                    }
+                })
+                    .then(result => res.json(result))
+                    .catch(err => res.json(err));
+            } else {
+                res.sendStatus(400);
+            }
+
+        } else {
+            res.sendStatus(404);
+        }
+    });
+
 };

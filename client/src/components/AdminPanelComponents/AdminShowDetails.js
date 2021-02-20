@@ -84,6 +84,7 @@ const AdminShowDetails = (props) => {
                     <p>{setList.contributed.username} ({setList.contributed._id})</p><br />
                 </div>
             }
+            <button type='button' className='admin-margin-bottom' onClick={()=>handleOpenModal('setlist')}>Edit Setlist</button>
             <p className='slight-bold admin-margin-bottom'>flyer: </p>
             {flyer.map(eachFlyer => {
                 const imgName = eachFlyer.flyerImg;

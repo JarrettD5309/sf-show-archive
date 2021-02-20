@@ -42,6 +42,7 @@ const AdminPanel = () => {
     const [checkBanUser, setCheckBanUser] = React.useState('');
     const [unbanUserInstructions, setUnbanUserInstructions] = React.useState('Are you sure you want to unban this user?');
     const [attendanceInstructions, setAttendanceInstructions] = React.useState('Remove a user from attendance history');
+    const [setlistInstructions, setSetListInstructions] = React.useState('Edit setlist');
 
     const handleShowSearch = () => {
         if (searchShowNum !== '') {
@@ -307,13 +308,38 @@ const AdminPanel = () => {
         };
 
         console.log(updateObj);
-        
+
         axios.put('/admin/delete-detail', updateObj)
-        .then(res=>{
-            console.log(res);
-            handleShowSearch();
-        })
-        .catch(err=>console.log(err));
+            .then(res => {
+                console.log(res);
+                handleShowSearch();
+            })
+            .catch(err => console.log(err));
+    };
+
+    const handleSetlistSubmit = (showId) => {
+        let newSetlist = [];
+        const inputArr = document.getElementsByClassName('admin-modal-setlist-input');
+
+        for (let i = 0; i < inputArr.length; i++) {
+            const currentInput = document.getElementById('admin-song' + i)
+            newSetlist.push(currentInput.value);
+        }
+
+        const setlistData = {
+            showId: showId,
+            setlist: newSetlist
+        };
+
+        axios.put('/admin/setlist', setlistData)
+            .then(res => {
+                console.log(res);
+                setSetListInstructions('Saved');
+                handleShowSearch();
+                setTimeout(() => {
+                    handleCloseModal('setlist')
+                }, 1000)
+            })
     };
 
     return (
@@ -397,6 +423,8 @@ const AdminPanel = () => {
                 attendanceInstructions={attendanceInstructions}
                 showDetails={showDetails}
                 handleRemoveUserAttendance={handleRemoveUserAttendance}
+                setlistInstructions={setlistInstructions}
+                handleSetlistSubmit={handleSetlistSubmit}
             />
             }
         </div>
