@@ -159,35 +159,42 @@ module.exports = app => {
             db.User.find({ username: username })
                 .then(results => {
                     if (results.length === 0) {
-                        const usernameIsValid = /^[a-zA-Z0-9]+$/.test(username);
-                        const usernameIsLength = stringLengthTest(username, 4, 25);
-                        const emailIsValid = /\S+@\S+\.\S+/.test(email);
-                        const passwordIsLength = stringLengthTest(password, 7, 100);
-                        const isAdmin = password===process.env.ADMIN_PASSWORD;
-
-                        if (password !== passwordConfirm) {
-                            res.status(400).send('passwordMismatch');
-                        } else if (!usernameIsValid) {
-                            res.status(400).send('usernameLettersNumbers');
-                        } else if (!usernameIsLength) {
-                            res.status(400).send('usernameLength');
-                        } else if (!emailIsValid) {
-                            res.status(400).send('emailNotValid');
-                        } else if (!passwordIsLength) {
-                            res.status(400).send('passwordLength');
-                        } else {
-                            bcrypt.hash(password, 10, (err, hash) => {
-                                const userObj = {
-                                    username: username,
-                                    email: email,
-                                    password: hash,
-                                    admin: isAdmin
+                        db.User.find({ email: email})
+                        .then(results2 => {
+                            if (results2.length === 0) {
+                                const usernameIsValid = /^[a-zA-Z0-9]+$/.test(username);
+                                const usernameIsLength = stringLengthTest(username, 4, 25);
+                                const emailIsValid = /\S+@\S+\.\S+/.test(email);
+                                const passwordIsLength = stringLengthTest(password, 7, 100);
+                                const isAdmin = password===process.env.ADMIN_PASSWORD;
+        
+                                if (password !== passwordConfirm) {
+                                    res.status(400).send('passwordMismatch');
+                                } else if (!usernameIsValid) {
+                                    res.status(400).send('usernameLettersNumbers');
+                                } else if (!usernameIsLength) {
+                                    res.status(400).send('usernameLength');
+                                } else if (!emailIsValid) {
+                                    res.status(400).send('emailNotValid');
+                                } else if (!passwordIsLength) {
+                                    res.status(400).send('passwordLength');
+                                } else {
+                                    bcrypt.hash(password, 10, (err, hash) => {
+                                        const userObj = {
+                                            username: username,
+                                            email: email,
+                                            password: hash,
+                                            admin: isAdmin
+                                        }
+                                        db.User.create(userObj)
+                                            .then(result => res.json(result))
+                                            .catch(err => res.json(err));
+                                    });
                                 }
-                                db.User.create(userObj)
-                                    .then(result => res.json(result))
-                                    .catch(err => res.json(err));
-                            })
-                        }
+                            } else {
+                                res.status(400).send('emailExists'); 
+                            }
+                        });
 
                     } else {
                         res.status(400).send('userExists');
@@ -266,6 +273,8 @@ module.exports = app => {
                 .then(results => {
                     if (results.length === 0) {
                         res.status(400).send('wrongPassUser');
+                    } else if (results[0].banned){
+                        res.status(400).send('bannedUser');
                     } else {
                         // console.log(results[0].password);
                         const hash = results[0].password;

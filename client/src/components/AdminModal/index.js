@@ -48,7 +48,10 @@ const AdminModal = (props) => {
         setCheckBanUser,
         handleBanUser,
         unbanUserInstructions,
-        handleUnbanUser
+        handleUnbanUser,
+        attendanceInstructions,
+        showDetails,
+        handleRemoveUserAttendance
     } = props;
     return (
         <div id='myModal' className='modal'>
@@ -295,6 +298,26 @@ const AdminModal = (props) => {
                             onClick={handleUnbanUser}
                         >
                             Submit
+                        </button>
+                    </div>
+                }
+
+                {type === 'attendance' &&
+                    <div>
+                        <h2>Attendance</h2><br />
+                        <p>{attendanceInstructions}</p><br />
+                        {showDetails.attendance.map(user => (
+                            <div key={user._id}>
+                                <p>{user.username} ({user._id}) </p>
+                                <button type='button' className='admin-margin-bottom' onClick={()=>handleRemoveUserAttendance(user._id,showDetails.showId._id)}>Remove</button>
+                            </div>
+                        ))}
+                        <br />
+                        <button
+                            type='button'
+                            onClick={() => handleCloseModal(type)}
+                        >
+                            Close
                         </button>
                     </div>
                 }

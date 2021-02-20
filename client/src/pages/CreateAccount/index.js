@@ -44,6 +44,8 @@ const CreateAccount = () => {
                     setCreateInstructions('Password must be between 7 and 100 characters');
                 } else if (err.response.data==='userExists') {
                     setCreateInstructions('Username is taken');
+                } else if (err.response.data==='emailExists') {
+                    setCreateInstructions('Email has already been used');
                 }
             });
     };

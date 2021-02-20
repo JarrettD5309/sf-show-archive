@@ -41,6 +41,7 @@ const AdminPanel = () => {
     const [userSearchUsername, setUserSearchUsername] = React.useState('');
     const [checkBanUser, setCheckBanUser] = React.useState('');
     const [unbanUserInstructions, setUnbanUserInstructions] = React.useState('Are you sure you want to unban this user?');
+    const [attendanceInstructions, setAttendanceInstructions] = React.useState('Remove a user from attendance history');
 
     const handleShowSearch = () => {
         if (searchShowNum !== '') {
@@ -97,10 +98,13 @@ const AdminPanel = () => {
             setAddShowCity('');
             setAddShowStateCountry('');
             setCheckAddShowEmpties(false);
-        } else if(type === 'ban-user') {
+        } else if (type === 'ban-user') {
             setBanUserInstructions('Are you sure you want to ban this user?');
-        } else if (type=== 'unban-user') {
-            setUnbanUserInstructions('Are you sure you want to unban this user?')
+            setCheckBanUser('');
+        } else if (type === 'unban-user') {
+            setUnbanUserInstructions('Are you sure you want to unban this user?');
+        } else if (type === 'attendance') {
+            setAttendanceInstructions('Remove a user from attendance history');
         }
     };
 
@@ -259,23 +263,40 @@ const AdminPanel = () => {
     };
 
     const handleUnbanUser = () => {
-            const updateUserObj = {
-                username: userSearchUsername,
-                banned: false
-            };
-            axios.put('/admin/user', updateUserObj)
-                .then(res => {
-                    console.log(res);
-                    setUnbanUserInstructions('UNBANNED!');
-                    setTimeout(() => {
-                        handleCloseModal('unban-user');
-                        handleUserSearch();
-                    }, 1000);
-                })
-                .catch(err => {
-                    console.log(err);
-                    setUnbanUserInstructions('Something went wrong');
-                });
+        const updateUserObj = {
+            username: userSearchUsername,
+            banned: false
+        };
+        axios.put('/admin/user', updateUserObj)
+            .then(res => {
+                console.log(res);
+                setUnbanUserInstructions('UNBANNED!');
+                setTimeout(() => {
+                    handleCloseModal('unban-user');
+                    handleUserSearch();
+                }, 1000);
+            })
+            .catch(err => {
+                console.log(err);
+                setUnbanUserInstructions('Something went wrong');
+            });
+    };
+
+    const handleRemoveUserAttendance = (userId, showId) => {
+        const updateObj = {
+            userId: userId,
+            showId: showId
+        };
+
+        axios.put('/admin/delete-attendance', updateObj)
+            .then(res => {
+                console.log(res);
+                setAttendanceInstructions('Removed!');
+                handleShowSearch();
+            })
+            .catch(err => {
+                console.log(err);
+            });
     };
 
     return (
@@ -298,9 +319,10 @@ const AdminPanel = () => {
             <br />
             <AdminShowDetails
                 showDetails={showDetails}
+                handleOpenModal={handleOpenModal}
             />
             <br />
-            <AdminUserInfo 
+            <AdminUserInfo
                 handleUserSearch={handleUserSearch}
                 usernameSearch={usernameSearch}
                 setUsernameSearch={setUsernameSearch}
@@ -354,6 +376,9 @@ const AdminPanel = () => {
                 handleBanUser={handleBanUser}
                 unbanUserInstructions={unbanUserInstructions}
                 handleUnbanUser={handleUnbanUser}
+                attendanceInstructions={attendanceInstructions}
+                showDetails={showDetails}
+                handleRemoveUserAttendance={handleRemoveUserAttendance}
             />
             }
         </div>

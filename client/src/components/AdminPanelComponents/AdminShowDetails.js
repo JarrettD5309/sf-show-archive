@@ -23,6 +23,10 @@ const AdminShowDetails = (props) => {
         flyer = props.showDetails.flyer
     }
 
+    const {
+        handleOpenModal
+    } = props;
+
     return (
         <div className='admin-show-details-div'>
             <h2 className='admin-margin-bottom'>Show Details</h2>
@@ -32,6 +36,7 @@ const AdminShowDetails = (props) => {
             <p className='admin-margin-bottom'><span className='slight-bold'>attendance: </span>
                 {attendance.map(user => `${user.username} (${user._id}), `)}
             </p>
+            <button type='button' className='admin-margin-bottom' onClick={()=>handleOpenModal('attendance')}>Edit Attendance</button>
             <p className='slight-bold admin-margin-bottom'>audio: </p>
             {audio.map((audio, i) =>
             (

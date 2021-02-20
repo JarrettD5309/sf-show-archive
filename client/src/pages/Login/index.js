@@ -29,6 +29,8 @@ const Login = (props) => {
                 console.log(err);
                 if (err.response.data==='wrongPassUser') {
                     setLoginInstructions('Incorrect username or password');
+                } else if (err.response.data==='bannedUser') {
+                    setLoginInstructions('User is banned');
                 }
             });
     };

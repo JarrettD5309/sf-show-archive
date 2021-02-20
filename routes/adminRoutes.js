@@ -121,28 +121,30 @@ module.exports = app => {
             db.Show.deleteOne({
                 _id: _id
             })
-            .then(results=> {
-                res.json(results);
-            })
-            .catch(err=>console.log(err));
+                .then(results => {
+                    res.json(results);
+                })
+                .catch(err => console.log(err));
         } else {
             res.sendStatus(404);
         }
     });
 
-    app.get('/admin/user', (req,res) => {
+    // GET USER INFO
+    app.get('/admin/user', (req, res) => {
         if (isAdmin) {
             const username = req.query.username;
-            db.User.findOne({username: username})
-            .then(result=>{
-                res.json(result);
-            })
-            .catch(err=>console.log(err));
+            db.User.findOne({ username: username })
+                .then(result => {
+                    res.json(result);
+                })
+                .catch(err => console.log(err));
         } else {
             res.sendStatus(404);
         }
     });
 
+    // BAN AND UNBAN USER
     app.put('/admin/user', (req, res) => {
         if (isAdmin) {
             const username = req.body.username;
@@ -152,16 +154,42 @@ module.exports = app => {
                 banned: banned
             };
 
-            db.User.findOne({username: username})
-            .then(result=>{
-                if (result.admin) {
-                    res.status(400).send('cantBanAdmin');
-                } else {
-                    db.User.updateOne({ username: username}, updateUserObj)
-                    .then(result => res.json(result));
-                }
-            })
-            .catch(err=>console.log(err));
+            db.User.findOne({ username: username })
+                .then(result => {
+                    if (result.admin) {
+                        res.status(400).send('cantBanAdmin');
+                    } else {
+                        db.User.updateOne({ username: username }, updateUserObj)
+                            .then(result => res.json(result));
+                    }
+                })
+                .catch(err => console.log(err));
+
+        } else {
+            res.sendStatus(404);
+        }
+    });
+
+    // REMOVE RECORD OF USER ATTENDANCE AT SHOW
+    app.put('/admin/delete-attendance', (req, res) => {
+        if (isAdmin) {
+
+            if (req.body.userId && req.body.showId) {
+                const userId = req.body.userId;
+                const showId = req.body.showId;
+                // console.log(req.body.userId);
+
+                db.ShowDetails.updateOne({ showId: showId },
+                    {
+                        $pullAll: {
+                            attendance: [userId]
+                        }
+                    })
+                    .then(result => res.json(result))
+                    .catch(err => res.json(err));
+            } else {
+                res.sendStatus(400);
+            }
 
         } else {
             res.sendStatus(404);
