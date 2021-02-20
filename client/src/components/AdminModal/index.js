@@ -53,7 +53,11 @@ const AdminModal = (props) => {
         showDetails,
         handleRemoveUserAttendance,
         setlistInstructions,
-        handleSetlistSubmit
+        handleSetlistSubmit,
+        submissionInstructions,
+        submissionIndex,
+        submissions,
+        handleSubmission
     } = props;
     return (
         <div id='myModal' className='modal'>
@@ -360,6 +364,40 @@ const AdminModal = (props) => {
                             onClick={() => handleSetlistSubmit(showDetails.showId._id)}
                         >
                             Submit
+                        </button>
+                    </div>
+                }
+
+                {type === 'submission' &&
+                    <div>
+                        <h2>New Submission</h2><br />
+                        <p>{submissionInstructions}</p><br />
+                        <p className='admin-margin-bottom'><span className='slight-bold'>Date:</span> <a href={`/show/${submissions[submissionIndex].showId.showNum}`} target='_blank' rel="noopener noreferrer">{submissions[submissionIndex].showId.date}</a></p>
+                        <p className='slight-bold admin-margin-bottom'>setList: </p>
+                            <div>
+                                {submissions[submissionIndex].setList.songs.map((song, i) =>
+                                    <p key={i}>{i + 1}. {song}</p>
+                                )}
+                                <p>{submissions[submissionIndex].setList.contributed.username} ({submissions[submissionIndex].setList.contributed._id})</p><br />
+                            </div>
+                        <br />
+                        <button
+                            type='button'
+                            onClick={() => handleCloseModal(type)}
+                        >
+                            Close
+                        </button>
+                        <button
+                            type='button'
+                            onClick={() => handleSubmission('reject',submissions[submissionIndex]._id)}
+                        >
+                            Reject
+                        </button>
+                        <button
+                            type='button'
+                            onClick={() => handleSubmission('approve',submissions[submissionIndex]._id)}
+                        >
+                            Approve
                         </button>
                     </div>
                 }

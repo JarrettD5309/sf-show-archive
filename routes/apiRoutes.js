@@ -6,6 +6,7 @@ const path = require('path');
 const nodemailer = require('nodemailer');
 const crypto = require('crypto');
 const mime = require('mime-types');
+const e = require('express');
 
 module.exports = app => {
     // GETS ALL STATES AND COUNTRIES FOR DROPDOWN
@@ -483,18 +484,34 @@ module.exports = app => {
                         songs: req.body.setlist,
                         contributed: req.session.userID
                     }
+                };
+                if (req.session.admin) {
+                    db.ShowDetails.findOneAndUpdate(
+                        { showId: req.body.showId },
+                        setlistObj,
+                        {
+                            new: true,
+                            upsert: true,
+                            setDefaultsOnInsert: true
+                        }
+                    )
+                        .then(result => res.json(result))
+                        .catch(err => res.json(err));
+                } else {
+                    const submittedOn = new Date();
+                    setlistObj.submittedOn = submittedOn;
+                    db.ApproveDetails.findOneAndUpdate(
+                        { showId: req.body.showId },
+                        setlistObj,
+                        {
+                            new: true,
+                            upsert: true,
+                            setDefaultsOnInsert: true
+                        }
+                    )
+                        .then(result => res.json(result))
+                        .catch(err => res.json(err));
                 }
-                db.ShowDetails.findOneAndUpdate(
-                    { showId: req.body.showId },
-                    setlistObj,
-                    {
-                        new: true,
-                        upsert: true,
-                        setDefaultsOnInsert: true
-                    }
-                )
-                    .then(result => res.json(result))
-                    .catch(err => res.json(err));
             } else {
                 res.status(400).json({
                     "message": "Error: Form not valid"

@@ -237,7 +237,7 @@ module.exports = app => {
 
                 db.ShowDetails.updateOne({ showId: showId }, updateObj)
                     .then(result => {
-                        if (detailType==='flyer') {
+                        if (detailType === 'flyer') {
                             const filePath = './client/public/uploads/' + imgName;
                             fs.unlink(filePath, (err) => {
                                 if (err) throw err;
@@ -274,6 +274,75 @@ module.exports = app => {
                 res.sendStatus(400);
             }
 
+        } else {
+            res.sendStatus(404);
+        }
+    });
+
+    // GET ALL SUBMISSIONS
+    app.get('/admin/submissions', (req, res) => {
+        if (isAdmin) {
+            db.ApproveDetails.find()
+                .populate('showId')
+                .populate('setList.contributed')
+                .sort('submittedOn')
+                .then(result => {
+                    res.json(result);
+                })
+                .catch(err => res.json(err));
+        } else {
+            res.sendStatus(404);
+        }
+    });
+
+    // DELETE A SUBMISSION WHEN REJECETED
+    app.delete('/admin/submissions', (req, res) => {
+        if (isAdmin) {
+            const _id = req.query._id;
+
+            db.ApproveDetails.deleteOne({
+                _id: _id
+            })
+                .then(results => {
+                    res.json(results);
+                })
+                .catch(err => console.log(err));
+        } else {
+            res.sendStatus(404);
+        }
+    });
+
+    // APPROVE SUBMISSION. ADD TO SHOWDETAILS AND DELETE SUBMISSION
+    app.put('/admin/submissions', (req, res) => {
+        if (isAdmin) {
+            const _id = req.body._id;
+            db.ApproveDetails.findOne({ _id: _id })
+                .then(results => {
+                    // console.log(results);
+                    const setlistObj = {
+                        setList: results.setList
+                    };
+
+                    db.ShowDetails.findOneAndUpdate(
+                        { showId: results.showId},
+                        setlistObj,
+                        {
+                            new: true,
+                            upsert: true,
+                            setDefaultsOnInsert: true
+                        }
+                    )
+                    .then(results2 => {
+                        db.ApproveDetails.deleteOne({ _id: _id })
+                        .then(results3 =>{
+                            res.json({
+                                resOne: results2,
+                                resTwo: results3
+                            });
+                        })
+                    })
+                })
+                .catch(err => res.json(err));
         } else {
             res.sendStatus(404);
         }

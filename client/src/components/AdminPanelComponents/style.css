@@ -1,3 +1,10 @@
+.admin-clickable {
+    cursor: pointer;
+}
+.admin-clickable:hover {
+    text-decoration: underline;
+    color: blue;
+}
 .admin-flyer {
     max-width: 500px;
     max-height: 500px;

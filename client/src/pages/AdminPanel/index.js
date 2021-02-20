@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import './style.css';
 import AdminAddShow from '../../components/AdminPanelComponents/AdminAddShow';
 import AdminShowDetails from '../../components/AdminPanelComponents/AdminShowDetails';
@@ -43,6 +43,27 @@ const AdminPanel = () => {
     const [unbanUserInstructions, setUnbanUserInstructions] = React.useState('Are you sure you want to unban this user?');
     const [attendanceInstructions, setAttendanceInstructions] = React.useState('Remove a user from attendance history');
     const [setlistInstructions, setSetListInstructions] = React.useState('Edit setlist');
+    const [submissions, setSubmissions] = React.useState([]);
+    const [submissionInstructions, setSubmissionInstructions] = React.useState('Approve this submission?');
+    const [submissionIndex, setSubmissionIndex] = React.useState();
+
+    useEffect(() => {
+        axios.get('/admin/submissions')
+            .then(res => {
+                console.log(res);
+                setSubmissions(res.data);
+            })
+            .catch(err => console.log(err));
+    }, []);
+
+    const handleSubmissionSearch = () => {
+        axios.get('/admin/submissions')
+            .then(res => {
+                console.log(res);
+                setSubmissions(res.data);
+            })
+            .catch(err => console.log(err));
+    };
 
     const handleShowSearch = () => {
         if (searchShowNum !== '') {
@@ -106,13 +127,22 @@ const AdminPanel = () => {
             setUnbanUserInstructions('Are you sure you want to unban this user?');
         } else if (type === 'attendance') {
             setAttendanceInstructions('Remove a user from attendance history');
+        } else if (type === 'setlist') {
+            setSetListInstructions('Edit setlist');
+        } else if (type === 'submission') {
+            setSubmissionInstructions('Approve this submission?');
+            setSubmissionIndex();
         }
     };
 
-    const handleOpenModal = (type) => {
+    const handleOpenModal = (type, index) => {
         setModalType(type);
         setDisplayModal(true);
         document.body.style.overflowY = 'hidden';
+
+        if (type === 'submission') {
+            setSubmissionIndex(index);
+        }
     };
 
     const handleInitialSubmit = () => {
@@ -339,8 +369,39 @@ const AdminPanel = () => {
                 handleShowSearch();
                 setTimeout(() => {
                     handleCloseModal('setlist')
-                }, 1000)
+                }, 1000);
             })
+    };
+
+    const handleSubmission = (approveOrReject, submissionId) => {
+        if (approveOrReject === 'approve') {
+            axios.put('/admin/submissions', { _id: submissionId })
+            .then(res=>{
+                console.log(res);
+                setSubmissionInstructions('Submission accepted');
+                
+                setTimeout(() => {
+                    handleCloseModal('submission');
+                    handleSubmissionSearch();
+                }, 1000);
+            })
+            .catch(err=>console.log(err));
+        } else if (approveOrReject === 'reject') {
+            axios.delete('/admin/submissions', {
+                params: {
+                    _id: submissionId
+                }
+            })
+                .then(res => {
+                    console.log(res);
+                    setSubmissionInstructions('Submission rejected');
+                    handleSubmissionSearch();
+                    setTimeout(() => {
+                        handleCloseModal('submission');
+                    }, 1000);
+                })
+                .catch(err => console.log(err));
+        }
     };
 
     return (
@@ -351,7 +412,10 @@ const AdminPanel = () => {
                 handleOpenModal={handleOpenModal}
             />
             <br />
-            <AdminSubmissions />
+            <AdminSubmissions
+                submissions={submissions}
+                handleOpenModal={handleOpenModal}
+            />
             <br />
             <AdminShowInfo
                 searchShowNum={searchShowNum}
@@ -426,6 +490,10 @@ const AdminPanel = () => {
                 handleRemoveUserAttendance={handleRemoveUserAttendance}
                 setlistInstructions={setlistInstructions}
                 handleSetlistSubmit={handleSetlistSubmit}
+                submissionInstructions={submissionInstructions}
+                submissionIndex={submissionIndex}
+                submissions={submissions}
+                handleSubmission={handleSubmission}
             />
             }
         </div>
