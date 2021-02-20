@@ -1,4 +1,5 @@
 const db = require('../models');
+const fs = require('fs');
 const bcrypt = require('bcrypt');
 const multer = require('multer');
 const path = require('path');
@@ -204,6 +205,7 @@ module.exports = app => {
                 const detailId = req.body.detailId;
                 const showId = req.body.showId;
                 const detailType = req.body.detailType;
+                const imgName = req.body.imgName;
 
                 const updateObj = {};
 
@@ -225,10 +227,25 @@ module.exports = app => {
                             _id: detailId
                         }
                     };
+                } else if (detailType === 'flyer') {
+                    updateObj.$pull = {
+                        flyer: {
+                            _id: detailId
+                        }
+                    };
                 }
 
                 db.ShowDetails.updateOne({ showId: showId }, updateObj)
-                    .then(result => res.json(result))
+                    .then(result => {
+                        if (detailType==='flyer') {
+                            const filePath = './client/public/uploads/' + imgName;
+                            fs.unlink(filePath, (err) => {
+                                if (err) throw err;
+                                console.log(filePath + ' was deleted');
+                            })
+                        }
+                        res.json(result);
+                    })
                     .catch(err => res.json(err));
             } else {
                 res.sendStatus(400);

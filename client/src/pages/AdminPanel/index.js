@@ -300,11 +300,12 @@ const AdminPanel = () => {
             });
     };
 
-    const handleRemoveDetail = (detailType, detailId, showId) => {
+    const handleRemoveDetail = (detailType, detailId, showId, imgName) => {
         const updateObj = {
             showId: showId,
             detailId: detailId,
-            detailType: detailType
+            detailType: detailType,
+            imgName: imgName
         };
 
         console.log(updateObj);

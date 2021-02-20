@@ -93,7 +93,8 @@ const AdminShowDetails = (props) => {
                 return (
                     <div key={eachFlyer._id}>
                         <img src={process.env.PUBLIC_URL + `/uploads/${imgName}`} className='admin-flyer' alt={`Flyer`} key={eachFlyer._id} />
-                        <p>{username} ({flyerUserId})</p><br />
+                        <p>{username} ({flyerUserId})</p>
+                        <button type='button' onClick={()=>handleRemoveDetail('flyer',eachFlyer._id,showID,imgName)}>Delete</button>
                     </div>
                 )
             }
