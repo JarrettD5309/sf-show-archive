@@ -24,27 +24,27 @@ var ApproveDetailsSchema = new Schema({
             ref: 'User'
         }
     },
-    // audio: [{
-    //     link: String,
-    //     contributed: {
-    //         type: mongoose.Schema.Types.ObjectId,
-    //         ref: 'User'
-    //     }
-    // }],
-    // video: [{
-    //     link: String,
-    //     contributed: {
-    //         type: mongoose.Schema.Types.ObjectId,
-    //         ref: 'User'
-    //     }
-    // }],
-    // review: [{
-    //     link: String,
-    //     contributed: {
-    //         type: mongoose.Schema.Types.ObjectId,
-    //         ref: 'User'
-    //     }
-    // }]
+    audio: {
+        link: String,
+        contributed: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'User'
+        }
+    },
+    video: {
+        link: String,
+        contributed: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'User'
+        }
+    },
+    review: {
+        link: String,
+        contributed: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'User'
+        }
+    },
     submittedOn: {
         type: Date
     },

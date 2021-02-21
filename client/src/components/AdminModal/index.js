@@ -374,12 +374,38 @@ const AdminModal = (props) => {
                         <p>{submissionInstructions}</p><br />
                         <p className='admin-margin-bottom'><span className='slight-bold'>Date:</span> <a href={`/show/${submissions[submissionIndex].showId.showNum}`} target='_blank' rel="noopener noreferrer">{submissions[submissionIndex].showId.date}</a></p>
                         <p className='slight-bold admin-margin-bottom'>setList: </p>
+                        {submissions[submissionIndex].setList.songs.length > 0 &&
                             <div>
                                 {submissions[submissionIndex].setList.songs.map((song, i) =>
                                     <p key={i}>{i + 1}. {song}</p>
                                 )}
                                 <p>{submissions[submissionIndex].setList.contributed.username} ({submissions[submissionIndex].setList.contributed._id})</p><br />
                             </div>
+                        }
+                        <br />
+                        <p className='slight-bold admin-margin-bottom'>audio: </p>
+                        {submissions[submissionIndex].audio &&
+                            <div >
+                                <a href={submissions[submissionIndex].audio.link} target='_blank' rel="noopener noreferrer">{submissions[submissionIndex].audio.link}</a><br />
+                                <p>{`${submissions[submissionIndex].audio.contributed.username} (${submissions[submissionIndex].audio.contributed._id})`}</p>
+                            </div>
+                        }
+                        <br />
+                        <p className='slight-bold admin-margin-bottom'>video: </p>
+                        {submissions[submissionIndex].video &&
+                            <div >
+                                <a href={submissions[submissionIndex].video.link} target='_blank' rel="noopener noreferrer">{submissions[submissionIndex].video.link}</a><br />
+                                <p>{`${submissions[submissionIndex].video.contributed.username} (${submissions[submissionIndex].video.contributed._id})`}</p>
+                            </div>
+                        }
+                        <br />
+                        <p className='slight-bold admin-margin-bottom'>review: </p>
+                        {submissions[submissionIndex].review &&
+                            <div >
+                                <a href={submissions[submissionIndex].review.link} target='_blank' rel="noopener noreferrer">{submissions[submissionIndex].review.link}</a><br />
+                                <p>{`${submissions[submissionIndex].review.contributed.username} (${submissions[submissionIndex].review.contributed._id})`}</p>
+                            </div>
+                        }
                         <br />
                         <button
                             type='button'
@@ -389,13 +415,13 @@ const AdminModal = (props) => {
                         </button>
                         <button
                             type='button'
-                            onClick={() => handleSubmission('reject',submissions[submissionIndex]._id)}
+                            onClick={() => handleSubmission('reject', submissions[submissionIndex]._id)}
                         >
                             Reject
                         </button>
                         <button
                             type='button'
-                            onClick={() => handleSubmission('approve',submissions[submissionIndex]._id)}
+                            onClick={() => handleSubmission('approve', submissions[submissionIndex]._id)}
                         >
                             Approve
                         </button>

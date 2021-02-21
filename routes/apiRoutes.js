@@ -160,42 +160,42 @@ module.exports = app => {
             db.User.find({ username: username })
                 .then(results => {
                     if (results.length === 0) {
-                        db.User.find({ email: email})
-                        .then(results2 => {
-                            if (results2.length === 0) {
-                                const usernameIsValid = /^[a-zA-Z0-9]+$/.test(username);
-                                const usernameIsLength = stringLengthTest(username, 4, 25);
-                                const emailIsValid = /\S+@\S+\.\S+/.test(email);
-                                const passwordIsLength = stringLengthTest(password, 7, 100);
-                                const isAdmin = password===process.env.ADMIN_PASSWORD;
-        
-                                if (password !== passwordConfirm) {
-                                    res.status(400).send('passwordMismatch');
-                                } else if (!usernameIsValid) {
-                                    res.status(400).send('usernameLettersNumbers');
-                                } else if (!usernameIsLength) {
-                                    res.status(400).send('usernameLength');
-                                } else if (!emailIsValid) {
-                                    res.status(400).send('emailNotValid');
-                                } else if (!passwordIsLength) {
-                                    res.status(400).send('passwordLength');
+                        db.User.find({ email: email })
+                            .then(results2 => {
+                                if (results2.length === 0) {
+                                    const usernameIsValid = /^[a-zA-Z0-9]+$/.test(username);
+                                    const usernameIsLength = stringLengthTest(username, 4, 25);
+                                    const emailIsValid = /\S+@\S+\.\S+/.test(email);
+                                    const passwordIsLength = stringLengthTest(password, 7, 100);
+                                    const isAdmin = password === process.env.ADMIN_PASSWORD;
+
+                                    if (password !== passwordConfirm) {
+                                        res.status(400).send('passwordMismatch');
+                                    } else if (!usernameIsValid) {
+                                        res.status(400).send('usernameLettersNumbers');
+                                    } else if (!usernameIsLength) {
+                                        res.status(400).send('usernameLength');
+                                    } else if (!emailIsValid) {
+                                        res.status(400).send('emailNotValid');
+                                    } else if (!passwordIsLength) {
+                                        res.status(400).send('passwordLength');
+                                    } else {
+                                        bcrypt.hash(password, 10, (err, hash) => {
+                                            const userObj = {
+                                                username: username,
+                                                email: email,
+                                                password: hash,
+                                                admin: isAdmin
+                                            }
+                                            db.User.create(userObj)
+                                                .then(result => res.json(result))
+                                                .catch(err => res.json(err));
+                                        });
+                                    }
                                 } else {
-                                    bcrypt.hash(password, 10, (err, hash) => {
-                                        const userObj = {
-                                            username: username,
-                                            email: email,
-                                            password: hash,
-                                            admin: isAdmin
-                                        }
-                                        db.User.create(userObj)
-                                            .then(result => res.json(result))
-                                            .catch(err => res.json(err));
-                                    });
+                                    res.status(400).send('emailExists');
                                 }
-                            } else {
-                                res.status(400).send('emailExists'); 
-                            }
-                        });
+                            });
 
                     } else {
                         res.status(400).send('userExists');
@@ -274,7 +274,7 @@ module.exports = app => {
                 .then(results => {
                     if (results.length === 0) {
                         res.status(400).send('wrongPassUser');
-                    } else if (results[0].banned){
+                    } else if (results[0].banned) {
                         res.status(400).send('bannedUser');
                     } else {
                         // console.log(results[0].password);
@@ -404,11 +404,11 @@ module.exports = app => {
 
         // Check ext
         const extname = filetypes.test(path.extname(file.originalname).toLowerCase());
-        
+
         // Check mime type
         const mimetype = filetypes.test(file.mimetype);
 
-        if (mimetype ) {
+        if (mimetype) {
             if (req.body.showId) {
                 db.ShowDetails.find({ showId: req.body.showId })
                     .then(results => {
@@ -500,15 +500,8 @@ module.exports = app => {
                 } else {
                     const submittedOn = new Date();
                     setlistObj.submittedOn = submittedOn;
-                    db.ApproveDetails.findOneAndUpdate(
-                        { showId: req.body.showId },
-                        setlistObj,
-                        {
-                            new: true,
-                            upsert: true,
-                            setDefaultsOnInsert: true
-                        }
-                    )
+                    setlistObj.showId = req.body.showId;
+                    db.ApproveDetails.create(setlistObj)
                         .then(result => res.json(result))
                         .catch(err => res.json(err));
                 }
@@ -539,49 +532,90 @@ module.exports = app => {
                     return true;
                 };
 
-                const linksObj = {
-                    $push: {}
-                };
+                if (req.session.admin) {
+                    const linksObj = {
+                        $push: {}
+                    };
 
-                if (isValidUrl(req.body.audio)) {
-                    linksObj.$push.audio = {
-                        link: req.body.audio,
-                        contributed: req.session.userID
-                    }
-                }
-
-                if (isValidUrl(req.body.video)) {
-                    linksObj.$push.video = {
-                        link: req.body.video,
-                        contributed: req.session.userID
-                    }
-                }
-
-                if (isValidUrl(req.body.review)) {
-                    linksObj.$push.review = {
-                        link: req.body.review,
-                        contributed: req.session.userID
-                    }
-                }
-
-                if (linksObj.$push.audio || linksObj.$push.video || linksObj.$push.review) {
-
-                    db.ShowDetails.findOneAndUpdate(
-                        { showId: req.body.showId },
-                        linksObj,
-                        {
-                            new: true,
-                            upsert: true,
-                            setDefaultsOnInsert: true
+                    if (isValidUrl(req.body.audio)) {
+                        linksObj.$push.audio = {
+                            link: req.body.audio,
+                            contributed: req.session.userID
                         }
-                    )
-                        .then(result => res.json(result))
-                        .catch(err => res.json(err));
+                    }
+
+                    if (isValidUrl(req.body.video)) {
+                        linksObj.$push.video = {
+                            link: req.body.video,
+                            contributed: req.session.userID
+                        }
+                    }
+
+                    if (isValidUrl(req.body.review)) {
+                        linksObj.$push.review = {
+                            link: req.body.review,
+                            contributed: req.session.userID
+                        }
+                    }
+
+                    if (linksObj.$push.audio || linksObj.$push.video || linksObj.$push.review) {
+                        db.ShowDetails.findOneAndUpdate(
+                            { showId: req.body.showId },
+                            linksObj,
+                            {
+                                new: true,
+                                upsert: true,
+                                setDefaultsOnInsert: true
+                            }
+                        )
+                            .then(result => res.json(result))
+                            .catch(err => res.json(err));
+
+                    } else {
+                        res.status(400).json({
+                            "message": "Error: Form not valid"
+                        });
+                    }
 
                 } else {
-                    res.status(400).json({
-                        "message": "Error: Form not valid"
-                    });
+                    const linksObj = {};
+
+                    if (isValidUrl(req.body.audio)) {
+                        linksObj.audio = {
+                            link: req.body.audio,
+                            contributed: req.session.userID
+                        }
+                    }
+
+                    if (isValidUrl(req.body.video)) {
+                        linksObj.video = {
+                            link: req.body.video,
+                            contributed: req.session.userID
+                        }
+                    }
+
+                    if (isValidUrl(req.body.review)) {
+                        linksObj.review = {
+                            link: req.body.review,
+                            contributed: req.session.userID
+                        }
+                    }
+
+                    if (linksObj.audio || linksObj.video || linksObj.review) {
+                        const submittedOn = new Date();
+                        linksObj.submittedOn = submittedOn;
+                        linksObj.showId = req.body.showId;
+                        console.log(linksObj);
+                        db.ApproveDetails.create(linksObj)
+                            .then(result => res.json(result))
+                            .catch(err => res.json(err));
+
+                    } else {
+                        res.status(400).json({
+                            "message": "Error: Form not valid"
+                        });
+                    }
+
                 }
 
             } else {
@@ -778,30 +812,30 @@ module.exports = app => {
                     token: token,
                     used: 0
                 })
-                .then(results=> {
-                    if (results) {
-                        db.ResetTokens.updateMany({
-                            email: req.body.email
-                        },
-                        {
-                            used: 1
-                        })
-                        .then(()=>{
-                            bcrypt.hash(password, 10, (err, hash) =>{
-                                const passwordUpdateObj = {
-                                    password: hash
-                                };
-                                db.User.updateOne({
-                                    email: req.body.email
-                                },passwordUpdateObj)
-                                .then(result=>res.json(result))
-                                .catch(err=>res.json(err));
-                            });
-                        })
-                    } else {
-                        res.status(400).send('tokenNotFound');
-                    }
-                })
+                    .then(results => {
+                        if (results) {
+                            db.ResetTokens.updateMany({
+                                email: req.body.email
+                            },
+                                {
+                                    used: 1
+                                })
+                                .then(() => {
+                                    bcrypt.hash(password, 10, (err, hash) => {
+                                        const passwordUpdateObj = {
+                                            password: hash
+                                        };
+                                        db.User.updateOne({
+                                            email: req.body.email
+                                        }, passwordUpdateObj)
+                                            .then(result => res.json(result))
+                                            .catch(err => res.json(err));
+                                    });
+                                })
+                        } else {
+                            res.status(400).send('tokenNotFound');
+                        }
+                    })
             }
         } else {
             res.status(400).send('formNotComplete');

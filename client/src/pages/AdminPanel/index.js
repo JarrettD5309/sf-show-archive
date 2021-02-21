@@ -104,6 +104,7 @@ const AdminPanel = () => {
     const handleCloseModal = (type) => {
         setDisplayModal(false);
         document.body.style.overflowY = 'visible';
+        // setModalType('');
 
         if (type === 'showInfo') {
             setFinalSubmit(false);
@@ -395,9 +396,10 @@ const AdminPanel = () => {
                 .then(res => {
                     console.log(res);
                     setSubmissionInstructions('Submission rejected');
-                    handleSubmissionSearch();
+                    
                     setTimeout(() => {
                         handleCloseModal('submission');
+                        handleSubmissionSearch();
                     }, 1000);
                 })
                 .catch(err => console.log(err));

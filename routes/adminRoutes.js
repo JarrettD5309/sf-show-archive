@@ -285,6 +285,9 @@ module.exports = app => {
             db.ApproveDetails.find()
                 .populate('showId')
                 .populate('setList.contributed')
+                .populate('audio.contributed')
+                .populate('video.contributed')
+                .populate('review.contributed')
                 .sort('submittedOn')
                 .then(result => {
                     res.json(result);
@@ -319,28 +322,45 @@ module.exports = app => {
             db.ApproveDetails.findOne({ _id: _id })
                 .then(results => {
                     // console.log(results);
-                    const setlistObj = {
-                        setList: results.setList
+                    const updateObj = {
+                        $push: {}
                     };
+                    if (results.setList.songs.length>0) {
+                        updateObj.setList = results.setList
+                    }
+
+                    // console.log('audio: '+results.audio.contributed)
+                    
+                    if (results.audio.contributed) {
+                        updateObj.$push.audio = results.audio;
+                    }
+                    if (results.video.contributed) {
+                        updateObj.$push.video = results.video;
+                    }
+                    if (results.review.contributed) {
+                        updateObj.$push.review = results.review;
+                    }
+
+                    // console.log(updateObj);
 
                     db.ShowDetails.findOneAndUpdate(
-                        { showId: results.showId},
-                        setlistObj,
+                        { showId: results.showId },
+                        updateObj,
                         {
                             new: true,
                             upsert: true,
                             setDefaultsOnInsert: true
                         }
                     )
-                    .then(results2 => {
-                        db.ApproveDetails.deleteOne({ _id: _id })
-                        .then(results3 =>{
-                            res.json({
-                                resOne: results2,
-                                resTwo: results3
-                            });
+                        .then(results2 => {
+                            db.ApproveDetails.deleteOne({ _id: _id })
+                                .then(results3 => {
+                                    res.json({
+                                        resOne: results2,
+                                        resTwo: results3
+                                    });
+                                })
                         })
-                    })
                 })
                 .catch(err => res.json(err));
         } else {
