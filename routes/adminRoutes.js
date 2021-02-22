@@ -8,12 +8,12 @@ const mime = require('mime-types');
 
 module.exports = app => {
 
-    const isAdmin = true;
+    // const req.session.admin = true;
 
     // SEARCH SHOW NUMBER
     app.get('/admin/shows', (req, res) => {
         // if (req.session.admin) {
-        if (isAdmin) {
+        if (req.session.admin) {
             const showNum = req.query.showNum;
 
             const queryObj = {};
@@ -43,7 +43,7 @@ module.exports = app => {
 
     // UPDATE SHOW INFO
     app.put('/admin/shows', (req, res) => {
-        if (isAdmin) {
+        if (req.session.admin) {
             const _id = req.body._id;
             const showNum = req.body.showNum;
             const date = req.body.date;
@@ -77,7 +77,7 @@ module.exports = app => {
 
     // ADD NEW SHOW
     app.post('/admin/shows', (req, res) => {
-        if (isAdmin) {
+        if (req.session.admin) {
             const showNum = req.body.showNum;
             const date = req.body.date;
             const venue = req.body.venue;
@@ -115,7 +115,7 @@ module.exports = app => {
 
     // DELETE A SHOW
     app.delete('/admin/delete-show', (req, res) => {
-        if (isAdmin) {
+        if (req.session.admin) {
             const _id = req.query._id;
             console.log(req.query._id);
 
@@ -133,7 +133,7 @@ module.exports = app => {
 
     // GET USER INFO
     app.get('/admin/user', (req, res) => {
-        if (isAdmin) {
+        if (req.session.admin) {
             const username = req.query.username;
             db.User.findOne({ username: username })
                 .then(result => {
@@ -147,7 +147,7 @@ module.exports = app => {
 
     // BAN AND UNBAN USER
     app.put('/admin/user', (req, res) => {
-        if (isAdmin) {
+        if (req.session.admin) {
             const username = req.body.username;
             const banned = req.body.banned;
 
@@ -173,7 +173,7 @@ module.exports = app => {
 
     // REMOVE RECORD OF USER ATTENDANCE AT SHOW
     app.put('/admin/delete-attendance', (req, res) => {
-        if (isAdmin) {
+        if (req.session.admin) {
 
             if (req.body.userId && req.body.showId) {
                 const userId = req.body.userId;
@@ -199,7 +199,7 @@ module.exports = app => {
 
     // REMOVE SHOW DETAIL
     app.put('/admin/delete-detail', (req, res) => {
-        if (isAdmin) {
+        if (req.session.admin) {
 
             if (req.body.detailId && req.body.showId && req.body.detailType) {
                 const detailId = req.body.detailId;
@@ -258,7 +258,7 @@ module.exports = app => {
 
     // UPDATE SETLIST
     app.put('/admin/setlist', (req, res) => {
-        if (isAdmin) {
+        if (req.session.admin) {
 
             if (req.body.showId && req.body.setlist) {
                 const showId = req.body.showId;
@@ -281,9 +281,10 @@ module.exports = app => {
 
     // GET ALL SUBMISSIONS
     app.get('/admin/submissions', (req, res) => {
-        if (isAdmin) {
+        if (req.session.admin) {
             db.ApproveDetails.find()
                 .populate('showId')
+                .populate('flyer.contributed')
                 .populate('setList.contributed')
                 .populate('audio.contributed')
                 .populate('video.contributed')
@@ -300,16 +301,29 @@ module.exports = app => {
 
     // DELETE A SUBMISSION WHEN REJECETED
     app.delete('/admin/submissions', (req, res) => {
-        if (isAdmin) {
+        if (req.session.admin) {
             const _id = req.query._id;
 
-            db.ApproveDetails.deleteOne({
-                _id: _id
-            })
+            // return the info for approvedetails entry to get img data
+            db.ApproveDetails.findOne({ _id: _id })
                 .then(results => {
-                    res.json(results);
+                    console.log(results);
+                    db.ApproveDetails.deleteOne({
+                        _id: _id
+                    })
+                        .then(results2 => {
+                            res.json(results2);
+                            // if image submission, delete the image file as well
+                            if (results.flyer.contributed) {
+                                const filePath = './client/public/uploads/' + results.flyer.flyerImg;
+                                fs.unlink(filePath, (err) => {
+                                    if (err) throw err;
+                                    console.log(filePath + ' was deleted');
+                                })
+                            }
+                        });
                 })
-                .catch(err => console.log(err));
+                .catch(err => res.json(err));
         } else {
             res.sendStatus(404);
         }
@@ -317,7 +331,7 @@ module.exports = app => {
 
     // APPROVE SUBMISSION. ADD TO SHOWDETAILS AND DELETE SUBMISSION
     app.put('/admin/submissions', (req, res) => {
-        if (isAdmin) {
+        if (req.session.admin) {
             const _id = req.body._id;
             db.ApproveDetails.findOne({ _id: _id })
                 .then(results => {
@@ -325,12 +339,12 @@ module.exports = app => {
                     const updateObj = {
                         $push: {}
                     };
-                    if (results.setList.songs.length>0) {
+                    if (results.setList.songs.length > 0) {
                         updateObj.setList = results.setList
                     }
 
                     // console.log('audio: '+results.audio.contributed)
-                    
+
                     if (results.audio.contributed) {
                         updateObj.$push.audio = results.audio;
                     }
@@ -339,6 +353,10 @@ module.exports = app => {
                     }
                     if (results.review.contributed) {
                         updateObj.$push.review = results.review;
+                    }
+
+                    if (results.flyer.contributed) {
+                        updateObj.$push.flyer = results.flyer;
                     }
 
                     // console.log(updateObj);

@@ -22,6 +22,7 @@ const Login = (props) => {
                 if (res.data==='loggedIn') {
                     props.setLoggedIn(true);
                     props.getUserInfo();
+                    props.checkAdminLogin();
                     history.push('/');
                 }
             })

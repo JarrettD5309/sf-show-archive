@@ -8,8 +8,7 @@ var ShowSchema = new Schema({
         type: Number
     },
     date: {
-        type: String,
-        lastActiveAt: Date
+        type: String
     },
     venue: {
         type: String

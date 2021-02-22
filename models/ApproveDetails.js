@@ -8,15 +8,15 @@ var ApproveDetailsSchema = new Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Show'
     },
-    // flyer: [{
-    //     flyerImg: {
-    //         type: String
-    //     }, 
-    //     contributed: {
-    //         type: mongoose.Schema.Types.ObjectId,
-    //         ref: 'User'
-    //     }
-    // }],
+    flyer: {
+        flyerImg: {
+            type: String
+        }, 
+        contributed: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'User'
+        }
+    },
     setList: {
         songs: [String],
         contributed: {

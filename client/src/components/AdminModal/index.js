@@ -401,9 +401,17 @@ const AdminModal = (props) => {
                         <br />
                         <p className='slight-bold admin-margin-bottom'>review: </p>
                         {submissions[submissionIndex].review &&
-                            <div >
+                            <div>
                                 <a href={submissions[submissionIndex].review.link} target='_blank' rel="noopener noreferrer">{submissions[submissionIndex].review.link}</a><br />
                                 <p>{`${submissions[submissionIndex].review.contributed.username} (${submissions[submissionIndex].review.contributed._id})`}</p>
+                            </div>
+                        }
+                        <br />
+                        <p className='slight-bold admin-margin-bottom'>flyer: </p>
+                        {submissions[submissionIndex].flyer && 
+                            <div>
+                                <img src={process.env.PUBLIC_URL + `/uploads/${submissions[submissionIndex].flyer.flyerImg}`} className='admin-flyer' alt='flyer' />
+                                <p>{`${submissions[submissionIndex].flyer.contributed.username} (${submissions[submissionIndex].flyer.contributed._id})`}</p>
                             </div>
                         }
                         <br />

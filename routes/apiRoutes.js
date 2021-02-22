@@ -445,26 +445,41 @@ module.exports = app => {
                             "message": "Error: No File Selected"
                         });
                     } else {
-
-                        db.ShowDetails.findOneAndUpdate(
-                            { showId: req.body.showId },
-                            {
-                                showId: req.body.showId,
-                                $push: {
-                                    flyer: {
-                                        flyerImg: req.file.filename,
-                                        contributed: req.session.userID
+                        if (req.session.admin) {
+                            db.ShowDetails.findOneAndUpdate(
+                                { showId: req.body.showId },
+                                {
+                                    showId: req.body.showId,
+                                    $push: {
+                                        flyer: {
+                                            flyerImg: req.file.filename,
+                                            contributed: req.session.userID
+                                        }
                                     }
+                                },
+                                {
+                                    new: true,
+                                    upsert: true,
+                                    setDefaultsOnInsert: true
                                 }
-                            },
-                            {
-                                new: true,
-                                upsert: true,
-                                setDefaultsOnInsert: true
-                            }
-                        )
-                            .then(result => res.json(result))
-                            .catch(err => res.json(err));
+                            )
+                                .then(result => res.json(result))
+                                .catch(err => res.json(err));
+                        } else {
+                            const flyerObj = {
+                                flyer: {
+                                    flyerImg: req.file.filename,
+                                    contributed: req.session.userID
+                                },
+                                showId: req.body.showId,
+                                submittedOn: new Date()
+                            };
+                            db.ApproveDetails.create(flyerObj)
+                                .then(result => res.json(result))
+                                .catch(err => res.json(err));
+
+                        }
+
                     }
                 }
             });
@@ -690,6 +705,14 @@ module.exports = app => {
 
     app.get('/api/checklogin', (req, res) => {
         if (req.session.loggedin) {
+            res.sendStatus(200);
+        } else {
+            res.sendStatus(404);
+        }
+    });
+
+    app.get('/api/checkadminlogin', (req, res) => {
+        if (req.session.admin) {
             res.sendStatus(200);
         } else {
             res.sendStatus(404);

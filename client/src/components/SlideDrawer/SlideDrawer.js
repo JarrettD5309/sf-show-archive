@@ -7,15 +7,16 @@ const SlideDrawer = (props) => {
     let history = useHistory();
     const handleLogout = () => {
         axios.get('/api/logout')
-            .then(res=>{
+            .then(res => {
                 console.log(res);
                 if (res.status === 200) {
                     props.setLoggedIn(false);
                     props.setDrawerOpen(false);
+                    props.setIsAdmin(false);
                     history.push('/');
                 }
             })
-            .catch(err=>console.log(err));
+            .catch(err => console.log(err));
     };
 
     return (
@@ -38,12 +39,12 @@ const SlideDrawer = (props) => {
                 {props.loggedIn ?
                     (
                         <div>
-                        <li className='nav-item'>
-                        <a href="/profile" className='nav-text'>Profile</a>
-                        </li>
-                        <li className='nav-item'>
-                            <p className='nav-text' onClick={handleLogout} >Logout</p>
-                        </li>
+                            <li className='nav-item'>
+                                <a href="/profile" className='nav-text'>Profile</a>
+                            </li>
+                            <li className='nav-item'>
+                                <p className='nav-text' onClick={handleLogout} >Logout</p>
+                            </li>
                         </div>
                     )
                     :
@@ -53,6 +54,12 @@ const SlideDrawer = (props) => {
                         </li>
                     )
 
+                }
+
+                {props.isAdmin &&
+                    <li className='nav-item'>
+                        <a href="/admin-panel" className='nav-text'>AdminPanel</a>
+                    </li>
                 }
 
             </ul>
