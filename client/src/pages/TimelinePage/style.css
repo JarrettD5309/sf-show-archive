@@ -19,6 +19,10 @@
     justify-content: center;
 }
 
+.no-shows-para {
+    text-align: center;
+}
+
 .sub-root {
     width: 900px;
     margin: 0 auto;

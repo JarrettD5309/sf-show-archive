@@ -95,6 +95,9 @@ const TimelinePage = (props) => {
                         key={show.showNum}
                     />
                 ))}
+                {timelineMini && shows.length===0 &&
+                <h4 className='no-shows-para'>No shows during this month</h4>
+                }
             </div>
         </div>
     );
