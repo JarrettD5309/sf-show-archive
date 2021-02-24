@@ -766,7 +766,6 @@ module.exports = app => {
 
         const message = {
             from: process.env.SENDER_ADDRESS,
-            // from: 'Screaming Females <postmaster@screamingfemalestourarchive.com>',
             to: req.body.email,
             // replyTo: process.env.REPLYTO_ADDRESS,
             subject: process.env.FORGOT_PASS_SUBJECT_LINE,
