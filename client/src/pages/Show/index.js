@@ -28,6 +28,9 @@ const Show = (props) => {
         userInfo
     } = props;
 
+    // used to scroll to top of modal
+    const topOfModal = document.getElementById('myModal');
+
     useEffect(() => {
         // console.log(userInfo._id);
         // deals with react unmounted component issue
@@ -95,14 +98,15 @@ const Show = (props) => {
             axios.post('/api/showflyer', formData, config)
                 .then(res => {
                     // console.log(res);
-                    setFlyerInstructions('Success!');
+                    setFlyerInstructions('THANK YOU! Your submission is AWAITING APPROVAL.');
+                    topOfModal.scrollTop = 0;
                     setTimeout(() => {
                         handleCloseModal('flyer');
                         // setImageFile(null);
                         // setImageFileName('');
                         // setFlyerInstructions('Please choose a image');
                         getDetails();
-                    }, 900);
+                    }, 2500);
                 })
                 .catch(err => {
                     console.log(err);
@@ -114,9 +118,9 @@ const Show = (props) => {
 
         } catch (error) {
             console.log(error);
-            if(error.toString()==='Error: The file given is not an image') {
+            if (error.toString() === 'Error: The file given is not an image') {
                 setFlyerInstructions('Error: Images Only');
-            } else if (error.toString()==='Error: The file given is not an instance of Blob or File') {
+            } else if (error.toString() === 'Error: The file given is not an instance of Blob or File') {
                 setFlyerInstructions('Error: No File Selected');
             } else {
                 setFlyerInstructions('Oops! Something went wrong. Please try again.');
@@ -141,20 +145,21 @@ const Show = (props) => {
             showId: showInfo._id,
             setlist: newSetlist
         }
+
         axios.post('/api/setlist', setlistData)
             .then(res => {
-                // console.log(res);
-                setSetListInstructions('Success!')
+                setSetListInstructions('THANK YOU! Your submission is AWAITING APPROVAL.');
+                topOfModal.scrollTop = 0;
                 setTimeout(() => {
-                    // setDisplayModal(false);
                     handleCloseModal('setlist');
-                    // setImageFile(null);
-                    // setImageFileName('');
-                    // setSetListInstructions('Please add songs');
                     getDetails();
-                }, 900);
+                }, 2500);
             })
-            .catch(err => console.log(err));
+            .catch(err => {
+                console.log(err);
+                setSetListInstructions('Oops! Something went wrong!');
+                topOfModal.scrollTop = 0;
+            });
     };
 
     const handleLinksSubmit = () => {
@@ -199,11 +204,12 @@ const Show = (props) => {
                 axios.post('/api/links', linksData)
                     .then(res => {
                         // console.log(res);
-                        setLinkInstructions('Success!');
+                        setLinkInstructions('THANK YOU! Your submission is AWAITING APPROVAL.');
+                        topOfModal.scrollTop = 0;
                         setTimeout(() => {
                             handleCloseModal('links');
                             getDetails();
-                        }, 900);
+                        }, 2500);
                     })
                     .catch(err => console.log(err));
 
