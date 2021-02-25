@@ -28,9 +28,6 @@ const Show = (props) => {
         userInfo
     } = props;
 
-    // used to scroll to top of modal
-    const topOfModal = document.getElementById('myModal');
-
     useEffect(() => {
         // console.log(userInfo._id);
         // deals with react unmounted component issue
@@ -95,6 +92,9 @@ const Show = (props) => {
                 }
             };
 
+            // used to scroll to top of modal
+            const topOfModal = document.getElementById('myModal');
+
             axios.post('/api/showflyer', formData, config)
                 .then(res => {
                     // console.log(res);
@@ -145,6 +145,9 @@ const Show = (props) => {
             showId: showInfo._id,
             setlist: newSetlist
         }
+
+        // used to scroll to top of modal
+        const topOfModal = document.getElementById('myModal');
 
         axios.post('/api/setlist', setlistData)
             .then(res => {
@@ -198,6 +201,9 @@ const Show = (props) => {
         }
 
         if (linksData.audio || linksData.video || linksData.review) {
+
+            // used to scroll to top of modal
+            const topOfModal = document.getElementById('myModal');
 
             if (isValidForSend(newAudioLink) && isValidForSend(newVideoLink) && isValidForSend(newReviewLink)) {
                 // console.log('send!');

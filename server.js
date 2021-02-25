@@ -3,7 +3,9 @@ const session = require('express-session');
 const path = require('path');
 const mongoose = require('mongoose');
 const MongoStore = require('connect-mongo')(session);
-// var db = require("./models");
+const nodemailer = require('nodemailer');
+const schedule = require('node-schedule');
+const db = require("./models");
 // const { start } = require('repl');
 require('dotenv').config();
 
@@ -38,6 +40,44 @@ app.use(session({
     saveUninitialized: true,
     store: new MongoStore({mongooseConnection: mongoose.connection})
 }));
+
+// SETUP EMAIL
+const transport = nodemailer.createTransport({
+    host: process.env.EMAIL_HOST,
+    port: process.env.EMAIL_PORT,
+    secure: false,
+    auth: {
+        user: process.env.EMAIL_USER,
+        pass: process.env.EMAIL_PASS
+    }
+});
+
+// EMAIL ADMIN ONCE A DAY (7PM EST) WITH NUMBER OF SUBMISSIONS AWAITING
+const rule = new schedule.RecurrenceRule();
+rule.hour = 19;
+rule.minute = 0;
+// rule.second = 30;
+rule.tz = 'America/New_York';
+const job = schedule.scheduleJob(rule, () => {
+    db.ApproveDetails.find()
+        .then(res => {
+            console.log('working');
+            if (res.length > 0) {
+                const message = {
+                    from: process.env.SENDER_ADDRESS,
+                    to: process.env.MY_EMAIL,
+                    subject: process.env.MY_EMAIL_SUBJECT,
+                    text: 'There is/are ' + res.length + ' submissions.'
+                };
+                transport.sendMail(message, (err, info) => {
+                    if (err) { console.log(err); }
+                    else { console.log(info); }
+                });
+            }
+        })
+        .catch(err => console.log(err));
+
+});
 
 require('./routes/apiRoutes')(app);
 require('./routes/adminRoutes')(app);
