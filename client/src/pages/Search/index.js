@@ -23,17 +23,17 @@ const Search = () => {
         }, 400);
     });
 
-    useEffect(()=>{
+    useEffect(() => {
         axios.get('/api/allstates')
-            .then(res=> {
+            .then(res => {
                 console.log(res);
                 setStateArr(res.data);
             })
-            .catch(err=>console.log(err));
-    },[]);
+            .catch(err => console.log(err));
+    }, []);
 
     const handleSubmit = () => {
-        if (startDate!=='' || endDate!=='' || venue!=='' || city!=='' || stateCountry!=='') {
+        if (startDate !== '' || endDate !== '' || venue !== '' || city !== '' || stateCountry !== '') {
             console.log(startDate);
             axios.get('/api/shows', {
                 params: {
@@ -46,7 +46,7 @@ const Search = () => {
             })
                 .then(res => {
                     console.log(res);
-                    if(res.data.length!==0) {
+                    if (res.data.length !== 0) {
                         setShows(res.data);
                         setFadeShows(true);
                     }
@@ -78,9 +78,9 @@ const Search = () => {
         setVenue('');
         setCity('');
         setStateCountry('');
-        setTimeout(()=>{
+        setTimeout(() => {
             setShows([]);
-        },900);
+        }, 900);
     };
 
     return (
@@ -91,28 +91,28 @@ const Search = () => {
                     <h1 className='outline'>&nbsp;Archive</h1>
                 </div>
             </div>
-                <div className={shows.length===0 ? 'search-form-div' : 'search-form-div off'}>
-                <SearchForm 
-                startDate={startDate}
-                setStartDate={setStartDate}
-                endDate={endDate}
-                setEndDate={setEndDate}
-                venue={venue}
-                setVenue={setVenue}
-                city={city}
-                setCity={setCity}
-                stateArr={stateArr}
-                stateCountry={stateCountry}
-                setStateCountry={setStateCountry}
-                handleSubmit={handleSubmit}
-                handleAllShowsSubmit={handleAllShowsSubmit}
-            />
+            <div className={shows.length === 0 ? 'search-form-div' : 'search-form-div off'}>
+                <SearchForm
+                    startDate={startDate}
+                    setStartDate={setStartDate}
+                    endDate={endDate}
+                    setEndDate={setEndDate}
+                    venue={venue}
+                    setVenue={setVenue}
+                    city={city}
+                    setCity={setCity}
+                    stateArr={stateArr}
+                    stateCountry={stateCountry}
+                    setStateCountry={setStateCountry}
+                    handleSubmit={handleSubmit}
+                    handleAllShowsSubmit={handleAllShowsSubmit}
+                />
             </div>
-            
-                <div className={fadeShows ? 'fadeIn search-back-button-div' : 'fadeOutSearchBack search-back-button-div'}>
-                    <button className='search-back-button' type='button' onClick={handleBack}>Back</button>
-                </div>
-           
+
+            <div className={fadeShows ? 'fadeIn search-back-button-div' : 'fadeOutSearchBack search-back-button-div'}>
+                <button className='search-back-button' type='button' onClick={handleBack}>Back</button>
+            </div>
+
             <div className={fadeShows ? 'fadeIn' : 'fadeOut'} >
                 {shows.map(show => (
                     <ShowInfo
