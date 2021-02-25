@@ -54,7 +54,8 @@ const App = () => {
                         setIsAdmin(false);
                         console.log('not admin');
                     }
-                });
+                })
+                .catch(err=>console.log(err));
         };
 
         checkLoggedIn();
@@ -71,7 +72,8 @@ const App = () => {
                     setIsAdmin(false);
                     console.log('not admin');
                 }
-            });
+            })
+            .catch(err=>console.log(err));
     };
 
 
