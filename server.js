@@ -20,16 +20,16 @@ if (process.env.NODE_ENV === "production") {
     app.use(express.static("client/build"));
 }
 
-// const MONGODB_URI = process.env.mongodburi;
-// mongoose.connect(MONGODB_URI || 'mongodb://localhost/show-archive',{
-//     useNewUrlParser: true,
-//     useUnifiedTopology: true
-// });
-mongoose.connect('mongodb://localhost/show-archive', {
+const MONGODB_URI = process.env.mongodburi;
+mongoose.connect(MONGODB_URI || 'mongodb://localhost/show-archive',{
     useNewUrlParser: true,
-    useUnifiedTopology: true,
-    useFindAndModify: false
+    useUnifiedTopology: true
 });
+// mongoose.connect('mongodb://localhost/show-archive', {
+//     useNewUrlParser: true,
+//     useUnifiedTopology: true,
+//     useFindAndModify: false
+// });
 
 mongoose.connection.on("connected", () => console.log("Mongoose is connected")
 );
@@ -42,42 +42,42 @@ app.use(session({
 }));
 
 // SETUP EMAIL
-// const transport = nodemailer.createTransport({
-//     host: process.env.EMAIL_HOST,
-//     port: process.env.EMAIL_PORT,
-//     secure: false,
-//     auth: {
-//         user: process.env.EMAIL_USER,
-//         pass: process.env.EMAIL_PASS
-//     }
-// });
+const transport = nodemailer.createTransport({
+    host: process.env.EMAIL_HOST,
+    port: process.env.EMAIL_PORT,
+    secure: false,
+    auth: {
+        user: process.env.EMAIL_USER,
+        pass: process.env.EMAIL_PASS
+    }
+});
 
 // EMAIL ADMIN ONCE A DAY (7PM EST) WITH NUMBER OF SUBMISSIONS AWAITING
-// const rule = new schedule.RecurrenceRule();
-// rule.hour = 19;
-// rule.minute = 0;
-// // rule.second = 30;
-// rule.tz = 'America/New_York';
-// const job = schedule.scheduleJob(rule, () => {
-//     db.ApproveDetails.find()
-//         .then(res => {
-//             console.log('working');
-//             if (res.length > 0) {
-//                 const message = {
-//                     from: process.env.SENDER_ADDRESS,
-//                     to: process.env.MY_EMAIL,
-//                     subject: process.env.MY_EMAIL_SUBJECT,
-//                     text: 'There is/are ' + res.length + ' submissions.'
-//                 };
-//                 transport.sendMail(message, (err, info) => {
-//                     if (err) { console.log(err); }
-//                     else { console.log(info); }
-//                 });
-//             }
-//         })
-//         .catch(err => console.log(err));
+const rule = new schedule.RecurrenceRule();
+rule.hour = 19;
+rule.minute = 0;
+// rule.second = 30;
+rule.tz = 'America/New_York';
+const job = schedule.scheduleJob(rule, () => {
+    db.ApproveDetails.find()
+        .then(res => {
+            console.log('working');
+            if (res.length > 0) {
+                const message = {
+                    from: process.env.SENDER_ADDRESS,
+                    to: process.env.MY_EMAIL,
+                    subject: process.env.MY_EMAIL_SUBJECT,
+                    text: 'There is/are ' + res.length + ' submissions.'
+                };
+                transport.sendMail(message, (err, info) => {
+                    if (err) { console.log(err); }
+                    else { console.log(info); }
+                });
+            }
+        })
+        .catch(err => console.log(err));
 
-// });
+});
 
 require('./routes/apiRoutes')(app);
 require('./routes/adminRoutes')(app);
