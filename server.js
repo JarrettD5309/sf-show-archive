@@ -19,16 +19,17 @@ if (process.env.NODE_ENV === "production") {
     app.use(express.static("client/build"));
 }
 
-const MONGODB_URI = process.env.mongodburi;
-mongoose.connect(MONGODB_URI || 'mongodb://localhost/show-archive', {
-    useNewUrlParser: true,
-    useUnifiedTopology: true
-});
-// mongoose.connect('mongodb://localhost/show-archive', {
+// const MONGODB_URI = process.env.mongodburi;
+// mongoose.connect(MONGODB_URI || 'mongodb://localhost/show-archive', {
 //     useNewUrlParser: true,
 //     useUnifiedTopology: true,
 //     useFindAndModify: false
 // });
+mongoose.connect('mongodb://localhost/show-archive', {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+    useFindAndModify: false
+});
 
 mongoose.connection.on("connected", () => console.log("Mongoose is connected")
 );
@@ -80,6 +81,11 @@ const job = schedule.scheduleJob(rule, () => {
 
 require('./routes/apiRoutes')(app);
 require('./routes/adminRoutes')(app);
+
+// To deliver images in storage
+app.get("/uploads/:image", (req,res) =>{
+    res.sendFile(path.join(__dirname, "./uploads/" + req.params.image));
+});
 // Send every other request to the React app
 // Define any API routes before this runs
 app.get("*", (req, res) => {

@@ -228,7 +228,7 @@ module.exports = app => {
                 db.ShowDetails.updateOne({ showId: showId }, updateObj)
                     .then(result => {
                         if (detailType === 'flyer') {
-                            const filePath = './client/public/uploads/' + imgName;
+                            const filePath = './uploads/' + imgName;
                             fs.unlink(filePath, (err) => {
                                 if (err) throw err;
                             });
@@ -303,7 +303,7 @@ module.exports = app => {
                             res.json(results2);
                             // if image submission, delete the image file as well
                             if (results.flyer.contributed) {
-                                const filePath = './client/public/uploads/' + results.flyer.flyerImg;
+                                const filePath = './uploads/' + results.flyer.flyerImg;
                                 fs.unlink(filePath, (err) => {
                                     if (err) throw err;
                                 });

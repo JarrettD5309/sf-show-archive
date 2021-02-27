@@ -150,6 +150,10 @@
     width: 100px;
 }
 
+.full-show-margin-bottom {
+    margin-bottom: 7px;
+}
+
 .full-show-num {
     grid-column-start: 3;
     grid-column-end: 4;

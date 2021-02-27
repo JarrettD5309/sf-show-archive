@@ -349,7 +349,7 @@ module.exports = app => {
     // Image Upload 
     // Set Storage Engine
     const storage = multer.diskStorage({
-        destination: './client/public/uploads/',
+        destination: './uploads/',
         filename: (req, file, cb) => {
             cb(null, req.body.date + '-' + Date.now() + '.' + mime.extension(file.mimetype));
         }
