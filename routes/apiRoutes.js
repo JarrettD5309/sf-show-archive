@@ -18,8 +18,8 @@ module.exports = app => {
     app.get('/api/shows', (req, res) => {
         const startDate = req.query.startDate;
         const endDate = req.query.endDate;
-        const venue = req.query.venue;
-        const city = req.query.city;
+        const venue = req.query.venue.trim();
+        const city = req.query.city.trim();
         const allShows = req.query.allShows;
         const stateCountry = req.query.stateCountry;
         let dateQuery;
@@ -122,9 +122,9 @@ module.exports = app => {
 
     // CREATE ACCOUNT
     app.post('/api/user', (req, res) => {
-        const username = req.body.username.toLowerCase();
+        const username = req.body.username.toLowerCase().trim();
         const password = req.body.password;
-        const email = req.body.email;
+        const email = req.body.email.trim();
         const passwordConfirm = req.body.passwordConfirm;
 
         const stringLengthTest = (string, min, max) => {
@@ -213,9 +213,9 @@ module.exports = app => {
 
             };
 
-            const email = req.body.email;
-            const instagram = req.body.instagram;
-            const twitter = req.body.twitter;
+            const email = req.body.email.trim();
+            const instagram = req.body.instagram.trim();
+            const twitter = req.body.twitter.trim();
 
             const userUpdateObj = {
                 email: email,
@@ -247,7 +247,7 @@ module.exports = app => {
 
     // LOGIN
     app.post('/api/login', (req, res) => {
-        const username = req.body.username.toLowerCase();
+        const username = req.body.username.toLowerCase().trim();
         const password = req.body.password;
 
         if (username && password) {
