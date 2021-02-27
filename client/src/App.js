@@ -31,10 +31,8 @@ const App = () => {
                     if (res.status === 200) {
                         setLoggedIn(true);
                         getUserInfo();
-                        console.log('LOGGED IN');
                         checkAdminLogin();
                     } else {
-                        console.log('not logged in');
                         setLoading(false);
                     }
                 })
@@ -49,13 +47,11 @@ const App = () => {
                 .then(res => {
                     if (res.status === 200) {
                         setIsAdmin(true);
-                        console.log('admin');
                     } else {
                         setIsAdmin(false);
-                        console.log('not admin');
                     }
                 })
-                .catch(err=>console.log(err));
+                .catch(err => console.log(err));
         };
 
         checkLoggedIn();
@@ -67,21 +63,17 @@ const App = () => {
             .then(res => {
                 if (res.status === 200) {
                     setIsAdmin(true);
-                    console.log('admin');
                 } else {
                     setIsAdmin(false);
-                    console.log('not admin');
                 }
             })
-            .catch(err=>console.log(err));
+            .catch(err => console.log(err));
     };
 
 
     const getUserInfo = () => {
         axios.get('/api/getuser')
             .then(res => {
-                console.log('get info');
-                console.log(res.data);
                 setUserInfo(res.data);
             })
             .catch(err => console.log(err))

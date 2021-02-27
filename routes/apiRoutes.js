@@ -2,11 +2,9 @@ const db = require('../models');
 const bcrypt = require('bcrypt');
 const multer = require('multer');
 const path = require('path');
-// const e = require('express');
 const nodemailer = require('nodemailer');
 const crypto = require('crypto');
 const mime = require('mime-types');
-const e = require('express');
 
 module.exports = app => {
     // GETS ALL STATES AND COUNTRIES FOR DROPDOWN
@@ -18,8 +16,6 @@ module.exports = app => {
 
     // FOR SHOW SEARCH
     app.get('/api/shows', (req, res) => {
-        // console.log(req.query);
-
         const startDate = req.query.startDate;
         const endDate = req.query.endDate;
         const venue = req.query.venue;
@@ -55,18 +51,11 @@ module.exports = app => {
             queryObj.stateCountry = stateCountry;
         }
 
-        // if (req.query.showNum) {
-        //     queryObj.showNum = req.query.showNum;
-        // }
-
         if (allShows) {
             queryObj = {};
         }
 
-        // console.log(queryObj);
-
         db.Show.find(queryObj)
-            // .sort('showNum')
             .sort({ date: 1 })
             .then(result => res.json(result))
             .catch(err => res.json(err))
@@ -85,19 +74,15 @@ module.exports = app => {
                     .populate('review.contributed', ['username'])
                     .populate('attendance', ['username'])
                     .then(newResult => {
-                        // console.log(newResult);
                         res.json([newResult, result[0]]);
                     })
                     .catch(err => res.json(err));
-                // res.json(result);
             })
             .catch(err => res.json(err))
     });
 
     // FOR USE WITH TIMELINE
     app.get('/api/shows/month', (req, res) => {
-        // console.log(req.query);
-
         let currentMonth = req.query.month;
         let currentYear = req.query.year;
 
@@ -131,15 +116,12 @@ module.exports = app => {
             date: { $gte: `${dateString}-01`, $lte: `${dateString}-31` }
         })
             .sort('showNum')
-            // .sort({date: 1})
             .then(result => res.json(result))
             .catch(err => res.json(err))
     });
 
     // CREATE ACCOUNT
     app.post('/api/user', (req, res) => {
-        // console.log(req.body);
-
         const username = req.body.username.toLowerCase();
         const password = req.body.password;
         const email = req.body.email;
@@ -222,7 +204,6 @@ module.exports = app => {
 
                 } else if (type === 'instagram') {
                     const validInstagram = /http(?:s)?:\/\/(?:www\.)?instagram\.com\/([a-zA-Z0-9_]+)/.test(linkString);
-                    // console.log(validInstagram);
                     if (validInstagram || linkString === '') {
                         return true;
                     } else {
@@ -277,12 +258,10 @@ module.exports = app => {
                     } else if (results[0].banned) {
                         res.status(400).send('bannedUser');
                     } else {
-                        // console.log(results[0].password);
                         const hash = results[0].password;
                         bcrypt.compare(password, hash, (err, result) => {
                             if (result) {
                                 req.session.loggedin = true;
-                                // console.log(results[0]._id);
                                 req.session.userID = results[0]._id;
                                 req.session.admin = results[0].admin;
                                 res.status(200).send('loggedIn');
@@ -302,7 +281,7 @@ module.exports = app => {
                 .then(results => {
                     res.json(results);
                 })
-                .catch(err => console.log(err));
+                .catch(err => res.json(err));
         } else {
             res.sendStatus(404);
         }
@@ -311,23 +290,19 @@ module.exports = app => {
     // GET USER ATTENDANCE AND CONTRIBUTIONS
     app.get('/api/userattendance', (req, res) => {
         const userID = req.query.userID;
-        // console.log(userID);
         let combinedResults = []
         db.ShowDetails.find({ attendance: userID }, { showId: 1 })
             .populate('showId')
             .then(results => {
-                // res.json(results);
                 combinedResults.push(results);
             })
-            // .catch(err => console.log(err))
             .then(() => {
                 db.ShowDetails.find({ $or: [{ "audio.contributed": userID }, { "video.contributed": userID }, { "review.contributed": userID }, { "flyer.contributed": userID }, { "setList.contributed": userID }] }, { showId: 1 })
                     .populate('showId')
                     .then(results => {
-                        // console.log(results);
                         combinedResults.push(results);
                     })
-                    .catch(err => console.log(err))
+                    .catch(err => res.json(err))
                     .then(() => {
                         res.json(combinedResults);
                     });
@@ -344,34 +319,26 @@ module.exports = app => {
             .then(result => {
                 combinedResults.push(result);
                 userID = result[0]?._id;
-                // console.log(JSON.stringify(result[0]._id));
             })
-            // .catch(err => res.json(err))
             .then(() => {
                 // get user attendance
                 db.ShowDetails.find({ attendance: userID }, { showId: 1 })
                     .populate('showId')
                     .then(results => {
-                        // res.json(results);
-                        // console.log('hit: ' + userID);
-                        // console.log(JSON.stringify(results));
                         combinedResults.push(results);
                     })
-                    // .catch(err => console.log(err))
                     .then(() => {
                         // get user contributions
                         db.ShowDetails.find({ $or: [{ "audio.contributed": userID }, { "video.contributed": userID }, { "review.contributed": userID }, { "flyer.contributed": userID }, { "setList.contributed": userID }] }, { showId: 1 })
                             .populate('showId')
                             .then(results2 => {
-                                // console.log(results);
-                                // console.log(userID);
                                 if (userID === undefined) {
                                     combinedResults.push([])
                                 } else {
                                     combinedResults.push(results2);
                                 }
                             })
-                            .catch(err => console.log(err))
+                            .catch(err => res.json(err))
                             .then(() => {
                                 res.json(combinedResults);
                             });
@@ -435,9 +402,7 @@ module.exports = app => {
         if (req.session.loggedin) {
 
             upload(req, res, (err) => {
-                // console.log(req.file);
                 if (err) {
-                    console.log(err);
                     res.status(400).json(err);
                 } else {
                     if (req.file == undefined) {
@@ -541,7 +506,6 @@ module.exports = app => {
                     try {
                         new URL(url);
                     } catch (e) {
-                        // console.error(e);
                         return false;
                     }
                     return true;
@@ -620,7 +584,6 @@ module.exports = app => {
                         const submittedOn = new Date();
                         linksObj.submittedOn = submittedOn;
                         linksObj.showId = req.body.showId;
-                        console.log(linksObj);
                         db.ApproveDetails.create(linksObj)
                             .then(result => res.json(result))
                             .catch(err => res.json(err));
@@ -767,11 +730,8 @@ module.exports = app => {
         const message = {
             from: process.env.SENDER_ADDRESS,
             to: req.body.email,
-            // replyTo: process.env.REPLYTO_ADDRESS,
             subject: process.env.FORGOT_PASS_SUBJECT_LINE,
-            // subject: 'Reset your Screaming Females Tour Archive Password',
             text: 'To reset your password, please click the link below.\n\nhttp://' + process.env.DOMAIN + '/reset-password/' + encodeURIComponent(token) + '/' + req.body.email
-            // text: 'test test test'
         };
 
         transport.sendMail(message, (err, info) => {

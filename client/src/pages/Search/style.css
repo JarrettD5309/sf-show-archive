@@ -61,6 +61,11 @@
     height: 0;
 }
 
+.search-no-shows-para {
+    text-align: center;
+    margin-top: 15px;
+}
+
 @media (min-width: 400px) and (max-width: 575px) {
 
     .search-back-button {

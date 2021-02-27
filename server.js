@@ -6,7 +6,6 @@ const MongoStore = require('connect-mongo')(session);
 const nodemailer = require('nodemailer');
 const schedule = require('node-schedule');
 const db = require("./models");
-// const { start } = require('repl');
 require('dotenv').config();
 
 const PORT = process.env.PORT || 3001;
@@ -21,7 +20,7 @@ if (process.env.NODE_ENV === "production") {
 }
 
 const MONGODB_URI = process.env.mongodburi;
-mongoose.connect(MONGODB_URI || 'mongodb://localhost/show-archive',{
+mongoose.connect(MONGODB_URI || 'mongodb://localhost/show-archive', {
     useNewUrlParser: true,
     useUnifiedTopology: true
 });
@@ -38,7 +37,7 @@ app.use(session({
     secret: process.env.SESSION_SECRET,
     resave: true,
     saveUninitialized: true,
-    store: new MongoStore({mongooseConnection: mongoose.connection})
+    store: new MongoStore({ mongooseConnection: mongoose.connection })
 }));
 
 // SETUP EMAIL

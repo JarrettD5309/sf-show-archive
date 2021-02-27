@@ -13,6 +13,7 @@ const Search = () => {
     const [city, setCity] = React.useState('');
     const [stateCountry, setStateCountry] = React.useState('');
     const [stateArr, setStateArr] = React.useState([]);
+    const [showNoResultsInstructions, setShowNoResultsInstructions] = React.useState(false);
 
     let resizeTimer;
     window.addEventListener("resize", () => {
@@ -26,7 +27,6 @@ const Search = () => {
     useEffect(() => {
         axios.get('/api/allstates')
             .then(res => {
-                console.log(res);
                 setStateArr(res.data);
             })
             .catch(err => console.log(err));
@@ -34,7 +34,6 @@ const Search = () => {
 
     const handleSubmit = () => {
         if (startDate !== '' || endDate !== '' || venue !== '' || city !== '' || stateCountry !== '') {
-            console.log(startDate);
             axios.get('/api/shows', {
                 params: {
                     startDate: startDate,
@@ -45,10 +44,12 @@ const Search = () => {
                 }
             })
                 .then(res => {
-                    console.log(res);
                     if (res.data.length !== 0) {
                         setShows(res.data);
                         setFadeShows(true);
+                        setShowNoResultsInstructions(false);
+                    } else {
+                        setShowNoResultsInstructions(true);
                     }
                 })
                 .catch(err => console.log(err));
@@ -57,13 +58,13 @@ const Search = () => {
     };
 
     const handleAllShowsSubmit = () => {
+        setShowNoResultsInstructions(false);
         axios.get('/api/shows', {
             params: {
                 allShows: true
             }
         })
             .then(res => {
-                console.log(res);
                 setShows(res.data);
                 setFadeShows(true);
             })
@@ -72,6 +73,7 @@ const Search = () => {
     };
 
     const handleBack = () => {
+        setShowNoResultsInstructions(false);
         setFadeShows(false);
         setStartDate('');
         setEndDate('');
@@ -108,6 +110,10 @@ const Search = () => {
                     handleAllShowsSubmit={handleAllShowsSubmit}
                 />
             </div>
+
+            {showNoResultsInstructions && shows.length === 0 &&
+                <h4 className='search-no-shows-para'>No shows to display</h4>
+            }
 
             <div className={fadeShows ? 'fadeIn search-back-button-div' : 'fadeOutSearchBack search-back-button-div'}>
                 <button className='search-back-button' type='button' onClick={handleBack}>Back</button>

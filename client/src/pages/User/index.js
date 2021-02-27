@@ -17,7 +17,6 @@ const User = () => {
             }
         })
             .then(res => {
-                console.log(res.data[0][0]);
                 setUserInfo(res.data[0][0]);
 
                 const attendedDates = res.data[1].map(show => {

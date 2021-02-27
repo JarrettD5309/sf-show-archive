@@ -24,40 +24,40 @@ const CreateAccountForm = (props) => {
                 </div>
                 <div>
                     <label htmlFor='create-username'>Username</label><br />
-                    <input 
-                        type='text' 
-                        id='create-username' 
+                    <input
+                        type='text'
+                        id='create-username'
                         name='create-username'
                         value={createUsername}
-                        onChange={event => setCreateUsername(event.target.value)} 
-                        className='create-input' 
+                        onChange={event => setCreateUsername(event.target.value)}
+                        className='create-input'
                     /><br />
                     <label htmlFor='create-email'>Email</label><br />
-                    <input 
-                        type='text' 
-                        id='create-email' 
+                    <input
+                        type='text'
+                        id='create-email'
                         name='create-email'
                         value={createEmail}
-                        onChange={event => setCreateEmail(event.target.value)} 
-                        className='create-input' 
+                        onChange={event => setCreateEmail(event.target.value)}
+                        className='create-input'
                     /><br />
                     <label htmlFor='create-password'>Password</label><br />
-                    <input 
-                        type='password' 
-                        id='create-password' 
+                    <input
+                        type='password'
+                        id='create-password'
                         name='create-password'
                         value={createPassword}
-                        onChange={event => setCreatePassword(event.target.value)} 
-                        className='create-input' 
+                        onChange={event => setCreatePassword(event.target.value)}
+                        className='create-input'
                     /><br />
                     <label htmlFor='create-password-confirm'>Password Confirm</label><br />
-                    <input 
-                        type='password' 
-                        id='create-password-confirm' 
+                    <input
+                        type='password'
+                        id='create-password-confirm'
                         name='create-password-confirm'
                         value={createPasswordConfirm}
-                        onChange={event => setCreatePasswordConfirm(event.target.value)} 
-                        className='create-input' 
+                        onChange={event => setCreatePasswordConfirm(event.target.value)}
+                        className='create-input'
                     />
                 </div>
                 <div>

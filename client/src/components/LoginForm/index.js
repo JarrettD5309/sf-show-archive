@@ -20,22 +20,22 @@ const LoginForm = (props) => {
                 </div>
                 <div>
                     <label htmlFor='login-username'>Username</label><br />
-                    <input 
-                        type='text' 
-                        id='login-username' 
+                    <input
+                        type='text'
+                        id='login-username'
                         name='login-username'
                         value={loginUsername}
-                        onChange={event => setLoginUsername(event.target.value)} 
-                        className='login-input' 
+                        onChange={event => setLoginUsername(event.target.value)}
+                        className='login-input'
                     /><br />
                     <label htmlFor='login-password'>Password</label><br />
-                    <input 
-                        type='password' 
-                        id='login-password' 
+                    <input
+                        type='password'
+                        id='login-password'
                         name='login-password'
                         value={loginPassword}
-                        onChange={event => setLoginPassword(event.target.value)} 
-                        className='login-input' 
+                        onChange={event => setLoginPassword(event.target.value)}
+                        className='login-input'
                     />
                 </div>
                 <div>

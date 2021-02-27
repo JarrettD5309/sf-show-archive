@@ -1,18 +1,10 @@
 const db = require('../models');
 const fs = require('fs');
-const bcrypt = require('bcrypt');
-const multer = require('multer');
-const path = require('path');
-const nodemailer = require('nodemailer');
-const mime = require('mime-types');
 
 module.exports = app => {
 
-    // const req.session.admin = true;
-
     // SEARCH SHOW NUMBER
     app.get('/admin/shows', (req, res) => {
-        // if (req.session.admin) {
         if (req.session.admin) {
             const showNum = req.query.showNum;
 
@@ -117,7 +109,6 @@ module.exports = app => {
     app.delete('/admin/delete-show', (req, res) => {
         if (req.session.admin) {
             const _id = req.query._id;
-            console.log(req.query._id);
 
             db.Show.deleteOne({
                 _id: _id
@@ -125,7 +116,7 @@ module.exports = app => {
                 .then(results => {
                     res.json(results);
                 })
-                .catch(err => console.log(err));
+                .catch(err => res.json(err));
         } else {
             res.sendStatus(404);
         }
@@ -139,7 +130,7 @@ module.exports = app => {
                 .then(result => {
                     res.json(result);
                 })
-                .catch(err => console.log(err));
+                .catch(err => res.json(err));
         } else {
             res.sendStatus(404);
         }
@@ -164,7 +155,7 @@ module.exports = app => {
                             .then(result => res.json(result));
                     }
                 })
-                .catch(err => console.log(err));
+                .catch(err => res.json(err));
 
         } else {
             res.sendStatus(404);
@@ -178,7 +169,6 @@ module.exports = app => {
             if (req.body.userId && req.body.showId) {
                 const userId = req.body.userId;
                 const showId = req.body.showId;
-                // console.log(req.body.userId);
 
                 db.ShowDetails.updateOne({ showId: showId },
                     {
@@ -241,8 +231,7 @@ module.exports = app => {
                             const filePath = './client/public/uploads/' + imgName;
                             fs.unlink(filePath, (err) => {
                                 if (err) throw err;
-                                console.log(filePath + ' was deleted');
-                            })
+                            });
                         }
                         res.json(result);
                     })
@@ -307,7 +296,6 @@ module.exports = app => {
             // return the info for approvedetails entry to get img data
             db.ApproveDetails.findOne({ _id: _id })
                 .then(results => {
-                    console.log(results);
                     db.ApproveDetails.deleteOne({
                         _id: _id
                     })
@@ -318,8 +306,7 @@ module.exports = app => {
                                 const filePath = './client/public/uploads/' + results.flyer.flyerImg;
                                 fs.unlink(filePath, (err) => {
                                     if (err) throw err;
-                                    console.log(filePath + ' was deleted');
-                                })
+                                });
                             }
                         });
                 })
@@ -335,15 +322,12 @@ module.exports = app => {
             const _id = req.body._id;
             db.ApproveDetails.findOne({ _id: _id })
                 .then(results => {
-                    // console.log(results);
                     const updateObj = {
                         $push: {}
                     };
                     if (results.setList.songs.length > 0) {
                         updateObj.setList = results.setList
                     }
-
-                    // console.log('audio: '+results.audio.contributed)
 
                     if (results.audio.contributed) {
                         updateObj.$push.audio = results.audio;
@@ -358,8 +342,6 @@ module.exports = app => {
                     if (results.flyer.contributed) {
                         updateObj.$push.flyer = results.flyer;
                     }
-
-                    // console.log(updateObj);
 
                     db.ShowDetails.findOneAndUpdate(
                         { showId: results.showId },

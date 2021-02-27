@@ -10,10 +10,10 @@ const TimelinePage = (props) => {
     const [shows, setShows] = React.useState([]);
     const [fadeShows, setFadeShows] = React.useState(false);
     const [timelineMini, setTimelineMini] = React.useState(false);
-    const [mobile, setMobile] = React.useState(window.innerWidth<=575);
+    const [mobile, setMobile] = React.useState(window.innerWidth <= 575);
 
     const handleResize = () => {
-        if (window.innerWidth>575) {
+        if (window.innerWidth > 575) {
             setMobile(false);
         } else {
             setMobile(true);
@@ -36,7 +36,7 @@ const TimelinePage = (props) => {
         }
     }, [currentMonth]);
 
-    useEffect(()=>{
+    useEffect(() => {
         window.addEventListener('resize', handleResize);
 
         return () => {
@@ -47,17 +47,15 @@ const TimelinePage = (props) => {
     const pageBackButton = () => {
         setCurrentYear(undefined);
         setCurrentMonth(undefined);
-        // setFadeShows(false);
-        // setTimeout(()=>{setShows([])},1100);
     };
 
     const handleUnMini = () => {
         setTimelineMini(false);
         setFadeShows(false);
-        setTimeout(()=>{
+        setTimeout(() => {
             setShows([]);
             setCurrentMonth(undefined);
-        },900);
+        }, 900);
     };
 
     return (
@@ -65,13 +63,13 @@ const TimelinePage = (props) => {
             <div className='main-header-div'>
                 <div className='child-header-div'>
                     <h1>Screaming</h1>
-                        <h1>&nbsp;&nbsp;&nbsp;Females</h1>
+                    <h1>&nbsp;&nbsp;&nbsp;Females</h1>
                     <h1 className='outline'>Tour</h1>
                     <h1 className='outline'>&nbsp;Archive</h1>
                 </div>
             </div>
-            <div 
-                {...(timelineMini && {onClick: ()=>{handleUnMini()}})}
+            <div
+                {...(timelineMini && { onClick: () => { handleUnMini() } })}
                 className={timelineMini ? 'timeline-div mini' : 'timeline-div'}
             >
                 <Timeline
@@ -95,8 +93,8 @@ const TimelinePage = (props) => {
                         key={show.showNum}
                     />
                 ))}
-                {timelineMini && shows.length===0 &&
-                <h4 className='no-shows-para'>No shows during this month</h4>
+                {timelineMini && shows.length === 0 &&
+                    <h4 className='no-shows-para'>No shows during this month</h4>
                 }
             </div>
         </div>

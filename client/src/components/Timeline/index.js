@@ -2,15 +2,15 @@ import React, { useEffect } from 'react';
 
 const Timeline = (props) => {
     const {
-        setCurrentYear, 
-        setCurrentMonth, 
+        setCurrentYear,
+        setCurrentMonth,
         pageBackButton,
         setTimelineMini,
         mobile
     } = props;
 
     const seconds = 1.5;
-    const numBranches =  mobile ? 6 : 10;
+    const numBranches = mobile ? 6 : 10;
     let numScreens = 0;
     let currentScreen = 0;
 
@@ -42,14 +42,14 @@ const Timeline = (props) => {
 
     const handler = (event) => {
         if (locked !== true) {
-    
+
             // if (event.target.id === 'triangle-end-right') {
             if (event.target.id === 'clickable-end-right') {
                 moveRight();
-            // } else if (event.target.id === 'triangle-end-left') {
+                // } else if (event.target.id === 'triangle-end-left') {
             } else if (event.target.id === 'clickable-end-left') {
                 moveLeft();
-            } else if (/^year/.test(event.target.id) && event.target.id!=='year-header-text') {
+            } else if (/^year/.test(event.target.id) && event.target.id !== 'year-header-text') {
                 fadeTimeline();
 
                 const currentYear = event.target.textContent;
@@ -78,17 +78,15 @@ const Timeline = (props) => {
                 moveLeftMonth();
             } else if (/^month/.test(event.target.id)) {
                 const currentMonth = event.target.textContent.toLowerCase();
-                console.log(currentMonth);
                 setCurrentMonth(currentMonth);
                 setTimelineMini(true);
             } else if (event.target.id === 'back-button') {
-                console.log('back button');
                 fadeInTimeline();
                 fadeOutMonthsTimeline();
                 fadeOutBackButton();
                 yearTextReturn();
                 timelineYearVisible();
-                
+
                 // manages TimelinePage logic
                 pageBackButton();
             }
@@ -235,11 +233,10 @@ const Timeline = (props) => {
 
     const moveRightMonth = () => {
         locked = true;
-        setTimeout(() => { locked = false; console.log(locked) }, (seconds * 1000) + 10);
+        setTimeout(() => locked = false, (seconds * 1000) + 10);
         let hiddenBranchId = 'month-branch' + (currentMonthScreen + 1) * numMonthBranches;
         let hiddenYearTextId = 'month' + (currentMonthScreen + 1) * numMonthBranches;
         let toHideBranchId = 'month-branch' + (((currentMonthScreen + 1) * numMonthBranches) - 1);
-        console.log('to hide branch: '+ toHideBranchId);
         let toHideYearTextId = 'month' + (((currentMonthScreen + 1) * numMonthBranches) - 1);
         let leftEndTriangleVisibility = 'visible';
         let leftEndCircleVisibility = 'hidden';
@@ -733,7 +730,7 @@ const Timeline = (props) => {
                 rectangle.style.cursor = 'pointer';
             }
             // rectangle.setAttribute('fill','red');
-            rectangle.setAttribute('opacity','0.0');
+            rectangle.setAttribute('opacity', '0.0');
             return rectangle;
         };
 
@@ -745,8 +742,6 @@ const Timeline = (props) => {
     };
 
     const fadeMonthsTimelineIn = () => {
-        // locked = true;
-        // console.log('fade timeline');
         const timelineAnimate = document.getElementById('month-timeline-fade-in');
         timelineAnimate.beginElement();
 
@@ -814,7 +809,6 @@ const Timeline = (props) => {
         const branches = lastYear - firstYear + 1;
 
         numScreens = Math.ceil(branches / numBranches);
-        console.log(numScreens);
 
         // define svg
         const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
@@ -864,8 +858,6 @@ const Timeline = (props) => {
 
         // first branch = distance plus offset
         let mLocation = mDistance + 20;
-
-        console.log(mDistance);
 
         // loop to create branches
         for (let i = 0; i < branches; i++) {
@@ -1061,7 +1053,7 @@ const Timeline = (props) => {
                 rectangle.style.cursor = 'pointer';
             }
             // rectangle.setAttribute('fill','red');
-            rectangle.setAttribute('opacity','0.0');
+            rectangle.setAttribute('opacity', '0.0');
             return rectangle;
         };
 

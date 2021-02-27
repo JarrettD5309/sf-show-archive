@@ -8,7 +8,6 @@ const SlideDrawer = (props) => {
     const handleLogout = () => {
         axios.get('/api/logout')
             .then(res => {
-                console.log(res);
                 if (res.status === 200) {
                     props.setLoggedIn(false);
                     props.setDrawerOpen(false);

@@ -27,47 +27,45 @@ const Profile = (props) => {
         getUserInfo
     } = props;
 
-    useEffect(()=>{
-        console.log('props: ' + JSON.stringify(props.userInfo));
+    useEffect(() => {
         setNewEmail(props.userInfo.email);
         setNewInstagram(props.userInfo.instagram);
         setNewTwitter(props.userInfo.twitter);
 
-        const getShowsAttended = ()=> {
+        const getShowsAttended = () => {
             axios.get('/api/userattendance', {
                 params: {
                     userID: _id
                 }
             })
-            .then(res=>{
-                console.log(res.data);
-                const attendedDates = res.data[0].map(show=>{
-                   const dateString = dateFunction(show.showId.date,true);
-                   return {
-                       dateString: dateString,
-                       showNum: parseInt(show.showId.showNum)
-                    };
-                });
-                attendedDates.sort((a, b) => a.showNum - b.showNum);
-                setAttendedArray(attendedDates);
-    
-                const contributedDates = res.data[1].map(show=>{
-                   const dateString = dateFunction(show.showId.date,true);
-                   return {
-                       dateString: dateString,
-                       showNum: parseInt(show.showId.showNum)
-                    };
-                });
-                contributedDates.sort((a, b) => a.showNum - b.showNum);
-                setContributedArray(contributedDates);
-            })
-            .catch(err=>{
-                console.log(err);
-            })
+                .then(res => {
+                    const attendedDates = res.data[0].map(show => {
+                        const dateString = dateFunction(show.showId.date, true);
+                        return {
+                            dateString: dateString,
+                            showNum: parseInt(show.showId.showNum)
+                        };
+                    });
+                    attendedDates.sort((a, b) => a.showNum - b.showNum);
+                    setAttendedArray(attendedDates);
+
+                    const contributedDates = res.data[1].map(show => {
+                        const dateString = dateFunction(show.showId.date, true);
+                        return {
+                            dateString: dateString,
+                            showNum: parseInt(show.showId.showNum)
+                        };
+                    });
+                    contributedDates.sort((a, b) => a.showNum - b.showNum);
+                    setContributedArray(contributedDates);
+                })
+                .catch(err => {
+                    console.log(err);
+                })
         };
 
         getShowsAttended();
-    },[]);
+    }, []);
 
     const handleUserUpdate = () => {
         const userUpdate = {
@@ -75,11 +73,9 @@ const Profile = (props) => {
             instagram: newInstagram,
             twitter: newTwitter
         }
-        console.log(userUpdate);
 
         axios.put('/api/userupdate', userUpdate)
-            .then (res => {
-                console.log(res);
+            .then(res => {
                 setProfileInstructions('Success!');
                 setTimeout(() => {
                     handleCloseModal('profile');
@@ -90,7 +86,7 @@ const Profile = (props) => {
                 console.log(err);
                 setProfileInstructions(err.response.data);
             });
-        
+
     };
 
     const handleCloseModal = (type) => {
@@ -112,7 +108,7 @@ const Profile = (props) => {
     return (
         <div>
 
-            <ProfileDisplay 
+            <ProfileDisplay
                 username={username}
                 email={email}
                 instagram={instagram}
@@ -122,7 +118,7 @@ const Profile = (props) => {
                 handleOpenModal={handleOpenModal}
             />
 
-            {displayModal && <Modal 
+            {displayModal && <Modal
                 type={modalType}
                 handleCloseModal={handleCloseModal}
                 profileInstructions={profileInstructions}

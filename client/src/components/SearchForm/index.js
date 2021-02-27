@@ -38,7 +38,6 @@ const SearchForm = (props) => {
                 </div>
                 <div>
                     <label htmlFor='stateCountry'>State/Country</label><br />
-                    {/* <input type='text' id='stateCountry' name='stateCountry' /> */}
                     <select type='text' id='stateCountry' name='stateCountry' value={stateCountry} onChange={event=>setStateCountry(event.target.value)}>
                         <option value=''></option>
                     {stateArr.map((state,i) => (

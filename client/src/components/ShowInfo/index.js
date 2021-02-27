@@ -5,7 +5,7 @@ import { useHistory } from "react-router-dom";
 
 function ShowInfo(props) {
     let history = useHistory();
-    const {showNum, date, venue, address, city, stateCountry} = props;
+    const { showNum, date, venue, address, city, stateCountry } = props;
 
     const dateString = dateFunction(date);
 

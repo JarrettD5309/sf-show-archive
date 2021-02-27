@@ -29,7 +29,6 @@ const Show = (props) => {
     } = props;
 
     useEffect(() => {
-        // console.log(userInfo._id);
         // deals with react unmounted component issue
         let mounted = true;
 
@@ -39,7 +38,6 @@ const Show = (props) => {
             }
         })
             .then(res => {
-                // console.log(res);
                 if (mounted) {
                     setShowInfoDetails(res.data[0]);
                     setShowInfo(res.data[1]);
@@ -61,7 +59,6 @@ const Show = (props) => {
             }
         })
             .then(res => {
-                // console.log(res);
                 setShowInfoDetails(res.data[0]);
                 setShowInfo(res.data[1]);
                 if (res.data[0]) {
@@ -85,7 +82,6 @@ const Show = (props) => {
             formData.append('showId', showInfo._id);
             formData.append('date', showInfo.date);
             formData.append('flyerImg', compressedFile);
-            // console.log(formData);
             const config = {
                 headers: {
                     'content-type': 'multipart/form-data'
@@ -97,20 +93,15 @@ const Show = (props) => {
 
             axios.post('/api/showflyer', formData, config)
                 .then(res => {
-                    // console.log(res);
                     setFlyerInstructions('THANK YOU! Your submission is AWAITING APPROVAL.');
                     topOfModal.scrollTop = 0;
                     setTimeout(() => {
                         handleCloseModal('flyer');
-                        // setImageFile(null);
-                        // setImageFileName('');
-                        // setFlyerInstructions('Please choose a image');
                         getDetails();
                     }, 2500);
                 })
                 .catch(err => {
                     console.log(err);
-                    // console.log(err.response.data.message);
                     setFlyerInstructions(err.response.data.message);
                     setImageFile(null);
                     setImageFileName('')
@@ -132,15 +123,14 @@ const Show = (props) => {
     const handleSetlistSubmit = () => {
         let newSetlist = [];
         const inputArr = document.getElementsByClassName('modal-setlist-input');
-        // console.log(inputArr.length);
+
         for (let i = 0; i < inputArr.length; i++) {
             const currentInput = document.getElementById('song' + i);
-            // console.log(currentInput.value);
             if (currentInput.value !== '') {
                 newSetlist.push(currentInput.value);
             }
         }
-        // console.log(newSetlist);
+
         const setlistData = {
             showId: showInfo._id,
             setlist: newSetlist
@@ -206,10 +196,8 @@ const Show = (props) => {
             const topOfModal = document.getElementById('myModal');
 
             if (isValidForSend(newAudioLink) && isValidForSend(newVideoLink) && isValidForSend(newReviewLink)) {
-                // console.log('send!');
                 axios.post('/api/links', linksData)
                     .then(res => {
-                        // console.log(res);
                         setLinkInstructions('THANK YOU! Your submission is AWAITING APPROVAL.');
                         topOfModal.scrollTop = 0;
                         setTimeout(() => {
@@ -230,10 +218,8 @@ const Show = (props) => {
     };
 
     const handleAttendanceSubmit = () => {
-        // console.log('send');
         axios.post('/api/attendance', { showId: showInfo._id, })
             .then(res => {
-                // console.log(res);
                 setAttendanceInstructions('Thank you!')
                 setTimeout(() => {
                     handleCloseModal('attendance');
@@ -244,10 +230,8 @@ const Show = (props) => {
     };
 
     const handleAttendanceRemoveSubmit = () => {
-        console.log('remove');
         axios.put('/api/attendance', { showId: showInfo._id })
             .then(res => {
-                console.log(res);
                 setAttendanceRemoveInstructions('Thank you!');
                 setTimeout(() => {
                     handleCloseModal('attendance-remove');

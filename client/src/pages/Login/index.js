@@ -16,28 +16,27 @@ const Login = (props) => {
             password: loginPassword
         };
 
-        axios.post('/api/login',userObj)
-            .then(res=>{
-                console.log(res.data);
-                if (res.data==='loggedIn') {
+        axios.post('/api/login', userObj)
+            .then(res => {
+                if (res.data === 'loggedIn') {
                     props.setLoggedIn(true);
                     props.getUserInfo();
                     props.checkAdminLogin();
                     history.push('/');
                 }
             })
-            .catch(err=>{
+            .catch(err => {
                 console.log(err);
-                if (err.response.data==='wrongPassUser') {
+                if (err.response.data === 'wrongPassUser') {
                     setLoginInstructions('Incorrect username or password');
-                } else if (err.response.data==='bannedUser') {
+                } else if (err.response.data === 'bannedUser') {
                     setLoginInstructions('User is banned');
                 }
             });
     };
 
     return (
-        <LoginForm 
+        <LoginForm
             loginUsername={loginUsername}
             setLoginUsername={setLoginUsername}
             loginPassword={loginPassword}

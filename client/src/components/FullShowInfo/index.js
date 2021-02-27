@@ -37,24 +37,10 @@ function FullShowInfo(props) {
 
     const dateString = dateFunction(date);
 
-    // const convertAttendanceUsers = () => {
-    //     let usersString = '';
-    //     for (let i = 0; i < attendance.length; i++) {
-    //         if (i < (attendance.length - 1)) {
-    //             usersString = usersString + attendance[i].username + ', ';
-    //         } else {
-    //             usersString = usersString + attendance[i].username;
-    //         }
-    //     }
-    //     return (
-    //         <p>{usersString}</p>
-    //     );
-    // };
-
     const attendButton = () => {
         let found = false;
-        for (let i=0;i<attendance.length;i++) {
-            if (userInfo._id===attendance[i]._id) {
+        for (let i = 0; i < attendance.length; i++) {
+            if (userInfo._id === attendance[i]._id) {
                 found = true;
             }
         }
@@ -72,7 +58,6 @@ function FullShowInfo(props) {
                 <div className='full-show-street'>{address}</div>
                 <div className='full-show-city'>{city}, {stateCountry}</div>
             </div>
-            {/* <div className='full-show-info-border'></div> */}
             <div className='full-show-flyer-set-div'>
                 <div className='full-show-flyer-div'>
                     <div className='full-show-header-margin'>
@@ -92,7 +77,6 @@ function FullShowInfo(props) {
                     ) :
                         (<p>N/A</p>)
                     }
-                    {/* <img src={ShowFlyer} className='full-show-image' /> */}
                 </div>
                 <div className='full-show-set-list-div'>
                     <div className='full-show-header-margin'>
@@ -105,7 +89,6 @@ function FullShowInfo(props) {
                                 <p key={i}>{i + 1}. {song}</p>
                             )}
                             <p>Contributed by: <a href={`/user/${setList.contributed.username}`} className='full-show-links-link'>{setList.contributed.username}</a></p>
-                            {/* <p>Contributed by: {setList.contributed.username} </p> */}
                         </div>
 
                     ) :
@@ -170,24 +153,24 @@ function FullShowInfo(props) {
             <div>
                 <div className='full-show-header-margin'>
                     <h2>Attendance</h2>
-                    {loggedIn && 
-                    <button className='full-show-add-button' type='button' onClick={() => {
-                        attendButton() ? 
-                        handleOpenModal('attendance-remove') :
-                        handleOpenModal('attendance')
-                        ;
-                    }}>ADD</button>
+                    {loggedIn &&
+                        <button className='full-show-add-button' type='button' onClick={() => {
+                            attendButton() ?
+                                handleOpenModal('attendance-remove') :
+                                handleOpenModal('attendance')
+                                ;
+                        }}>ADD</button>
                     }
                 </div>
                 <div>
                     {attendance.length !== 0 ? attendance.map((user, i) => {
-                            if (i < (attendance.length - 1)) {
-                                return <span key={i}><a href={`/user/${attendance[i].username}`} className='full-show-links-link'>{attendance[i].username}</a>, </span>;
-                            } else {
-                                return <a href={`/user/${attendance[i].username}`} className='full-show-links-link' key={i}>{attendance[i].username}</a>;
-                            }
+                        if (i < (attendance.length - 1)) {
+                            return <span key={i}><a href={`/user/${attendance[i].username}`} className='full-show-links-link'>{attendance[i].username}</a>, </span>;
+                        } else {
+                            return <a href={`/user/${attendance[i].username}`} className='full-show-links-link' key={i}>{attendance[i].username}</a>;
+                        }
 
-                        }) :
+                    }) :
                         (<p>N/A</p>)}
                 </div>
             </div>
