@@ -17,6 +17,8 @@ import withAuth from './withAuth';
 import withAuthAdmin from './withAuthAdmin';
 import axios from 'axios';
 
+import Attendance from './pages/Attendance';
+
 const App = () => {
     const [drawerOpen, setDrawerOpen] = React.useState(false);
     const [loggedIn, setLoggedIn] = React.useState(false);
@@ -108,6 +110,11 @@ const App = () => {
                     <Route path='/show/:id' component={() => <Show loggedIn={loggedIn} userInfo={userInfo} />} />
 
                     <Route path='/user/:username' component={User} />
+
+                    {/* Special page to add attendance to every show */}
+                    {/* <Route path='/attendance' component={Attendance} /> */}
+
+
                     <Route path='*' component={() => <h1 style={{ textAlign: 'center' }} >404 NOT FOUND</h1>} />
                 </Switch>
             </Router>

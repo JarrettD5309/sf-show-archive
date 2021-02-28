@@ -7,6 +7,39 @@ const crypto = require('crypto');
 const mime = require('mime-types');
 
 module.exports = app => {
+
+    // ADD ATTENDANCE FOR EVERY SHOW 
+    // app.get('/special/attendance', (req,res) => {
+    //     console.log('yup');
+    //     // let datesArray = [];
+    //     db.Show.find()
+    //     .then(res=>{
+    //         // console.log(res);
+    //         async function addAttendance () {
+    //             const datesArray = res;
+
+    //             for (const date of datesArray) {
+    //                 console.log(date._id);
+    //                 await db.ShowDetails.findOneAndUpdate(
+    //                     { showId: date._id },
+    //                     {
+    //                         $addToSet: {
+    //                             attendance: req.session.userID
+    //                         }
+    //                     },
+    //                     {
+    //                         new: true,
+    //                         upsert: true,
+    //                         setDefaultsOnInsert: true
+    //                     }
+    //                 );
+    //             }
+    //         };
+
+    //         addAttendance();
+    //     });
+    // });
+
     // GETS ALL STATES AND COUNTRIES FOR DROPDOWN
     app.get('/api/allstates', (req, res) => {
         db.Show.distinct('stateCountry')

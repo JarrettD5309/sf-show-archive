@@ -26,6 +26,7 @@
 .sub-root {
     width: 900px;
     margin: 0 auto;
+    padding-bottom: 15px;
 }
 
 .timeline-div {
