@@ -731,7 +731,7 @@ module.exports = app => {
             from: process.env.SENDER_ADDRESS,
             to: req.body.email,
             subject: process.env.FORGOT_PASS_SUBJECT_LINE,
-            text: 'To reset your password, please click the link below.\n\nhttp://' + process.env.DOMAIN + '/reset-password/' + encodeURIComponent(token) + '/' + req.body.email
+            text: 'To reset your password, please click the link below.\n\nhttps://' + process.env.DOMAIN + '/reset-password/' + encodeURIComponent(token) + '/' + req.body.email
         };
 
         transport.sendMail(message, (err, info) => {
