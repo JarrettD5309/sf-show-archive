@@ -18,8 +18,14 @@ module.exports = app => {
     app.get('/api/shows', (req, res) => {
         const startDate = req.query.startDate;
         const endDate = req.query.endDate;
-        const venue = req.query.venue.trim();
-        const city = req.query.city.trim();
+        let venue = req.query.venue;
+        if (venue) {
+            venue = venue.trim();
+        }
+        let city = req.query.city;
+        if (city) {
+            city = venue.trim();
+        }
         const allShows = req.query.allShows;
         const stateCountry = req.query.stateCountry;
         let dateQuery;
@@ -122,9 +128,15 @@ module.exports = app => {
 
     // CREATE ACCOUNT
     app.post('/api/user', (req, res) => {
-        const username = req.body.username.toLowerCase().trim();
+        let username = req.body.username;
+        if (username) {
+            username = username.toLowerCase().trim();
+        }
         const password = req.body.password;
-        const email = req.body.email.trim();
+        let email = req.body.email;
+        if (email) {
+            email = email.trim();
+        }
         const passwordConfirm = req.body.passwordConfirm;
 
         const stringLengthTest = (string, min, max) => {
@@ -213,9 +225,20 @@ module.exports = app => {
 
             };
 
-            const email = req.body.email.trim();
-            const instagram = req.body.instagram.trim();
-            const twitter = req.body.twitter.trim();
+            let email = req.body.email;
+            if (email) {
+                email = email.trim();
+            }
+
+            let instagram = req.body.instagram;
+            if (instagram) {
+                instagram = instagram.trim();
+            }
+
+            let twitter = req.body.twitter;
+            if (twitter) {
+                twitter = twitter.trim();
+            }
 
             const userUpdateObj = {
                 email: email,
@@ -247,7 +270,10 @@ module.exports = app => {
 
     // LOGIN
     app.post('/api/login', (req, res) => {
-        const username = req.body.username.toLowerCase().trim();
+        let username = req.body.username;
+        if (username) {
+            username = username.toLowerCase().trim();
+        }
         const password = req.body.password;
 
         if (username && password) {

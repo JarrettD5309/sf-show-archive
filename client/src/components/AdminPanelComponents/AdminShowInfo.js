@@ -30,7 +30,7 @@ const AdminShowInfo = (props) => {
                     value={searchShowNum}
                     onChange={event => setSearchShowNum(event.target.value)}
                 /><br />
-                <button type='button' onClick={handleShowSearch}>Search</button>
+                <button type='button' className='admin-button' onClick={handleShowSearch}>Search</button>
             </div>
 
             <p className='admin-margin-bottom'><span className='slight-bold'>ID:</span> {_id}</p>
@@ -40,7 +40,7 @@ const AdminShowInfo = (props) => {
             <p className='admin-margin-bottom'><span className='slight-bold'>address:</span> {address}</p>
             <p className='admin-margin-bottom'><span className='slight-bold'>city:</span> {city}</p>
             <p className='admin-margin-bottom'><span className='slight-bold'>stateCountry:</span> {stateCountry}</p>
-            <button type='button' onClick={()=>handleOpenModal('showInfo')}>Edit</button>
+            <button type='button' className='admin-button' onClick={()=>handleOpenModal('showInfo')}>Edit</button>
         </div>
     )
 };

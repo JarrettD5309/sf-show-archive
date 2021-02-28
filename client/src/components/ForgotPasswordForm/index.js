@@ -27,6 +27,8 @@ const ForgotPasswordForm = (props) => {
                         type='text'
                         id='forgot-password-email'
                         name='forgot-password-email'
+                        autoCapitalize='none'
+                        autoCorrect='none'
                         value={resetEmail}
                         onChange={event => setResetEmail(event.target.value)}
                         className='forgot-password-input'

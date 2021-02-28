@@ -9,7 +9,7 @@ const AdminAddShow = (props) => {
         return (
             <div>
                 <h2 className='admin-margin-bottom'>Add Show</h2>
-                <button type='button' onClick={()=>handleOpenModal('addShow')}>Add Show</button>
+                <button type='button' className='admin-button' onClick={()=>handleOpenModal('addShow')}>Add Show</button>
             </div>
         );
 };

@@ -24,6 +24,8 @@ const LoginForm = (props) => {
                         type='text'
                         id='login-username'
                         name='login-username'
+                        autoCapitalize='none'
+                        autoCorrect='none'
                         value={loginUsername}
                         onChange={event => setLoginUsername(event.target.value)}
                         className='login-input'

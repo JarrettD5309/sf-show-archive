@@ -28,6 +28,8 @@ const CreateAccountForm = (props) => {
                         type='text'
                         id='create-username'
                         name='create-username'
+                        autoCapitalize='none'
+                        autoCorrect='none'
                         value={createUsername}
                         onChange={event => setCreateUsername(event.target.value)}
                         className='create-input'
@@ -37,6 +39,8 @@ const CreateAccountForm = (props) => {
                         type='text'
                         id='create-email'
                         name='create-email'
+                        autoCapitalize='none'
+                        autoCorrect='none'
                         value={createEmail}
                         onChange={event => setCreateEmail(event.target.value)}
                         className='create-input'

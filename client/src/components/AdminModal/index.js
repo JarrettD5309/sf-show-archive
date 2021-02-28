@@ -140,6 +140,7 @@ const AdminModal = (props) => {
                         }
                         <button
                             type='button'
+                            className='admin-button'
                             onClick={() => handleCloseModal(type)}
                         >
                             Close
@@ -147,6 +148,7 @@ const AdminModal = (props) => {
                         {!finalSubmit && !finalDelete &&
                             <button
                                 type='button'
+                                className='admin-button'
                                 onClick={handleInitialSubmit}
                             >
                                 Submit
@@ -155,6 +157,7 @@ const AdminModal = (props) => {
                         {!finalDelete && !finalSubmit &&
                             <button
                                 type='button'
+                                className='admin-button'
                                 onClick={handleInitialDelete}
                             >
                                 Delete
@@ -163,6 +166,7 @@ const AdminModal = (props) => {
                         {finalSubmit &&
                             <button
                                 type='button'
+                                className='admin-button'
                                 onClick={handleUpdateShow}
                             >
                                 Final Update
@@ -171,6 +175,7 @@ const AdminModal = (props) => {
                         {finalDelete &&
                             <button
                                 type='button'
+                                className='admin-button'
                                 onClick={handleDeleteShow}
                             >
                                 Final Delete
@@ -245,12 +250,14 @@ const AdminModal = (props) => {
                         }
                         <button
                             type='button'
+                            className='admin-button'
                             onClick={() => handleCloseModal(type)}
                         >
                             Close
                         </button>
                         <button
                             type='button'
+                            className='admin-button'
                             onClick={handleAddShow}
                         >
                             Submit
@@ -275,12 +282,14 @@ const AdminModal = (props) => {
                         </div>
                         <button
                             type='button'
+                            className='admin-button'
                             onClick={() => handleCloseModal(type)}
                         >
                             Close
                         </button>
                         <button
                             type='button'
+                            className='admin-button'
                             onClick={handleBanUser}
                         >
                             Submit
@@ -295,12 +304,14 @@ const AdminModal = (props) => {
                         <p className='slight-bold'>{userSearchUsername}</p><br />
                         <button
                             type='button'
+                            className='admin-button'
                             onClick={() => handleCloseModal(type)}
                         >
                             Close
                         </button>
                         <button
                             type='button'
+                            className='admin-button'
                             onClick={handleUnbanUser}
                         >
                             Submit
@@ -316,7 +327,7 @@ const AdminModal = (props) => {
                             showDetails.attendance.map(user => (
                                 <div key={user._id}>
                                     <p>{user.username} ({user._id}) </p>
-                                    <button type='button' className='admin-margin-bottom' onClick={() => handleRemoveUserAttendance(user._id, showDetails.showId._id)}>Remove</button>
+                                    <button type='button' className='admin-margin-bottom admin-button' onClick={() => handleRemoveUserAttendance(user._id, showDetails.showId._id)}>Remove</button>
                                 </div>
                             ))
                             :
@@ -325,6 +336,7 @@ const AdminModal = (props) => {
                         <br />
                         <button
                             type='button'
+                            className='admin-button'
                             onClick={() => handleCloseModal(type)}
                         >
                             Close
@@ -355,12 +367,14 @@ const AdminModal = (props) => {
                         <br />
                         <button
                             type='button'
+                            className='admin-button'
                             onClick={() => handleCloseModal(type)}
                         >
                             Close
                         </button>
                         <button
                             type='button'
+                            className='admin-button'
                             onClick={() => handleSetlistSubmit(showDetails.showId._id)}
                         >
                             Submit
@@ -417,18 +431,21 @@ const AdminModal = (props) => {
                         <br />
                         <button
                             type='button'
+                            className='admin-button'
                             onClick={() => handleCloseModal(type)}
                         >
                             Close
                         </button>
                         <button
                             type='button'
+                            className='admin-button'
                             onClick={() => handleSubmission('reject', submissions[submissionIndex]._id)}
                         >
                             Reject
                         </button>
                         <button
                             type='button'
+                            className='admin-button'
                             onClick={() => handleSubmission('approve', submissions[submissionIndex]._id)}
                         >
                             Approve

@@ -6,12 +6,17 @@ html {
 button {
 	font-family: 'Raleway', sans-serif;
 	font-size: 16px;
+	padding: 0;
 }
 
 input {
 	font-size: 1rem;
 	font-family: 'Raleway', sans-serif;
 	border-radius: 0;
+}
+
+select {
+	font-size: 1rem;
 }
 
 input:-webkit-autofill,

@@ -37,14 +37,14 @@ const AdminShowDetails = (props) => {
             <p className='admin-margin-bottom'><span className='slight-bold'>attendance: </span>
                 {attendance.map(user => `${user.username} (${user._id}), `)}
             </p>
-            <button type='button' className='admin-margin-bottom' onClick={()=>handleOpenModal('attendance')}>Edit Attendance</button>
+            <button type='button' className='admin-margin-bottom admin-button' onClick={()=>handleOpenModal('attendance')}>Edit Attendance</button>
             <p className='slight-bold admin-margin-bottom'>audio: </p>
             {audio.map((audio, i) =>
             (
                 <div key={i}>
                     <a href={audio.link} target='_blank' rel="noopener noreferrer">{audio.link}</a><br />
                     <p>{`${audio.contributed.username} (${audio.contributed._id})`}</p>
-                    <button type='button' onClick={()=>handleRemoveDetail('audio',audio._id,showID)}>Delete</button>
+                    <button type='button' className='admin-button' onClick={()=>handleRemoveDetail('audio',audio._id,showID)}>Delete</button>
                     <br />
                     <br />
                 </div>
@@ -56,7 +56,7 @@ const AdminShowDetails = (props) => {
                 <div key={i}>
                     <a href={review.link} target='_blank' rel="noopener noreferrer">{review.link}</a><br />
                     <p>{`${review.contributed.username} (${review.contributed._id})`}</p>
-                    <button type='button' onClick={()=>handleRemoveDetail('review',review._id,showID)}>Delete</button>
+                    <button type='button' className='admin-button' onClick={()=>handleRemoveDetail('review',review._id,showID)}>Delete</button>
                     <br />
                     <br />
                 </div>
@@ -68,7 +68,7 @@ const AdminShowDetails = (props) => {
                 <div key={i}>
                     <a href={video.link} target='_blank' rel="noopener noreferrer">{video.link}</a><br />
                     <p>{`${video.contributed.username} (${video.contributed._id})`}</p>
-                    <button type='button' onClick={()=>handleRemoveDetail('video',video._id,showID)}>Delete</button>
+                    <button type='button' className='admin-button' onClick={()=>handleRemoveDetail('video',video._id,showID)}>Delete</button>
                     <br />
                     <br />
                 </div>
@@ -84,7 +84,7 @@ const AdminShowDetails = (props) => {
                     <p>{setList.contributed.username} ({setList.contributed._id})</p><br />
                 </div>
             }
-            <button type='button' className='admin-margin-bottom' onClick={()=>handleOpenModal('setlist')}>Edit Setlist</button>
+            <button type='button' className='admin-margin-bottom admin-button' onClick={()=>handleOpenModal('setlist')}>Edit Setlist</button>
             <p className='slight-bold admin-margin-bottom'>flyer: </p>
             {flyer.map(eachFlyer => {
                 const imgName = eachFlyer.flyerImg;
@@ -94,7 +94,7 @@ const AdminShowDetails = (props) => {
                     <div key={eachFlyer._id}>
                         <img src={process.env.PUBLIC_URL + `/uploads/${imgName}`} className='admin-flyer' alt={`Flyer`} key={eachFlyer._id} />
                         <p>{username} ({flyerUserId})</p>
-                        <button type='button' onClick={()=>handleRemoveDetail('flyer',eachFlyer._id,showID,imgName)}>Delete</button>
+                        <button type='button' className='admin-button' onClick={()=>handleRemoveDetail('flyer',eachFlyer._id,showID,imgName)}>Delete</button>
                     </div>
                 )
             }

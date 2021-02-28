@@ -46,6 +46,7 @@ const Search = () => {
                 .then(res => {
                     if (res.data.length !== 0) {
                         setShows(res.data);
+                        window.scrollTo(0,0);
                         setFadeShows(true);
                         setShowNoResultsInstructions(false);
                     } else {
@@ -66,6 +67,7 @@ const Search = () => {
         })
             .then(res => {
                 setShows(res.data);
+                window.scrollTo(0,0);
                 setFadeShows(true);
             })
             .catch(err => console.log(err));

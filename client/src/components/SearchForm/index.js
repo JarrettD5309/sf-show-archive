@@ -22,27 +22,57 @@ const SearchForm = (props) => {
             <div className='form-row'>
                 <div>
                     <label htmlFor='startDate'>Start Date</label><br />
-                    <input type='date' id='startDate' name='startDate' placeholder='yyyy-mm-dd' value={startDate} onChange={event=>setStartDate(event.target.value)}/>
+                    <input
+                        type='date'
+                        id='startDate'
+                        name='startDate'
+                        placeholder='yyyy-mm-dd'
+                        value={startDate}
+                        onChange={event => setStartDate(event.target.value)}
+                    />
                 </div>
                 <div>
                     <label htmlFor='endDate'>End Date (optional)</label><br />
-                    <input type='date' id='endDate' name='endDate' value={endDate} placeholder='yyyy-mm-dd' onChange={event=>setEndDate(event.target.value)} />
+                    <input
+                        type='date'
+                        id='endDate'
+                        name='endDate'
+                        value={endDate}
+                        placeholder='yyyy-mm-dd'
+                        onChange={event => setEndDate(event.target.value)}
+                    />
                 </div>
                 <div>
                     <label htmlFor='venue'>Venue</label><br />
-                    <input type='text' id='venue' name='venue' value={venue} onChange={event=>setVenue(event.target.value)} />
+                    <input
+                        type='text'
+                        id='venue'
+                        name='venue'
+                        autoCapitalize='none'
+                        autoCorrect='none'
+                        value={venue}
+                        onChange={event => setVenue(event.target.value)}
+                    />
                 </div>
                 <div>
                     <label htmlFor='city'>City</label><br />
-                    <input type='text' id='city' name='city' value={city} onChange={event=>setCity(event.target.value)} />
+                    <input
+                        type='text'
+                        id='city'
+                        name='city'
+                        autoCapitalize='none'
+                        autoCorrect='none'
+                        value={city}
+                        onChange={event => setCity(event.target.value)}
+                    />
                 </div>
                 <div>
                     <label htmlFor='stateCountry'>State/Country</label><br />
-                    <select type='text' id='stateCountry' name='stateCountry' value={stateCountry} onChange={event=>setStateCountry(event.target.value)}>
+                    <select type='text' id='stateCountry' name='stateCountry' value={stateCountry} onChange={event => setStateCountry(event.target.value)}>
                         <option value=''></option>
-                    {stateArr.map((state,i) => (
-                    <option value={state} key={i}>{state}</option>
-                ))}
+                        {stateArr.map((state, i) => (
+                            <option value={state} key={i}>{state}</option>
+                        ))}
                     </select>
                 </div>
                 <div>

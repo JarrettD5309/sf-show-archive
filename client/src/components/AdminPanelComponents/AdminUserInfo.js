@@ -36,7 +36,7 @@ const AdminUserInfo = (props) => {
                     value={usernameSearch}
                     onChange={event => setUsernameSearch(event.target.value)}
                 /><br />
-                <button type='button' onClick={handleUserSearch}>Search</button>
+                <button type='button' className='admin-button' onClick={handleUserSearch}>Search</button>
             </div>
             <p className='admin-margin-bottom'><span className='slight-bold'>ID:</span> {_id}</p>
             <p className='admin-margin-bottom'><span className='slight-bold'>username:</span> <a href={`/user/${username}`}>{username}</a></p>
@@ -45,9 +45,9 @@ const AdminUserInfo = (props) => {
             <p className='admin-margin-bottom'><span className='slight-bold'>instagram:</span> {instagram}</p>
             <p className='admin-margin-bottom'><span className='slight-bold'>banned:</span> {banned}</p>
             {props.userSearchInfo?.banned ? 
-            <button type='button' onClick={()=>handleOpenModal('unban-user')}>Unban User</button>
+            <button type='button' className='admin-button' onClick={()=>handleOpenModal('unban-user')}>Unban User</button>
             : 
-            <button type='button' onClick={()=>handleOpenModal('ban-user')}>Ban User</button>
+            <button type='button' className='admin-button' onClick={()=>handleOpenModal('ban-user')}>Ban User</button>
             }
         </div>
     );
