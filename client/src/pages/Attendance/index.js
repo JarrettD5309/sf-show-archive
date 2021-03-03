@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react';
 import axios from 'axios';
+import { FacebookLoginButton } from 'react-social-login-buttons';
 
 const Attendance = () => {
 
@@ -11,9 +12,10 @@ const Attendance = () => {
 
     return (
         <div>
-            <button onClick={handleRun}>
+            <FacebookLoginButton onClick={()=>console.log('hello')} />
+            {/* <button onClick={handleRun}>
                 Run
-            </button>
+            </button> */}
         </div>
     );
 };

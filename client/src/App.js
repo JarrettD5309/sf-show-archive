@@ -112,7 +112,7 @@ const App = () => {
                     <Route path='/user/:username' component={User} />
 
                     {/* Special page to add attendance to every show */}
-                    {/* <Route path='/attendance' component={Attendance} /> */}
+                    <Route path='/attendance' component={Attendance} />
 
 
                     <Route path='*' component={() => <h1 style={{ textAlign: 'center' }} >404 NOT FOUND</h1>} />
