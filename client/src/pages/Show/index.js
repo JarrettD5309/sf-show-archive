@@ -69,67 +69,95 @@ const Show = (props) => {
             .catch(err => console.log(err));
     };
 
-    const handleFlyerSubmit = async () => {
-        const options = {
-            maxSizeMB: 1.5
-        };
-
-        try {
-
-            const compressedFile = await imageCompression(imageFile, options);
-
-            const formData = new FormData();
-
-            formData.append('showId', showInfo._id);
-            formData.append('date', showInfo.date);
-            formData.append('flyerImg', compressedFile);
-            const config = {
-                headers: {
-                    'content-type': 'multipart/form-data'
+    const handleFlyerSubmit = () => {
+        const topOfModal = document.getElementById('myModal');
+        new Compressor(imageFile, {
+            convertSize: 1500000,
+            success(result) {
+                const formData = new FormData();
+                formData.append('showId', showInfo._id);
+                formData.append('date', showInfo.date);
+                formData.append('flyerImg', result, result.name);
+                const config = {
+                    headers: {
+                        'content-type': 'multipart/form-data'
+                    }
+                };
+                axios.post('/api/showflyer', formData, config)
+                    .then(res => {
+                        setFlyerInstructions('THANK YOU! Your submission is AWAITING APPROVAL.');
+                        topOfModal.scrollTop = 0;
+                        setTimeout(() => {
+                            handleCloseModal('flyer');
+                            getDetails();
+                        }, 2500);
+                    });
+            },
+            error(error) {
+                setImageFile(null);
+                setImageFileName('');
+                if (error.toString() === 'Error: The file given is not an image') {
+                    setFlyerInstructions('Error: Images Only');
+                } else if (error.toString() === 'Error: The file given is not an instance of Blob or File') {
+                    setFlyerInstructions('Error: No File Selected');
+                } else {
+                    setFlyerInstructions('Oops! Something went wrong. Please try again.');
                 }
-            };
-
-            // used to scroll to top of modal
-            const topOfModal = document.getElementById('myModal');
-
-            const res = await axios.post('/api/showflyer', formData, config);
-            setFlyerInstructions('THANK YOU! Your submission is AWAITING APPROVAL.');
-            topOfModal.scrollTop = 0;
-            setTimeout(() => {
-                handleCloseModal('flyer');
-                getDetails();
-            }, 2500);
-
-            // axios.post('/api/showflyer', formData, config)
-            //     .then(res => {
-            //         setFlyerInstructions('THANK YOU! Your submission is AWAITING APPROVAL.');
-            //         topOfModal.scrollTop = 0;
-            //         setTimeout(() => {
-            //             handleCloseModal('flyer');
-            //             getDetails();
-            //         }, 2500);
-            //     })
-            //     .catch(err => {
-            //         console.log(err);
-            //         setFlyerInstructions(err.response.data.message);
-            //         setImageFile(null);
-            //         setImageFileName('')
-            //     });
-
-        } catch (error) {
-            console.log(error);
-            setImageFile(null);
-            setImageFileName('');
-            if (error.toString() === 'Error: The file given is not an image') {
-                setFlyerInstructions('Error: Images Only');
-            } else if (error.toString() === 'Error: The file given is not an instance of Blob or File') {
-                setFlyerInstructions('Error: No File Selected');
-            } else {
-                setFlyerInstructions('Oops! Something went wrong. Please try again.');
             }
-        }
-
+        });
     };
+
+    // const handleFlyerSubmit = async () => {
+    //     const options = {
+    //         maxSizeMB: 1.5
+    //     };
+
+    //     try {
+
+    //         const compressedFile = await imageCompression(imageFile, options);
+
+    //         const formData = new FormData();
+
+    //         formData.append('showId', showInfo._id);
+    //         formData.append('date', showInfo.date);
+    //         formData.append('flyerImg', compressedFile);
+    //         const config = {
+    //             headers: {
+    //                 'content-type': 'multipart/form-data'
+    //             }
+    //         };
+
+    //         // used to scroll to top of modal
+    //         const topOfModal = document.getElementById('myModal');
+
+    //         axios.post('/api/showflyer', formData, config)
+    //             .then(res => {
+    //                 setFlyerInstructions('THANK YOU! Your submission is AWAITING APPROVAL.');
+    //                 topOfModal.scrollTop = 0;
+    //                 setTimeout(() => {
+    //                     handleCloseModal('flyer');
+    //                     getDetails();
+    //                 }, 2500);
+    //             })
+    //             .catch(err => {
+    //                 console.log(err);
+    //                 setFlyerInstructions(err.response.data.message);
+    //                 setImageFile(null);
+    //                 setImageFileName('')
+    //             });
+
+    //     } catch (error) {
+    //         console.log(error);
+    //         if (error.toString() === 'Error: The file given is not an image') {
+    //             setFlyerInstructions('Error: Images Only');
+    //         } else if (error.toString() === 'Error: The file given is not an instance of Blob or File') {
+    //             setFlyerInstructions('Error: No File Selected');
+    //         } else {
+    //             setFlyerInstructions('Oops! Something went wrong. Please try again.');
+    //         }
+    //     }
+
+    // };
 
     const handleSetlistSubmit = () => {
         let newSetlist = [];
