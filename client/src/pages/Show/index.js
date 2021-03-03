@@ -94,11 +94,12 @@ const Show = (props) => {
                     });
             },
             error(error) {
+                console.log(error.message);
                 setImageFile(null);
                 setImageFileName('');
-                if (error.toString() === 'Error: The file given is not an image') {
+                if (error.message === 'The first argument must be an image File or Blob object.') {
                     setFlyerInstructions('Error: Images Only');
-                } else if (error.toString() === 'Error: The file given is not an instance of Blob or File') {
+                } else if (error.message === 'The first argument must be a File or Blob object.') {
                     setFlyerInstructions('Error: No File Selected');
                 } else {
                     setFlyerInstructions('Oops! Something went wrong. Please try again.');
