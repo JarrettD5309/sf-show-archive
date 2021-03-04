@@ -13,7 +13,7 @@ const Show = (props) => {
     const [modalType, setModalType] = React.useState('');
     const [imageFile, setImageFile] = React.useState();
     const [imageFileName, setImageFileName] = React.useState('');
-    const [flyerInstructions, setFlyerInstructions] = React.useState('Please choose a image');
+    const [flyerInstructions, setFlyerInstructions] = React.useState('Please choose a image. (upload may take a moment)');
     const [setListArr, setSetListArr] = React.useState([]);
     const [setlistInstructions, setSetListInstructions] = React.useState('Please add songs');
     const [newAudioLink, setNewAudioLink] = React.useState('');
@@ -69,41 +69,36 @@ const Show = (props) => {
     };
 
     const handleFlyerSubmit = () => {
+
         const topOfModal = document.getElementById('myModal');
-        new Compressor(imageFile, {
-            convertSize: 1500000,
-            success(result) {
-                const formData = new FormData();
-                formData.append('showId', showInfo._id);
-                formData.append('date', showInfo.date);
-                formData.append('flyerImg', result, result.name);
-                const config = {
-                    headers: {
-                        'content-type': 'multipart/form-data'
-                    }
-                };
-                axios.post('/api/showflyer', formData, config)
-                    .then(res => {
-                        setFlyerInstructions('THANK YOU! Your submission is AWAITING APPROVAL.');
-                        topOfModal.scrollTop = 0;
-                        setTimeout(() => {
-                            handleCloseModal('flyer');
-                            getDetails();
-                        }, 2500);
-                    });
-            },
-            error(error) {
-                setImageFile(null);
-                setImageFileName('');
-                if (error.message === 'The first argument must be an image File or Blob object.') {
-                    setFlyerInstructions('Error: Images Only');
-                } else if (error.message === 'The first argument must be a File or Blob object.') {
-                    setFlyerInstructions('Error: No File Selected');
-                } else {
-                    setFlyerInstructions('Oops! Something went wrong. Please try again.');
-                }
+        const formData = new FormData();
+
+        formData.append('showId', showInfo._id);
+        formData.append('date', showInfo.date);
+        formData.append('flyerImg', imageFile);
+        
+        const config = {
+            headers: {
+                'content-type': 'multipart/form-data'
             }
-        });
+        };
+
+        axios.post('/api/showflyer', formData, config)
+            .then(res => {
+                setFlyerInstructions('THANK YOU! Your submission is AWAITING APPROVAL.');
+                topOfModal.scrollTop = 0;
+                setTimeout(() => {
+                    handleCloseModal('flyer');
+                    getDetails();
+                }, 2500);
+            })
+            .catch(err => {
+                console.log(err);
+                setFlyerInstructions(err.response.data.message);
+                topOfModal.scrollTop = 0;
+                setImageFile(null);
+                setImageFileName('')
+            });
     };
 
     const handleSetlistSubmit = () => {
@@ -234,7 +229,7 @@ const Show = (props) => {
         if (type === 'flyer') {
             setImageFileName('');
             setImageFile(null);
-            setFlyerInstructions('Please choose a image');
+            setFlyerInstructions('Please choose a image. (upload may take a moment)');
         } else if (type === 'setlist') {
             setSetListInstructions('Please add songs');
         } else if (type === 'links') {

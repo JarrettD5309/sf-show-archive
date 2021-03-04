@@ -5,6 +5,10 @@ const path = require('path');
 const nodemailer = require('nodemailer');
 const crypto = require('crypto');
 const mime = require('mime-types');
+const imagemin = require('imagemin');
+const imageminJpegtran = require('imagemin-jpegtran');
+const imageminPngquant = require('imagemin-pngquant');
+const fs = require('fs');
 
 module.exports = app => {
 
@@ -408,7 +412,7 @@ module.exports = app => {
     // Image Upload 
     // Set Storage Engine
     const storage = multer.diskStorage({
-        destination: './uploads/',
+        destination: './temp-uploads/',
         filename: (req, file, cb) => {
             cb(null, req.body.date + '-' + Date.now() + '.' + mime.extension(file.mimetype));
         }
@@ -417,7 +421,7 @@ module.exports = app => {
     // Init Upload Variable
     var upload = multer({
         storage: storage,
-        limits: { fileSize: 2000000 },
+        // limits: { fileSize: 2000000 },
         fileFilter: (req, file, cb) => {
             checkFileType(req, file, cb);
         }
@@ -460,7 +464,7 @@ module.exports = app => {
     app.post('/api/showflyer', (req, res) => {
         if (req.session.loggedin) {
 
-            upload(req, res, (err) => {
+            upload(req, res, async (err) => {
                 if (err) {
                     res.status(400).json(err);
                 } else {
@@ -469,7 +473,24 @@ module.exports = app => {
                             "message": "Error: No File Selected"
                         });
                     } else {
-                        if (req.session.admin) {
+                        if (req.session.admin) { 
+                                // compress image
+                                await imagemin(['./temp-uploads/' + req.file.filename], {
+                                    destination: './uploads',
+                                    plugins: [
+                                        imageminJpegtran(),
+                                        imageminPngquant({
+                                            quality: [0.6, 0.8]
+                                        })
+                                    ]
+                                });
+
+                                // delete temp full size image
+                                const filePath = './temp-uploads/' + req.file.filename;
+                                fs.unlink(filePath, (err) => {
+                                    if (err) throw err;
+                                });
+
                             db.ShowDetails.findOneAndUpdate(
                                 { showId: req.body.showId },
                                 {
