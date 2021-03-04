@@ -2,7 +2,6 @@ import React, { useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import FullShowInfo from '../../components/FullShowInfo';
 import Modal from '../../components/Modal';
-import Compressor from 'compressorjs';
 import axios from 'axios';
 
 const Show = (props) => {
