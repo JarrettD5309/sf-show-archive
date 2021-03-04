@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import FullShowInfo from '../../components/FullShowInfo';
 import Modal from '../../components/Modal';
+import imageCompression from 'browser-image-compression';
 import axios from 'axios';
 
 const Show = (props) => {
@@ -67,37 +68,89 @@ const Show = (props) => {
             .catch(err => console.log(err));
     };
 
-    const handleFlyerSubmit = () => {
+    // const handleFlyerSubmit = () => {
 
-        const topOfModal = document.getElementById('myModal');
-        const formData = new FormData();
+    //     const topOfModal = document.getElementById('myModal');
+    //     const formData = new FormData();
 
-        formData.append('showId', showInfo._id);
-        formData.append('date', showInfo.date);
-        formData.append('flyerImg', imageFile);
+    //     formData.append('showId', showInfo._id);
+    //     formData.append('date', showInfo.date);
+    //     formData.append('flyerImg', imageFile);
         
-        const config = {
-            headers: {
-                'content-type': 'multipart/form-data'
-            }
+    //     const config = {
+    //         headers: {
+    //             'content-type': 'multipart/form-data'
+    //         }
+    //     };
+
+    //     axios.post('/api/showflyer', formData, config)
+    //         .then(res => {
+    //             setFlyerInstructions('THANK YOU! Your submission is AWAITING APPROVAL.');
+    //             topOfModal.scrollTop = 0;
+    //             setTimeout(() => {
+    //                 handleCloseModal('flyer');
+    //                 getDetails();
+    //             }, 2500);
+    //         })
+    //         .catch(err => {
+    //             console.log(err);
+    //             setFlyerInstructions(err.response.data.message);
+    //             topOfModal.scrollTop = 0;
+    //             setImageFile(null);
+    //             setImageFileName('')
+    //         });
+    // };
+
+    const handleFlyerSubmit = async () => {
+        const options = {
+            maxSizeMB: 1.5
         };
 
-        axios.post('/api/showflyer', formData, config)
-            .then(res => {
-                setFlyerInstructions('THANK YOU! Your submission is AWAITING APPROVAL.');
-                topOfModal.scrollTop = 0;
-                setTimeout(() => {
-                    handleCloseModal('flyer');
-                    getDetails();
-                }, 2500);
-            })
-            .catch(err => {
-                console.log(err);
-                setFlyerInstructions(err.response.data.message);
-                topOfModal.scrollTop = 0;
-                setImageFile(null);
-                setImageFileName('')
-            });
+        try {
+
+            const compressedFile = await imageCompression(imageFile, options);
+
+            const formData = new FormData();
+
+            formData.append('showId', showInfo._id);
+            formData.append('date', showInfo.date);
+            formData.append('flyerImg', compressedFile);
+            const config = {
+                headers: {
+                    'content-type': 'multipart/form-data'
+                }
+            };
+
+            // used to scroll to top of modal
+            const topOfModal = document.getElementById('myModal');
+
+            axios.post('/api/showflyer', formData, config)
+                .then(res => {
+                    setFlyerInstructions('THANK YOU! Your submission is AWAITING APPROVAL.');
+                    topOfModal.scrollTop = 0;
+                    setTimeout(() => {
+                        handleCloseModal('flyer');
+                        getDetails();
+                    }, 2500);
+                })
+                .catch(err => {
+                    console.log(err);
+                    setFlyerInstructions(err.response.data.message);
+                    setImageFile(null);
+                    setImageFileName('')
+                });
+
+        } catch (error) {
+            console.log(error);
+            if (error.toString() === 'Error: The file given is not an image') {
+                setFlyerInstructions('Error: Images Only');
+            } else if (error.toString() === 'Error: The file given is not an instance of Blob or File') {
+                setFlyerInstructions('Error: No File Selected');
+            } else {
+                setFlyerInstructions('Oops! Something went wrong. Please try again.');
+            }
+        }
+
     };
 
     const handleSetlistSubmit = () => {
