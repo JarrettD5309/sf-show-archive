@@ -61,7 +61,7 @@ module.exports = app => {
         }
         let city = req.query.city;
         if (city) {
-            city = venue.trim();
+            city = city.trim();
         }
         const allShows = req.query.allShows;
         const stateCountry = req.query.stateCountry;
