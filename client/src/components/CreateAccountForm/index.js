@@ -12,6 +12,8 @@ const CreateAccountForm = (props) => {
         createPasswordConfirm,
         setCreatePasswordConfirm,
         createInstructions,
+        otherField,
+        setOtherField,
         handleSubmit
     } = props;
 
@@ -63,6 +65,17 @@ const CreateAccountForm = (props) => {
                         onChange={event => setCreatePasswordConfirm(event.target.value)}
                         className='create-input'
                     />
+                    <div className='create-other-field' aria-hidden='true'>
+                        <input 
+                        type='text'
+                        id='leave-blank'
+                        name='other-field'
+                        tabIndex='-1'
+                        placeholder='Real people leave blank'
+                        value={otherField}
+                        onChange={event=> setOtherField(event.target.value)}
+                        />
+                    </div>
                 </div>
                 <div>
                     <button className='create-button' type='button' onClick={handleSubmit}>Sign Up</button>

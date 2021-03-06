@@ -10,8 +10,17 @@ const CreateAccount = () => {
     const [createEmail, setCreateEmail] = React.useState('');
     const [createPasswordConfirm, setCreatePasswordConfirm] = React.useState('');
     const [createInstructions, setCreateInstructions] = React.useState('Please enter details');
+    const [otherField,setOtherField] = React.useState('');
 
     const handleSubmit = () => {
+
+        // stops bots from signing up
+        if (otherField!=='') {
+            setTimeout(() => {
+                history.push('/login');
+            }, 1500);
+            return;
+        }
 
         const newUserObj = {
             username: createUsername,
@@ -60,6 +69,8 @@ const CreateAccount = () => {
             createPasswordConfirm={createPasswordConfirm}
             setCreatePasswordConfirm={setCreatePasswordConfirm}
             createInstructions={createInstructions}
+            otherField={otherField}
+            setOtherField={setOtherField}
             handleSubmit={handleSubmit}
         />
     );

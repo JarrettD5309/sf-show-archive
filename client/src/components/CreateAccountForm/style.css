@@ -81,6 +81,11 @@
     text-decoration: underline;
 }
 
+.create-other-field {
+    position: absolute;
+    left: -5000px;
+}
+
 .create-root {
     padding: 14px;
 }
