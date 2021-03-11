@@ -32,7 +32,8 @@ const Modal = (props) => {
         setNewInstagram,
         newTwitter,
         setNewTwitter,
-        handleUserUpdate
+        handleUserUpdate,
+        isButtonDisabled
     } = props;
 
     const setlistRender = () => {
@@ -91,11 +92,21 @@ const Modal = (props) => {
                                 />
                             </label><br />
                             <br />
-
                         </div>
                         <div className='modal-button-div'>
                             <button className='modal-close-button' type='button' onClick={() => handleCloseModal(type)}>Close</button>
-                            <button className='modal-submit-button' type='button' onClick={handleFlyerSubmit}>Submit</button>
+                            <button 
+                                disabled={isButtonDisabled} 
+                                className='modal-submit-button' 
+                                type='button' 
+                                onClick={handleFlyerSubmit}
+                            >
+                                {isButtonDisabled ?
+                                    <div className='loader'></div>
+                                    :
+                                    'Submit'
+                                }
+                            </button>
                         </div>
                     </div>
                 }

@@ -22,6 +22,7 @@ const Show = (props) => {
     const [linksInstructions, setLinkInstructions] = React.useState('Please add a link (must include the ENTIRE url!)');
     const [attendanceInstructions, setAttendanceInstructions] = React.useState('Did you attend this show?');
     const [attendanceRemoveInstructions, setAttendanceRemoveInstructions] = React.useState('You are already marked as ATTENDED. Want to be removed?');
+    const [isButtonDisabled, setIsButtonDisabled] = React.useState(false);
 
     const {
         loggedIn,
@@ -102,6 +103,7 @@ const Show = (props) => {
     // };
 
     const handleFlyerSubmit = async () => {
+        setIsButtonDisabled(true);
         const options = {
             maxSizeMB: 1.5
         };
@@ -127,6 +129,7 @@ const Show = (props) => {
             axios.post('/api/showflyer', formData, config)
                 .then(res => {
                     setFlyerInstructions('THANK YOU! Your submission is AWAITING APPROVAL.');
+                    setIsButtonDisabled(false);
                     topOfModal.scrollTop = 0;
                     setTimeout(() => {
                         handleCloseModal('flyer');
@@ -135,6 +138,7 @@ const Show = (props) => {
                 })
                 .catch(err => {
                     console.log(err);
+                    setIsButtonDisabled(false);
                     setFlyerInstructions(err.response.data.message);
                     setImageFile(null);
                     setImageFileName('')
@@ -142,6 +146,7 @@ const Show = (props) => {
 
         } catch (error) {
             console.log(error);
+            setIsButtonDisabled(false);
             if (error.toString() === 'Error: The file given is not an image') {
                 setFlyerInstructions('Error: Images Only');
             } else if (error.toString() === 'Error: The file given is not an instance of Blob or File') {
@@ -336,6 +341,7 @@ const Show = (props) => {
                         attendanceInstructions={attendanceInstructions}
                         handleAttendanceRemoveSubmit={handleAttendanceRemoveSubmit}
                         attendanceRemoveInstructions={attendanceRemoveInstructions}
+                        isButtonDisabled={isButtonDisabled}
                     />}
 
                 </div>
