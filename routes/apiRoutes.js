@@ -511,6 +511,23 @@ module.exports = app => {
                                 .then(result => res.json(result))
                                 .catch(err => res.json(err));
                         } else {
+                            // compress image
+                            await imagemin(['./temp-uploads/' + req.file.filename], {
+                                destination: './uploads',
+                                plugins: [
+                                    imageminJpegtran(),
+                                    imageminPngquant({
+                                        quality: [0.6, 0.8]
+                                    })
+                                ]
+                            });
+
+                            // delete temp full size image
+                            const filePath = './temp-uploads/' + req.file.filename;
+                            fs.unlink(filePath, (err) => {
+                                if (err) throw err;
+                            });
+                            
                             const flyerObj = {
                                 flyer: {
                                     flyerImg: req.file.filename,
