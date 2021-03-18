@@ -20,6 +20,10 @@ const TimelinePage = (props) => {
         }
     };
 
+    useEffect(()=>{
+        console.log('load');
+    });
+
     useEffect(() => {
         if (currentMonth) {
             axios.get('/api/shows/month', {

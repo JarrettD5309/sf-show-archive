@@ -1,16 +1,14 @@
 import React, { useEffect } from 'react';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import AdminPanel from './pages/AdminPanel';
-import Backdrop from './components/SlideDrawer/Backdrop';
 import CreateAccount from './pages/CreateAccount';
 import ForgotPassword from './pages/ForgotPassword';
 import Login from './pages/Login';
-import NavBar from './components/NavBar';
+import NavBarComponent from './components/NavBarComponent';
 import Profile from './pages/Profile';
 import ResetPassword from './pages/ResetPassword';
 import Search from './pages/Search';
 import Show from './pages/Show';
-import SlideDrawer from './components/SlideDrawer/SlideDrawer';
 import TimelinePage from './pages/TimelinePage';
 import User from './pages/User';
 import withAuth from './withAuth';
@@ -20,7 +18,6 @@ import axios from 'axios';
 import Attendance from './pages/Attendance';
 
 const App = () => {
-    const [drawerOpen, setDrawerOpen] = React.useState(false);
     const [loggedIn, setLoggedIn] = React.useState(false);
     const [isAdmin, setIsAdmin] = React.useState(false);
     const [userInfo, setUserInfo] = React.useState();
@@ -82,21 +79,17 @@ const App = () => {
             .then(() => setLoading(false));
     };
 
-    const handleDrawerToggle = () => {
-        setDrawerOpen(!drawerOpen);
-    };
-
-    const handleBackdrop = () => {
-        setDrawerOpen(false);
-    };
-
     return (
         loading ?
             null :
             <Router>
-                <NavBar handleDrawerToggle={handleDrawerToggle} />
-                <SlideDrawer handleBackdrop={handleBackdrop} setDrawerOpen={setDrawerOpen} show={drawerOpen} loggedIn={loggedIn} setLoggedIn={setLoggedIn} isAdmin={isAdmin} setIsAdmin={setIsAdmin} />
-                <Backdrop handleBackdrop={handleBackdrop} show={drawerOpen} />
+                <NavBarComponent 
+                    loggedIn={loggedIn}
+                    setLoggedIn={setLoggedIn}
+                    isAdmin={isAdmin}
+                    setIsAdmin={setIsAdmin}
+                />
+                
                 <Switch>
                     <Route exact path='/' component={TimelinePage} />
                     <Route exact path='/search' component={Search} />
