@@ -323,7 +323,8 @@ module.exports = app => {
             db.ApproveDetails.findOne({ _id: _id })
                 .then(results => {
                     const updateObj = {
-                        $push: {}
+                        $push: {},
+                        updated: new Date()
                     };
                     if (results.setList.songs.length > 0) {
                         updateObj.setList = results.setList

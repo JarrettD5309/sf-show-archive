@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import AdminPanel from './pages/AdminPanel';
 import CreateAccount from './pages/CreateAccount';
 import ForgotPassword from './pages/ForgotPassword';
+import LatestUpdates from './pages/LatestUpdates';
 import Login from './pages/Login';
 import NavBarComponent from './components/NavBarComponent';
 import Profile from './pages/Profile';
@@ -93,6 +94,7 @@ const App = () => {
                 <Switch>
                     <Route exact path='/' component={TimelinePage} />
                     <Route exact path='/search' component={Search} />
+                    <Route exact path='/latest-updates' component={LatestUpdates} />
                     <Route exact path='/login' component={() => <Login setLoggedIn={setLoggedIn} getUserInfo={getUserInfo} checkAdminLogin={checkAdminLogin} />} />
                     <Route exact path='/create-account' component={CreateAccount} />
 

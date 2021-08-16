@@ -163,6 +163,16 @@ module.exports = app => {
             .catch(err => res.json(err))
     });
 
+    // GET LATEST UPDATED SHOWS
+    app.get('/api/shows/latest', (req, res) => {
+        db.ShowDetails.find({'updated': { $exists : true }})
+            .populate('showId')
+            .sort({'updated': -1})
+            .limit(10)
+            .then(result => res.json(result))
+            .catch(err => res.json(err))
+    });
+
     // CREATE ACCOUNT
     app.post('/api/user', (req, res) => {
         let username = req.body.username;
@@ -500,7 +510,8 @@ module.exports = app => {
                                             flyerImg: req.file.filename,
                                             contributed: req.session.userID
                                         }
-                                    }
+                                    },
+                                    updated: new Date()
                                 },
                                 {
                                     new: true,
@@ -565,7 +576,10 @@ module.exports = app => {
                 if (req.session.admin) {
                     db.ShowDetails.findOneAndUpdate(
                         { showId: req.body.showId },
-                        setlistObj,
+                        {
+                            ...setlistObj,
+                            updated: new Date()
+                        },
                         {
                             new: true,
                             upsert: true,
@@ -610,7 +624,8 @@ module.exports = app => {
 
                 if (req.session.admin) {
                     const linksObj = {
-                        $push: {}
+                        $push: {},
+                        updated: new Date()
                     };
 
                     if (isValidUrl(req.body.audio)) {

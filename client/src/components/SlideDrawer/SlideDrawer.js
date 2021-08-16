@@ -35,6 +35,9 @@ const SlideDrawer = (props) => {
                 <li className='nav-item'>
                     <a href="/search" className='nav-text'>Search</a>
                 </li>
+                <li className='nav-item'>
+                    <a href="/latest-updates" className='nav-text'>Updates</a>
+                </li>
                 {props.loggedIn ?
                     (
                         <div>

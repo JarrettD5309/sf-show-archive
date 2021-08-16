@@ -48,7 +48,10 @@ var ShowDetailsSchema = new Schema({
     attendance: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User'
-    }]
+    }],
+    updated: {
+        type: Date
+    }
 });
 
 // This creates our model from the above schema, using mongoose's model method
