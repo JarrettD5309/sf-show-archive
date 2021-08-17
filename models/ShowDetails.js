@@ -50,7 +50,12 @@ var ShowDetailsSchema = new Schema({
         ref: 'User'
     }],
     updated: {
-        type: Date
+        date: Date,
+        user: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'User'
+        },
+        section: String
     }
 });
 

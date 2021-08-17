@@ -4,11 +4,18 @@ import ShowInfo from '../../components/ShowInfo';
 
 const LatestUpdates = (props) => {
     const [shows, setShows] = React.useState([]);
+    const [updates, setUpdates] = React.useState([]);
     useEffect(() => {
         axios.get('/api/shows/latest')
             .then(res => {
-                let showsArr = [];
-                res.data.forEach(showDetail => showsArr.push(showDetail.showId));
+                console.log(res);
+                const showsArr = [];
+                const updatedArr = [];
+                res.data.forEach((showDetail) => {
+                    showsArr.push(showDetail.showId);
+                    updatedArr.push(showDetail.updated);
+                });
+                setUpdates(updatedArr);
                 setShows(showsArr);
             })
             .catch(err => console.log(err));
@@ -24,7 +31,7 @@ const LatestUpdates = (props) => {
             </div>
 
             <div>
-                {shows.map(show => (
+                {shows.map((show, i) => (
                     <ShowInfo 
                         showNum={show.showNum}
                         date={show.date}
@@ -33,6 +40,7 @@ const LatestUpdates = (props) => {
                         city={show.city}
                         stateCountry={show.stateCountry}
                         key={show.showNum}
+                        updated={updates[i]}
                     />
                 ))}
             </div>

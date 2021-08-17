@@ -324,24 +324,49 @@ module.exports = app => {
                 .then(results => {
                     const updateObj = {
                         $push: {},
-                        updated: new Date()
+                        updated: { date: new Date() }
                     };
                     if (results.setList.songs.length > 0) {
-                        updateObj.setList = results.setList
+                        updateObj.setList = results.setList;
+                        updateObj.updated = {
+                            ...updateObj.updated,
+                            user: results.setList.contributed,
+                            section: 'Setlist'
+                        };
                     }
 
                     if (results.audio.contributed) {
                         updateObj.$push.audio = results.audio;
+                        updateObj.updated = {
+                            ...updateObj.updated,
+                            user: results.audio.contributed,
+                            section: 'Links - Audio'
+                        };
                     }
                     if (results.video.contributed) {
                         updateObj.$push.video = results.video;
+                        updateObj.updated = {
+                            ...updateObj.updated,
+                            user: results.video.contributed,
+                            section: 'Links - Video'
+                        };
                     }
                     if (results.review.contributed) {
                         updateObj.$push.review = results.review;
+                        updateObj.updated = {
+                            ...updateObj.updated,
+                            user: results.review.contributed,
+                            section: 'Links - Review'
+                        };
                     }
 
                     if (results.flyer.contributed) {
                         updateObj.$push.flyer = results.flyer;
+                        updateObj.updated = {
+                            ...updateObj.updated,
+                            user: results.flyer.contributed,
+                            section: 'Flyer'
+                        };
                     }
 
                     db.ShowDetails.findOneAndUpdate(

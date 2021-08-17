@@ -5,7 +5,7 @@ import { useHistory } from "react-router-dom";
 
 function ShowInfo(props) {
     let history = useHistory();
-    const { showNum, date, venue, address, city, stateCountry } = props;
+    const { showNum, date, venue, address, city, stateCountry, updated } = props;
 
     const dateString = dateFunction(date);
 
@@ -24,6 +24,9 @@ function ShowInfo(props) {
                 <div className='street'>{address}</div>
                 <div className='city'>{city}, {stateCountry}</div>
             </div>
+            {updated && 
+                <p>{updated.section} {updated.date} {updated.user.username}</p>
+            }
             <div className='show-info-border'></div>
         </div>
     );

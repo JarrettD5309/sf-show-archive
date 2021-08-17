@@ -167,7 +167,8 @@ module.exports = app => {
     app.get('/api/shows/latest', (req, res) => {
         db.ShowDetails.find({'updated': { $exists : true }})
             .populate('showId')
-            .sort({'updated': -1})
+            .populate('updated.user', ['username'])
+            .sort({'updated.date': -1})
             .limit(10)
             .then(result => res.json(result))
             .catch(err => res.json(err))
@@ -511,7 +512,11 @@ module.exports = app => {
                                             contributed: req.session.userID
                                         }
                                     },
-                                    updated: new Date()
+                                    updated: {
+                                        date: new Date(),
+                                        user: req.session.userID,
+                                        section: 'Flyer'
+                                    }
                                 },
                                 {
                                     new: true,
@@ -578,7 +583,11 @@ module.exports = app => {
                         { showId: req.body.showId },
                         {
                             ...setlistObj,
-                            updated: new Date()
+                            updated: {
+                                date: new Date(),
+                                user: req.session.userID,
+                                section: 'Setlist'
+                            }
                         },
                         {
                             new: true,
@@ -625,7 +634,10 @@ module.exports = app => {
                 if (req.session.admin) {
                     const linksObj = {
                         $push: {},
-                        updated: new Date()
+                        updated: {
+                            date: new Date(),
+                            user: req.session.userID
+                        }
                     };
 
                     if (isValidUrl(req.body.audio)) {
@@ -633,6 +645,7 @@ module.exports = app => {
                             link: req.body.audio,
                             contributed: req.session.userID
                         }
+                        linksObj.updated.section = 'Links - Audio';
                     }
 
                     if (isValidUrl(req.body.video)) {
@@ -640,6 +653,7 @@ module.exports = app => {
                             link: req.body.video,
                             contributed: req.session.userID
                         }
+                        linksObj.updated.section = 'Links - Video';
                     }
 
                     if (isValidUrl(req.body.review)) {
@@ -647,6 +661,7 @@ module.exports = app => {
                             link: req.body.review,
                             contributed: req.session.userID
                         }
+                        linksObj.updated.section = 'Links - Review';
                     }
 
                     if (linksObj.$push.audio || linksObj.$push.video || linksObj.$push.review) {
