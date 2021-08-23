@@ -2,6 +2,7 @@ import React from 'react';
 import './style.css';
 import dateFunction from '../../other/dateFunction';
 import { useHistory } from "react-router-dom";
+import UpdateInfo from '../UpdateInfo';
 
 function ShowInfo(props) {
     let history = useHistory();
@@ -25,7 +26,12 @@ function ShowInfo(props) {
                 <div className='city'>{city}, {stateCountry}</div>
             </div>
             {updated && 
-                <p>{updated.section} {updated.date} {updated.user.username}</p>
+                <UpdateInfo 
+                    section={updated.section}
+                    date={updated.date}
+                    user={updated.user}
+                    showNum={showNum}
+                />
             }
             <div className='show-info-border'></div>
         </div>

@@ -1,0 +1,54 @@
+.update-date {
+    grid-column-start: 2;
+    grid-column-end: 3;
+    grid-row-start: 2;
+    grid-row-end: 3;
+}
+.update-date-title {
+    grid-column-start: 1;
+    grid-column-end: 2;
+    grid-row-start: 2;
+    grid-row-end: 3;
+}
+
+.update-grid-container {
+    display: grid;
+    grid-template-columns: 250px 260px 60px;
+    justify-content: center;
+    grid-template-rows: auto auto 33px;
+    cursor: pointer;
+}
+
+.update-section {
+    grid-column-start: 2;
+    grid-column-end: 3;
+    grid-row-start: 1;
+    grid-row-end: 2;
+}
+
+.update-section-title {
+    grid-column-start: 1;
+    grid-column-end: 2;
+    grid-row-start: 1;
+    grid-row-end: 2;
+}
+
+.update-user {
+    grid-column-start: 2;
+    grid-column-end: 3;
+    grid-row-start: 3;
+    grid-row-end: 4;
+}
+
+.update-user-title {
+    grid-column-start: 1;
+    grid-column-end: 2;
+    grid-row-start: 3;
+    grid-row-end: 4;
+}
+
+@media (max-width:399px) {}
+
+@media (min-width: 400px) and (max-width: 575px) {}
+
+@media (min-width: 576px) and (max-width: 767px) {}
