@@ -4,6 +4,7 @@
     grid-row-start: 2;
     grid-row-end: 3;
 }
+
 .update-date-title {
     grid-column-start: 1;
     grid-column-end: 2;
@@ -47,8 +48,110 @@
     grid-row-end: 4;
 }
 
-@media (max-width:399px) {}
+@media (max-width:399px) {
+    .update-date {
+        grid-column-start: 1;
+        grid-column-end: 3;
+        grid-row-start: 4;
+        grid-row-end: 5;
+    }
+    
+    .update-date-title {
+        grid-column-start: 1;
+        grid-column-end: 2;
+        grid-row-start: 3;
+        grid-row-end: 4;
+    }
 
-@media (min-width: 400px) and (max-width: 575px) {}
+    .update-grid-container {
+        grid-template-columns: 227px 55px;
+        grid-template-rows: auto auto auto auto auto 33px;
+    }
 
-@media (min-width: 576px) and (max-width: 767px) {}
+    .update-section {
+        grid-column-start: 1;
+        grid-column-end: 3;
+        grid-row-start: 2;
+        grid-row-end: 3;
+    }
+    
+    .update-section-title {
+        grid-column-start: 1;
+        grid-column-end: 2;
+        grid-row-start: 1;
+        grid-row-end: 2;
+    }
+    
+    .update-user {
+        grid-column-start: 1;
+        grid-column-end: 3;
+        grid-row-start: 6;
+        grid-row-end: 7;
+    }
+    
+    .update-user-title {
+        grid-column-start: 1;
+        grid-column-end: 2;
+        grid-row-start: 5;
+        grid-row-end: 6;
+    }
+}
+
+@media (min-width: 400px) and (max-width: 575px) {
+    .update-date {
+        grid-column-start: 1;
+        grid-column-end: 3;
+        grid-row-start: 4;
+        grid-row-end: 5;
+        margin-left: 20px;
+    }
+    
+    .update-date-title {
+        grid-column-start: 1;
+        grid-column-end: 2;
+        grid-row-start: 3;
+        grid-row-end: 4;
+    }
+
+    .update-grid-container {
+        grid-template-columns: 311px 55px;
+        grid-template-rows: auto auto auto auto auto 33px;
+    }
+
+    .update-section {
+        grid-column-start: 1;
+        grid-column-end: 3;
+        grid-row-start: 2;
+        grid-row-end: 3;
+        margin-left: 20px;
+    }
+    
+    .update-section-title {
+        grid-column-start: 1;
+        grid-column-end: 2;
+        grid-row-start: 1;
+        grid-row-end: 2;
+    }
+    
+    .update-user {
+        grid-column-start: 1;
+        grid-column-end: 3;
+        grid-row-start: 6;
+        grid-row-end: 7;
+        margin-left: 20px;
+    }
+    
+    .update-user-title {
+        grid-column-start: 1;
+        grid-column-end: 2;
+        grid-row-start: 5;
+        grid-row-end: 6;
+    }
+}
+
+@media (min-width: 576px) and (max-width: 767px) {
+    .update-grid-container {
+        grid-template-columns: 216px 226px 55px;
+    }
+
+}

@@ -1,7 +1,7 @@
 # Screaming Females Tour Archive
 <https://screamingfemalestourarchive.com/>\
-Version 1.0 \
-Version Deployment Date - March 01, 2021\
+Version 2.0 \
+Version Deployment Date - Sept 01, 2021\
 By Jarrett Dougherty
 
 <kbd><img src="md_images/sf-tour-archive-home.png" alt="SF Tour Archive Homepage" width="500"/></kbd>
@@ -28,3 +28,10 @@ Screaming Females Tour Archive is an interactive archive of performance informat
 * XML
 * Multer
 * Nodemailer
+
+## Versions
+Version 2.0 - Deployment Date Sept 01, 2021
+### Updates
+* Add Latest Updates screen
+----------
+Version 1.0 - Deployment Date March 01, 2021
