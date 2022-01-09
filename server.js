@@ -21,17 +21,9 @@ if (process.env.NODE_ENV === "production") {
 
 if (process.env.NODE_ENV === "production") {
     const MONGODB_URI = process.env.mongodburi;
-    mongoose.connect(MONGODB_URI || 'mongodb://localhost/show-archive', {
-        useNewUrlParser: true,
-        useUnifiedTopology: true,
-        useFindAndModify: false
-    });
+    mongoose.connect(MONGODB_URI || 'mongodb://localhost/show-archive');
 } else {
-    mongoose.connect('mongodb://localhost/show-archive', {
-        useNewUrlParser: true,
-        useUnifiedTopology: true,
-        useFindAndModify: false
-    });
+    mongoose.connect('mongodb://localhost/show-archive');
 }
 
 mongoose.connection.on("connected", () => console.log("Mongoose is connected")
