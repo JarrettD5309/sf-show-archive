@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import AdminPanel from './pages/AdminPanel';
 import CreateAccount from './pages/CreateAccount';
 import ForgotPassword from './pages/ForgotPassword';
@@ -7,13 +7,13 @@ import LatestUpdates from './pages/LatestUpdates';
 import Login from './pages/Login';
 import NavBarComponent from './components/NavBarComponent';
 import Profile from './pages/Profile';
+import ProtectedRoute from './protectedRoute';
+import ProtectedRouteAdmin from './protectedRouteAdmin';
 import ResetPassword from './pages/ResetPassword';
 import Search from './pages/Search';
 import Show from './pages/Show';
 import TimelinePage from './pages/TimelinePage';
 import User from './pages/User';
-import withAuth from './withAuth';
-import withAuthAdmin from './withAuthAdmin';
 import axios from 'axios';
 
 import Attendance from './pages/Attendance';
@@ -84,34 +84,43 @@ const App = () => {
         loading ?
             null :
             <Router>
-                <NavBarComponent 
+                <NavBarComponent
                     loggedIn={loggedIn}
                     setLoggedIn={setLoggedIn}
                     isAdmin={isAdmin}
                     setIsAdmin={setIsAdmin}
                 />
-                
-                <Switch>
-                    <Route exact path='/' component={TimelinePage} />
-                    <Route exact path='/search' component={Search} />
-                    <Route exact path='/latest-updates' component={LatestUpdates} />
-                    <Route exact path='/login' component={() => <Login setLoggedIn={setLoggedIn} getUserInfo={getUserInfo} checkAdminLogin={checkAdminLogin} />} />
-                    <Route exact path='/create-account' component={CreateAccount} />
 
-                    <Route exact path='/profile' component={withAuth(() => <Profile userInfo={userInfo} getUserInfo={getUserInfo} />)} />
-                    <Route exact path='/admin-panel' component={withAuthAdmin(() => <AdminPanel />)} />
-                    <Route exact path='/forgot-password' component={ForgotPassword} />
-                    <Route exact path='/reset-password/:token/:email' component={ResetPassword} />
-                    <Route path='/show/:id' component={() => <Show loggedIn={loggedIn} userInfo={userInfo} />} />
+                <Routes>
+                    <Route path='/' element={<TimelinePage />} />
+                    <Route path='/search' element={<Search />} />
+                    <Route path='/latest-updates' element={<LatestUpdates />} />
+                    <Route path='/login' element={<Login setLoggedIn={setLoggedIn} getUserInfo={getUserInfo} checkAdminLogin={checkAdminLogin} />} />
+                    <Route path='/create-account' element={<CreateAccount />} />
+                    <Route path='/profile' element={
+                        <ProtectedRoute loggedIn={loggedIn}>
+                            <Profile userInfo={userInfo} getUserInfo={getUserInfo} />
+                        </ProtectedRoute>
+                    }
+                    />
+                    <Route path='/admin-panel' element={
+                        <ProtectedRouteAdmin>
+                            <AdminPanel />
+                        </ProtectedRouteAdmin>
+                    }
+                    />
+                    <Route path='/forgot-password' element={<ForgotPassword />} />
+                    <Route path='/reset-password/:token/:email' element={<ResetPassword />} />
+                    <Route path='/show/:id' element={<Show loggedIn={loggedIn} userInfo={userInfo} />} />
 
-                    <Route path='/user/:username' component={User} />
+                    <Route path='/user/:username' element={<User />} />
 
                     {/* Special page to add attendance to every show */}
-                    {/* <Route path='/attendance' component={Attendance} /> */}
+                    {/* <Route path='/attendance' element={<Attendance />} /> */}
 
 
-                    <Route path='*' component={() => <h1 style={{ textAlign: 'center' }} >404 NOT FOUND</h1>} />
-                </Switch>
+                    <Route path='*' element={<h1 style={{ textAlign: 'center' }} >404 NOT FOUND</h1>} />
+                </Routes>
             </Router>
     );
 }

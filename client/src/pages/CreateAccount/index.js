@@ -1,10 +1,10 @@
 import React from 'react';
 import CreateAccountForm from '../../components/CreateAccountForm';
-import { useHistory } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import axios from 'axios';
 
 const CreateAccount = () => {
-    let history = useHistory();
+    let navigate = useNavigate();
     const [createUsername, setCreateUsername] = React.useState('');
     const [createPassword, setCreatePassword] = React.useState('');
     const [createEmail, setCreateEmail] = React.useState('');
@@ -17,7 +17,7 @@ const CreateAccount = () => {
         // stops bots from signing up
         if (otherField!=='') {
             setTimeout(() => {
-                history.push('/login');
+                navigate('/login');
             }, 1500);
             return;
         }
@@ -33,7 +33,7 @@ const CreateAccount = () => {
             .then(res => {
                 setCreateInstructions('Success! Wait to be redirected.');
                 setTimeout(() => {
-                    history.push('/login');
+                    navigate('/login');
                 }, 1500);
             })
             .catch(err => {

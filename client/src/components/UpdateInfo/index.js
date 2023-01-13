@@ -1,16 +1,16 @@
 import React from 'react';
 import './style.css';
 import dateFunction from '../../other/dateFunction';
-import { useHistory } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 function UpdateInfo(props) {
-    let history = useHistory();
+    let navigate = useNavigate();
     const { section, date, user, showNum } = props;
 
     const dateString = dateFunction(date);
 
     const handleClick = () => {
-        history.push(`/show/${showNum}`);
+        navigate(`/show/${showNum}`);
     };
 
     return (
