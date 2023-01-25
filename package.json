@@ -25,24 +25,24 @@
   "homepage": "https://github.com/JarrettD5309/sf-show-archive#readme",
   "dependencies": {
     "axios": "^0.21.1",
-    "bcrypt": "^5.0.0",
-    "connect-mongo": "^3.2.0",
-    "dotenv": "^8.2.0",
-    "express": "^4.17.1",
-    "express-session": "^1.17.1",
+    "bcrypt": "^5.1.0",
+    "connect-mongo": "^4.6.0",
+    "dotenv": "^16.0.3",
+    "express": "^4.18.2",
+    "express-session": "^1.17.3",
     "if-env": "^1.0.4",
-    "imagemin": "^7.0.1",
+    "imagemin": "^8.0.1",
     "imagemin-jpegtran": "^7.0.0",
     "imagemin-pngquant": "^9.0.1",
-    "mime-types": "^2.1.27",
-    "mongoose": "^6.1.5",
+    "mime-types": "^2.1.35",
+    "mongodb": "^4.13.0",
+    "mongoose": "^6.8.4",
     "multer": "^1.4.2",
-    "node-schedule": "^2.0.0",
-    "nodemailer": "^6.4.17",
-    "react-router-dom": "^5.2.0"
+    "node-schedule": "^2.1.1",
+    "nodemailer": "^6.9.0"
   },
   "devDependencies": {
-    "concurrently": "^5.3.0",
-    "nodemon": "^2.0.4"
+    "concurrently": "^7.6.0",
+    "nodemon": "^2.0.20"
   }
 }

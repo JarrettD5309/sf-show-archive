@@ -1,10 +1,10 @@
 import React from 'react';
 import './SlideDrawer.css';
-import { useHistory } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import axios from 'axios';
 
 const SlideDrawer = (props) => {
-    let history = useHistory();
+    let navigate = useNavigate();
     const handleLogout = () => {
         axios.get('/api/logout')
             .then(res => {
@@ -12,7 +12,7 @@ const SlideDrawer = (props) => {
                     props.setLoggedIn(false);
                     props.setDrawerOpen(false);
                     props.setIsAdmin(false);
-                    history.push('/');
+                    navigate('/');
                 }
             })
             .catch(err => console.log(err));

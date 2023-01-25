@@ -2,7 +2,7 @@ const express = require('express');
 const session = require('express-session');
 const path = require('path');
 const mongoose = require('mongoose');
-const MongoStore = require('connect-mongo')(session);
+const MongoStore = require('connect-mongo');
 const nodemailer = require('nodemailer');
 const schedule = require('node-schedule');
 const db = require("./models");
@@ -33,7 +33,7 @@ app.use(session({
     secret: process.env.SESSION_SECRET,
     resave: true,
     saveUninitialized: true,
-    store: new MongoStore({ mongooseConnection: mongoose.connection })
+    store: MongoStore.create({ client: mongoose.connection.getClient() })
 }));
 
 // SETUP EMAIL

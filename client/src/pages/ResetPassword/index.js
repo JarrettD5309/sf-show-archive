@@ -1,11 +1,10 @@
 import React, { useEffect } from 'react';
 import ResetPasswordForm from '../../components/ResetPasswordForm';
-import { useParams } from 'react-router-dom';
-import { useHistory } from "react-router-dom";
+import { useNavigate, useParams } from 'react-router-dom';
 import axios from 'axios';
 
 const ResetPassword = () => {
-    let history = useHistory();
+    let navigate = useNavigate();
     const { token, email } = useParams();
     const [loading, setLoading] = React.useState(true);
     const [showForm, setShowForm] = React.useState(false);
@@ -50,7 +49,7 @@ const ResetPassword = () => {
             .then(res => {
                 setResetPasswordInstructions('Success! Wait to be redirected.');
                 setTimeout(() => {
-                    history.push('/login');
+                    navigate('/login');
                 }, 1500);
             })
             .catch(err => {

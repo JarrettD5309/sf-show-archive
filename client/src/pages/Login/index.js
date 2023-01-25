@@ -1,10 +1,10 @@
 import React from 'react';
 import LoginForm from '../../components/LoginForm';
-import { useHistory } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import axios from 'axios';
 
 const Login = (props) => {
-    let history = useHistory();
+    let navigate = useNavigate();
     const [loginUsername, setLoginUsername] = React.useState('');
     const [loginPassword, setLoginPassword] = React.useState('');
     const [loginInstructions, setLoginInstructions] = React.useState('Please enter details');
@@ -22,7 +22,7 @@ const Login = (props) => {
                     props.setLoggedIn(true);
                     props.getUserInfo();
                     props.checkAdminLogin();
-                    history.push('/');
+                    navigate('/');
                 }
             })
             .catch(err => {

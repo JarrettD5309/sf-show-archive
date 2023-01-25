@@ -5,9 +5,9 @@ const path = require('path');
 const nodemailer = require('nodemailer');
 const crypto = require('crypto');
 const mime = require('mime-types');
-const imagemin = require('imagemin');
-const imageminJpegtran = require('imagemin-jpegtran');
-const imageminPngquant = require('imagemin-pngquant');
+const imagemin = import('imagemin');
+const imageminJpegtran = import('imagemin-jpegtran');
+const imageminPngquant = import('imagemin-pngquant');
 const fs = require('fs');
 
 module.exports = app => {

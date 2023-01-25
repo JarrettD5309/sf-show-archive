@@ -1,17 +1,17 @@
 import React from 'react';
 import './style.css';
 import dateFunction from '../../other/dateFunction';
-import { useHistory } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import UpdateInfo from '../UpdateInfo';
 
 function ShowInfo(props) {
-    let history = useHistory();
+    let navigate = useNavigate();
     const { showNum, date, venue, address, city, stateCountry, updated } = props;
 
     const dateString = dateFunction(date);
 
     const handleClick = () => {
-        history.push(`/show/${showNum}`);
+        navigate(`/show/${showNum}`);
     };
 
     return (
