@@ -5,12 +5,21 @@ const path = require('path');
 const nodemailer = require('nodemailer');
 const crypto = require('crypto');
 const mime = require('mime-types');
-const imagemin = import('imagemin');
-const imageminJpegtran = import('imagemin-jpegtran');
-const imageminPngquant = import('imagemin-pngquant');
 const fs = require('fs');
 
 module.exports = app => {
+    // allows for import of ES module into CommonJS
+    let imagemin;
+    let imageminJpegtran;
+    let imageminPngquant;
+
+    const startup = async() => {
+        imagemin = (await import('imagemin')).default;
+        imageminJpegtran = (await import('imagemin-jpegtran')).default;
+        imageminPngquant = (await import('imagemin-pngquant')).default;
+    };
+
+    startup();
 
     // ADD ATTENDANCE FOR EVERY SHOW 
     // app.get('/special/attendance', (req,res) => {
