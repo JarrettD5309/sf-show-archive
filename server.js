@@ -21,9 +21,9 @@ if (process.env.NODE_ENV === "production") {
 
 if (process.env.NODE_ENV === "production") {
     const MONGODB_URI = process.env.mongodburi;
-    mongoose.connect(MONGODB_URI || 'mongodb://localhost/show-archive');
+    mongoose.connect(MONGODB_URI || 'mongodb://127.0.0.1/show-archive');
 } else {
-    mongoose.connect('mongodb://localhost/show-archive');
+    mongoose.connect('mongodb://127.0.0.1/show-archive');
 }
 
 mongoose.connection.on("connected", () => console.log("Mongoose is connected")
