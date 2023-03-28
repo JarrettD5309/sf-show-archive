@@ -6,8 +6,18 @@ const Timeline = (props) => {
         setCurrentMonth,
         pageBackButton,
         setTimelineMini,
-        mobile
+        mobile,
+        noShows
     } = props;
+
+    // const noShows = [
+    //     {year: 2005, month:3, lookup: []},
+    //     {year: 2005, month:4, lookup: []},
+    //     {year: 2005, month:5, lookup: []},
+    //     {year: 2005, month:6, lookup: []},
+    //     {year: 2005, month:12, lookup: []},
+    //     {year: 2009, month:10, lookup: []},
+    // ];
 
     const seconds = 1.5;
     const numBranches = mobile ? 6 : 10;
@@ -24,6 +34,8 @@ const Timeline = (props) => {
 
     const currentDate = new Date();
     const currentYear = currentDate.getFullYear();
+
+    const noShowMonthColor = '#aeaeae';
 
     useEffect(() => {
         if (document.getElementById('timeline-svg')) {
@@ -77,9 +89,13 @@ const Timeline = (props) => {
             } else if (event.target.id === 'clickable-end-left-month') {
                 moveLeftMonth();
             } else if (/^month/.test(event.target.id)) {
-                const currentMonth = event.target.textContent.toLowerCase();
-                setCurrentMonth(currentMonth);
-                setTimelineMini(true);
+                // prevents being able to click months with no shows
+                if (document.getElementById(event.target.id).getAttribute('fill') !== noShowMonthColor) {
+                    const currentMonth = event.target.textContent.toLowerCase();
+                    setCurrentMonth(currentMonth);
+                    setTimelineMini(true);
+                }
+
             } else if (event.target.id === 'back-button') {
                 fadeInTimeline();
                 fadeOutMonthsTimeline();
@@ -619,11 +635,24 @@ const Timeline = (props) => {
             monthText.setAttribute('dy', dyValue);
 
 
-            // monthText.setAttribute('id', 'month' + currentMonthIndex);
             monthText.setAttribute('id', 'month' + i);
             monthText.append(monthArray[currentMonthIndex]);
 
-            monthText.style.cursor = 'pointer';
+            let noShowsMonth = false;
+            noShows.forEach((item) => {
+                let yearNum = item.year;
+                let monthNum = item.month;
+
+                if (Number(currentYearTextElement.textContent) === yearNum && (currentMonthIndex + 1) === monthNum) {
+                    noShowsMonth = true;
+                }
+            });
+
+            if (noShowsMonth) {
+                monthText.setAttribute('fill', noShowMonthColor);
+            } else {
+                monthText.style.cursor = 'pointer';
+            }
 
             const loops = numMonthScreens - 1;
             let startXLocation = xLocation;
