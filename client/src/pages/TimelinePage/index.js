@@ -64,49 +64,48 @@ const TimelinePage = (props) => {
     };
 
     return (
-        noShows.length===0 ?
-        null:
-
-        <div className='sub-root'>
-            <div className='main-header-div'>
-                <div className='child-header-div'>
-                    <h1>Screaming</h1>
-                    <h1>&nbsp;&nbsp;&nbsp;Females</h1>
-                    <h1 className='outline'>Tour</h1>
-                    <h1 className='outline'>&nbsp;Archive</h1>
+        noShows.length === 0 ?
+            null :
+            <div className='sub-root'>
+                <div className='main-header-div'>
+                    <div className='child-header-div'>
+                        <h1>Screaming</h1>
+                        <h1>&nbsp;&nbsp;&nbsp;Females</h1>
+                        <h1 className='outline'>Tour</h1>
+                        <h1 className='outline'>&nbsp;Archive</h1>
+                    </div>
+                </div>
+                <div
+                    {...(timelineMini && { onClick: () => { handleUnMini() } })}
+                    className={timelineMini ? 'timeline-div mini' : 'timeline-div'}
+                >
+                    <Timeline
+                        setCurrentYear={setCurrentYear}
+                        setCurrentMonth={setCurrentMonth}
+                        setFadeShows={setFadeShows}
+                        pageBackButton={pageBackButton}
+                        setTimelineMini={setTimelineMini}
+                        mobile={mobile}
+                        noShows={noShows}
+                    />
+                </div>
+                <div className={fadeShows ? 'fadeIn' : 'fadeOut'} >
+                    {shows.map(show => (
+                        <ShowInfo
+                            showNum={show.showNum}
+                            date={show.date}
+                            venue={show.venue}
+                            address={show.address}
+                            city={show.city}
+                            stateCountry={show.stateCountry}
+                            key={show.showNum}
+                        />
+                    ))}
+                    {timelineMini && shows.length === 0 &&
+                        <h4 className='no-shows-para'>No shows during this month</h4>
+                    }
                 </div>
             </div>
-            <div
-                {...(timelineMini && { onClick: () => { handleUnMini() } })}
-                className={timelineMini ? 'timeline-div mini' : 'timeline-div'}
-            >
-                <Timeline
-                    setCurrentYear={setCurrentYear}
-                    setCurrentMonth={setCurrentMonth}
-                    setFadeShows={setFadeShows}
-                    pageBackButton={pageBackButton}
-                    setTimelineMini={setTimelineMini}
-                    mobile={mobile}
-                    noShows={noShows}
-                />
-            </div>
-            <div className={fadeShows ? 'fadeIn' : 'fadeOut'} >
-                {shows.map(show => (
-                    <ShowInfo
-                        showNum={show.showNum}
-                        date={show.date}
-                        venue={show.venue}
-                        address={show.address}
-                        city={show.city}
-                        stateCountry={show.stateCountry}
-                        key={show.showNum}
-                    />
-                ))}
-                {timelineMini && shows.length === 0 &&
-                    <h4 className='no-shows-para'>No shows during this month</h4>
-                }
-            </div>
-        </div>
     );
 
 };

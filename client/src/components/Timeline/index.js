@@ -10,15 +10,6 @@ const Timeline = (props) => {
         noShows
     } = props;
 
-    // const noShows = [
-    //     {year: 2005, month:3, lookup: []},
-    //     {year: 2005, month:4, lookup: []},
-    //     {year: 2005, month:5, lookup: []},
-    //     {year: 2005, month:6, lookup: []},
-    //     {year: 2005, month:12, lookup: []},
-    //     {year: 2009, month:10, lookup: []},
-    // ];
-
     const seconds = 1.5;
     const numBranches = mobile ? 6 : 10;
     let numScreens = 0;
