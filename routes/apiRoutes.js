@@ -172,6 +172,114 @@ module.exports = app => {
             .catch(err => res.json(err))
     });
 
+    // GET YEAR-MONTH WITH NO SHOWS
+    app.get('/api/shows/noshows', (req, res) => {
+        db.Show.aggregate([
+            {
+                $limit: 1
+            }, 
+            {
+                $project: {
+                    _id: 0,
+                    year: {
+                        $range: [
+                            2005,
+                            {
+                                $add: [
+                                    {
+                                        $year: "$$NOW"
+                                    },
+                                    1
+                                ]
+                            }
+                        ]
+                    },
+                    month: {
+                        $range: [1,13]
+                    }
+                }
+            },
+            {
+                $unwind: "$year"
+            },
+            {
+                $unwind: "$month"
+            },
+            {
+                $lookup: {
+                    from: "shows",
+                    let: {
+                        year: "$year",
+                        month: "$month"
+                    },
+                    pipeline: [
+                        {
+                            $set: {
+                                parsedDate: {
+                                    $toDate: "$date"
+                                }
+                            }
+                        },
+                        {
+                            $match: {
+                                $expr: {
+                                    $and: [
+                                        {
+                                            $eq: [
+                                                "$$year",
+                                                {
+                                                    $year: "$parsedDate"
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            $eq: [
+                                                "$$month",
+                                                {
+                                                    $month: "$parsedDate"
+                                                }
+                                            ]
+                                        }
+                                    ]
+                                }
+                            }
+                        },
+                        {
+                            $limit: 1
+                        }
+                    ],
+                    as: "lookup"
+                }
+            },
+            {
+               $match: {
+                    $expr: {
+                        $and: [
+                            {
+                                $eq: [
+                                    "$lookup",
+                                    []
+                                ]
+                            },
+                            {
+                                $lte: [
+                                    {
+                                        $dateFromParts: {
+                                            year: "$year",
+                                            month: "$month"
+                                        }
+                                    },
+                                    "$$NOW"
+                                ]
+                            }
+                        ]
+                    }
+               } 
+            }
+        ])
+            .then(result => res.json(result))
+    });
+
     // GET LATEST UPDATED SHOWS
     app.get('/api/shows/latest', (req, res) => {
         db.ShowDetails.find({'updated': { $exists : true }})

@@ -11,6 +11,7 @@ const TimelinePage = (props) => {
     const [fadeShows, setFadeShows] = React.useState(false);
     const [timelineMini, setTimelineMini] = React.useState(false);
     const [mobile, setMobile] = React.useState(window.innerWidth <= 575);
+    const [noShows, setNoShows] = React.useState([]);
 
     const handleResize = () => {
         if (window.innerWidth > 575) {
@@ -21,6 +22,10 @@ const TimelinePage = (props) => {
     };
 
     useEffect(() => {
+        axios.get('/api/shows/noshows')
+            .then(res => setNoShows(res.data))
+            .catch(err => console.log(err));
+
         if (currentMonth) {
             axios.get('/api/shows/month', {
                 params: {
@@ -59,6 +64,9 @@ const TimelinePage = (props) => {
     };
 
     return (
+        noShows.length===0 ?
+        null:
+
         <div className='sub-root'>
             <div className='main-header-div'>
                 <div className='child-header-div'>
@@ -79,6 +87,7 @@ const TimelinePage = (props) => {
                     pageBackButton={pageBackButton}
                     setTimelineMini={setTimelineMini}
                     mobile={mobile}
+                    noShows={noShows}
                 />
             </div>
             <div className={fadeShows ? 'fadeIn' : 'fadeOut'} >
