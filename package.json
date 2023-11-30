@@ -24,7 +24,7 @@
   },
   "homepage": "https://github.com/JarrettD5309/sf-show-archive#readme",
   "dependencies": {
-    "axios": "^0.21.1",
+    "axios": "^1.6.2",
     "bcrypt": "^5.1.0",
     "connect-mongo": "^5.1.0",
     "dotenv": "^16.0.3",
