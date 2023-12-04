@@ -183,15 +183,16 @@ module.exports = app => {
                     _id: 0,
                     year: {
                         $range: [
-                            2005,
-                            {
-                                $add: [
-                                    {
-                                        $year: "$$NOW"
-                                    },
-                                    1
-                                ]
-                            }
+                            2005, 2024
+                            // CODE TO UTILIZE CURRENT YEAR AS <end> INSTEAD OF STATIC YEAR
+                            // {
+                            //     $add: [
+                            //         {
+                            //             $year: "$$NOW"
+                            //         },
+                            //         1
+                            //     ]
+                            // }
                         ]
                     },
                     month: {
