@@ -23,8 +23,11 @@ const Timeline = (props) => {
 
     let locked = false;
 
-    const currentDate = new Date();
-    const currentYear = currentDate.getFullYear();
+    // CODE TO FIND AND USE CURRENT YEAR AS OF THE ACTUAL DATE
+    // const currentDate = new Date();
+    // const currentYear = currentDate.getFullYear();
+
+    const currentYear = 2023;
 
     const noShowMonthColor = '#aeaeae';
 
