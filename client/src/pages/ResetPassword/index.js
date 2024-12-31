@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import ResetPasswordForm from '../../components/ResetPasswordForm';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router';
 import axios from 'axios';
 
 const ResetPassword = () => {

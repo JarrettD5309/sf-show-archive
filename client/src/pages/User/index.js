@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams } from 'react-router';
 import UserDisplay from '../../components/UserDisplay';
 import dateFunction from '../../other/dateFunction';
 import axios from 'axios';
