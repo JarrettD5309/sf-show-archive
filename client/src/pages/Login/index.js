@@ -1,6 +1,6 @@
 import React from 'react';
 import LoginForm from '../../components/LoginForm';
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router";
 import axios from 'axios';
 
 const Login = (props) => {

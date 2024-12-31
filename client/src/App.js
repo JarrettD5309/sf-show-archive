@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Routes } from 'react-router';
 import AdminPanel from './pages/AdminPanel';
 import CreateAccount from './pages/CreateAccount';
 import ForgotPassword from './pages/ForgotPassword';
@@ -83,7 +83,12 @@ const App = () => {
     return (
         loading ?
             null :
-            <Router>
+            <Router
+                future={{
+                    v7_relativeSplatPath: true,
+                    v7_startTransition: true
+                }}
+            >
                 <NavBarComponent
                     loggedIn={loggedIn}
                     setLoggedIn={setLoggedIn}

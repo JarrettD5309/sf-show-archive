@@ -1,7 +1,7 @@
 import React from 'react';
 import './style.css';
 import dateFunction from '../../other/dateFunction';
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router";
 import UpdateInfo from '../UpdateInfo';
 
 function ShowInfo(props) {

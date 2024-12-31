@@ -1,6 +1,6 @@
 import React from 'react';
 import './SlideDrawer.css';
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router";
 import axios from 'axios';
 
 const SlideDrawer = (props) => {
