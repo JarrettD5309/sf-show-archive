@@ -2,7 +2,7 @@ const express = require('express');
 const session = require('express-session');
 const path = require('path');
 const mongoose = require('mongoose');
-const MongoStore = require('connect-mongo');
+const { MongoStore } = require('connect-mongo');
 const nodemailer = require('nodemailer');
 const schedule = require('node-schedule');
 const db = require("./models");
@@ -83,7 +83,7 @@ app.get("/uploads/:image", (req, res) => {
 });
 // Send every other request to the React app
 // Define any API routes before this runs
-app.get("*", (req, res) => {
+app.get("/{*any}", (req, res) => {
     res.sendFile(path.join(__dirname, "./client/build/index.html"));
 });
 

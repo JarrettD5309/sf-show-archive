@@ -1,6 +1,6 @@
 {
   "name": "sf-show-archive",
-  "version": "1.0.0",
+  "version": "2.5.0",
   "description": "",
   "main": "server.js",
   "scripts": {
@@ -8,7 +8,6 @@
     "start:prod": "node server.js",
     "start:dev": "concurrently \"nodemon --ignore 'client/*'\" \"npm run client\"",
     "client": "cd client && npm run start",
-    "install": "cd client && npm install",
     "build": "cd client && npm run build",
     "heroku-postbuild": "npm run build"
   },
@@ -25,21 +24,21 @@
   "homepage": "https://github.com/JarrettD5309/sf-show-archive#readme",
   "dependencies": {
     "axios": "^1.6.2",
-    "bcrypt": "^5.1.0",
-    "connect-mongo": "^5.1.0",
-    "dotenv": "^16.0.3",
-    "express": "^4.18.2",
+    "bcrypt": "^6.0.0",
+    "connect-mongo": "^6.0.0",
+    "dotenv": "^17.2.3",
+    "express": "5.0",
     "express-session": "^1.17.3",
     "if-env": "^1.0.4",
     "imagemin": "^9.0.0",
     "imagemin-jpegtran": "^8.0.0",
     "imagemin-pngquant": "^10.0.0",
-    "mime-types": "^2.1.35",
-    "mongodb": "^6.3.0",
-    "mongoose": "^8.0.2",
-    "multer": "^1.4.2",
+    "mime-types": "^3.0.2",
+    "mongodb": "^7.0.0",
+    "mongoose": "^9.1.2",
+    "multer": "^2.0.2",
     "node-schedule": "^2.1.1",
-    "nodemailer": "^6.9.0"
+    "nodemailer": "^7.0.12"
   },
   "devDependencies": {
     "concurrently": "^9.1.1",
