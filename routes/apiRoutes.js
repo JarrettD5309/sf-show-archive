@@ -373,7 +373,7 @@ module.exports = app => {
 
             const isValidForSend = (linkString, type) => {
                 if (type === 'twitter') {
-                    const validTwitter = /http(?:s)?:\/\/(?:www\.)?twitter\.com\/([a-zA-Z0-9_]+)/.test(linkString);
+                    const validTwitter = /http(?:s)?:\/\/(?:www\.)?(twitter|x)\.com\/([a-zA-Z0-9_]+)/.test(linkString);
                     if (validTwitter || linkString === '') {
                         return true;
                     } else {
