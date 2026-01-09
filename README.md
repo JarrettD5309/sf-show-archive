@@ -1,8 +1,8 @@
 # Screaming Females Tour Archive
 <https://screamingfemalestourarchive.com/>\
-Version 2.4 \
+Version 2.5 \
 Original Version Deployment Date - Sept 01, 2021\
-Minor Version Deployment Date - Dec 30, 2024\
+Minor Version Deployment Date - Jan 09, 2026\
 By Jarrett Dougherty
 
 <kbd><img src="md_images/sf-tour-archive-home.png" alt="SF Tour Archive Homepage" width="500"/></kbd>
@@ -31,6 +31,10 @@ Screaming Females Tour Archive is an interactive archive of performance informat
 * Nodemailer
 
 ## Versions
+Version 2.5 - Deployment Date Jan 09, 2026
+### Updates
+* Update dependencies
+----------
 Version 2.4 - Deployment Date Dec 30, 2024
 ### Updates
 * Update dependencies
